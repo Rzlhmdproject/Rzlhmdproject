@@ -3,103 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rzlhmdproject — Google Workspace Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Rzlhmdproject — Enterprise Control Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
         :root {
-            /* Google Light Theme */
-            --bg: #f8f9fa;
+            --bg: #0b0f19;
+            --surface: #111827;
+            --surface-hover: #1f2937;
+            --border: #374151;
+            --text-main: #f9fafb;
+            --text-sub: #9ca3af;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg: #f3f4f6;
             --surface: #ffffff;
-            --surface-variant: #f1f3f4;
-            --border: #e0e0e0;
-            --text-main: #202124;
-            --text-sub: #5f6368;
-            --g-blue: #1a73e8;
-            --g-blue-hover: #1557b0;
-            --g-red: #ea4335;
-            --g-green: #34a853;
-            --g-yellow: #fbbc04;
-            --card-shadow: 0 1px 3px rgba(60,64,67,0.12), 0 1px 2px rgba(60,64,67,0.24);
+            --surface-hover: #f9fafb;
+            --border: #e5e7eb;
+            --text-main: #111827;
+            --text-sub: #6b7280;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
-        [data-theme="dark"] {
-            /* Google Dark Theme (Material Dark) */
-            --bg: #171717;
-            --surface: #242424;
-            --surface-variant: #2d2d2d;
-            --border: #3c4043;
-            --text-main: #e8eaed;
-            --text-sub: #9aa0a6;
-            --g-blue: #8ab4f8;
-            --g-blue-hover: #aecbfa;
-            --g-red: #f28b82;
-            --g-green: #81c995;
-            --g-yellow: #fdd663;
-            --card-shadow: 0 1px 3px rgba(0,0,0,0.5);
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, Roboto, sans-serif; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
         body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; padding: 30px 15px; }
-        .container { width: 100%; max-width: 650px; }
+        .container { width: 100%; max-width: 720px; }
 
-        /* Top Bar & Theme Toggle */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .brand-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; letter-spacing: -0.3px; }
-        .brand-logo .g-dots { display: flex; gap: 4px; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; }
+        /* Top Bar */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; background: var(--surface); border: 1px solid var(--border); padding: 14px 20px; border-radius: 16px; box-shadow: var(--card-shadow); }
+        .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 16px; letter-spacing: -0.3px; }
+        .brand i { color: var(--primary); font-size: 20px; }
+        .top-actions { display: flex; gap: 10px; align-items: center; }
+        
+        .icon-btn { background: var(--surface-hover); border: 1px solid var(--border); color: var(--text-main); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .icon-btn:hover { border-color: var(--primary); }
 
-        .theme-toggle { background: var(--surface-variant); border: 1px solid var(--border); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        /* Cards & Containers */
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: var(--card-shadow); }
+        .card-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; color: var(--text-main); }
+        .card-title i { color: var(--primary); }
 
-        /* Material Cards */
-        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 24px; margin-bottom: 20px; box-shadow: var(--card-shadow); }
-        .card-title { font-size: 16px; font-weight: 600; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; color: var(--text-main); }
-        .card-title i { color: var(--g-blue); }
+        /* Stats KPI */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+        .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; text-align: center; box-shadow: var(--card-shadow); }
+        .stat-val { font-size: 24px; font-weight: 800; color: var(--text-main); }
+        .stat-lbl { font-size: 11px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
 
-        /* KPI Grid */
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
-        .stat-card { background: var(--surface-variant); border-radius: 16px; padding: 14px; text-align: center; }
-        .stat-val { font-size: 22px; font-weight: 700; }
-        .stat-lbl { font-size: 11px; color: var(--text-sub); font-weight: 600; margin-top: 2px; }
-
-        /* Google Form Style Inputs */
+        /* Form Inputs */
         .form-group { margin-bottom: 16px; }
-        label { display: block; font-size: 12px; font-weight: 600; color: var(--text-sub); margin-bottom: 6px; }
+        label { display: block; font-size: 12px; font-weight: 700; color: var(--text-sub); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         .input-wrapper { position: relative; display: flex; align-items: center; }
         .input-wrapper i { position: absolute; left: 16px; color: var(--text-sub); font-size: 14px; }
-        input { width: 100%; padding: 12px 16px 12px 44px; border: 1px solid var(--border); border-radius: 12px; font-size: 14px; color: var(--text-main); background: var(--surface); outline: none; }
-        input:focus { border-color: var(--g-blue); box-shadow: 0 0 0 2px rgba(26,115,232,0.2); }
+        input { width: 100%; padding: 13px 16px 13px 44px; border: 1px solid var(--border); border-radius: 12px; font-size: 14px; color: var(--text-main); background: var(--bg); outline: none; }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); }
 
-        /* Material Buttons */
+        /* Buttons */
         .btn-group { display: flex; gap: 10px; margin-top: 18px; }
-        button { width: 100%; background: var(--g-blue); color: #fff; border: none; padding: 12px 20px; border-radius: 24px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        button:hover { background: var(--g-blue-hover); }
-        button:disabled { opacity: 0.6; cursor: not-allowed; }
-        .btn-danger { background: transparent; color: var(--g-red); border: 1px solid var(--border); }
-        .btn-danger:hover { background: rgba(234,67,53,0.08); }
+        button { width: 100%; background: var(--primary); color: #fff; border: none; padding: 13px 20px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2); }
+        button:hover { background: var(--primary-hover); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+        .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--border); box-shadow: none; }
+        .btn-danger:hover { background: rgba(239, 68, 68, 0.08); }
 
-        /* Card List */
-        .card-item { padding: 14px 16px; border: 1px solid var(--border); border-radius: 16px; margin-bottom: 12px; background: var(--surface); }
+        /* Filter Tabs */
+        .filter-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+        .tab-btn { background: var(--surface-hover); border: 1px solid var(--border); color: var(--text-sub); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; width: auto; box-shadow: none; }
+        .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        /* Card Item List */
+        .card-item { padding: 16px; border: 1px solid var(--border); border-radius: 14px; margin-bottom: 12px; background: var(--bg); }
         .card-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .card-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px; }
-        .badge-active { background: rgba(52,168,83,0.15); color: var(--g-green); }
-        .badge-empty { background: rgba(251,188,4,0.15); color: var(--g-yellow); }
-
-        .card-url { color: var(--text-sub); font-size: 12px; word-break: break-all; margin-bottom: 10px; }
+        .card-badge { font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
+        .badge-active { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .badge-empty { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        
+        .card-url { color: var(--text-sub); font-size: 12px; word-break: break-all; margin-bottom: 12px; font-family: monospace; }
         .card-actions { display: flex; gap: 8px; border-top: 1px solid var(--border); padding-top: 10px; }
-        .action-btn { width: auto; padding: 6px 14px; font-size: 12px; border-radius: 16px; background: var(--surface-variant); color: var(--text-main); border: none; }
-        .action-btn:hover { background: var(--border); }
+        .action-btn { width: auto; padding: 6px 12px; font-size: 11px; border-radius: 8px; background: var(--surface); color: var(--text-main); border: 1px solid var(--border); box-shadow: none; font-weight: 600; }
+        .action-btn:hover { border-color: var(--primary); color: var(--primary); }
 
-        .toast { padding: 12px 16px; border-radius: 12px; font-size: 13px; display: none; align-items: center; gap: 10px; margin-bottom: 18px; }
-        .toast-success { background: rgba(52,168,83,0.15); color: var(--g-green); border: 1px solid var(--g-green); }
-        .toast-error { background: rgba(234,67,53,0.15); color: var(--g-red); border: 1px solid var(--g-red); }
+        /* Toast */
+        .toast { padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; display: none; align-items: center; gap: 10px; margin-bottom: 18px; }
+        .toast-success { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid var(--success); }
+        .toast-error { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid var(--danger); }
 
         /* Modal QR */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 999; }
-        .modal-content { background: var(--surface); padding: 24px; border-radius: 24px; text-align: center; max-width: 320px; width: 100%; }
-        #qrcode { display: flex; justify-content: center; margin: 16px 0; background: #fff; padding: 12px; border-radius: 12px; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 999; }
+        .modal-content { background: var(--surface); border: 1px solid var(--border); padding: 28px; border-radius: 24px; text-align: center; max-width: 340px; width: 100%; box-shadow: var(--card-shadow); }
+        #qrcode { display: flex; justify-content: center; margin: 16px 0; background: #fff; padding: 16px; border-radius: 16px; }
 
         .hidden { display: none !important; }
     </style>
@@ -109,28 +111,27 @@
 <div class="container">
     <!-- Top Bar -->
     <div class="top-bar">
-        <div class="brand-logo">
-            <div class="g-dots">
-                <div class="dot" style="background:#4285F4"></div>
-                <div class="dot" style="background:#EA4335"></div>
-                <div class="dot" style="background:#FBBC05"></div>
-                <div class="dot" style="background:#34A853"></div>
-            </div>
-            Rzlhmdproject Admin
+        <div class="brand">
+            <i class="fa-solid fa-cube"></i> Rzlhmdproject <span style="font-size:11px; color:var(--text-sub); font-weight:500;">v2.5 Pro</span>
         </div>
-        <button class="theme-toggle" onclick="toggleTheme()" title="Ganti Tema Light/Dark">
-            <i class="fa-solid fa-moon" id="themeIcon"></i>
-        </button>
+        <div class="top-actions">
+            <button class="icon-btn" onclick="toggleTheme()" title="Ganti Tema">
+                <i class="fa-solid fa-moon" id="themeIcon"></i>
+            </button>
+            <button class="icon-btn hidden" id="logoutIconBtn" onclick="handleLogout()" title="Keluar">
+                <i class="fa-solid fa-power-off" style="color:var(--danger)"></i>
+            </button>
+        </div>
     </div>
 
     <div id="toast" class="toast"></div>
 
     <!-- LOGIN SECTION -->
     <div id="loginSection" class="card">
-        <div class="card-title"><i class="fa-solid fa-shield"></i> Login Akses Admin</div>
+        <div class="card-title"><i class="fa-solid fa-lock"></i> Autentikasi Admin</div>
         <form onsubmit="handleLogin(event)">
             <div class="form-group">
-                <label>GitHub Access Token</label>
+                <label>GitHub Personal Access Token</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-key"></i>
                     <input type="password" id="loginToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" required>
@@ -142,67 +143,80 @@
 
     <!-- MAIN DASHBOARD -->
     <div id="dashboardSection" class="hidden">
+        <!-- KPI Stats -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-val" id="statTotal">0</div>
                 <div class="stat-lbl">Total Kartu</div>
             </div>
             <div class="stat-card">
-                <div class="stat-val" style="color:var(--g-green)" id="statActive">0</div>
+                <div class="stat-val" style="color:var(--success)" id="statActive">0</div>
                 <div class="stat-lbl">Aktif</div>
             </div>
             <div class="stat-card">
-                <div class="stat-val" style="color:var(--g-yellow)" id="statEmpty">0</div>
+                <div class="stat-val" style="color:var(--warning)" id="statEmpty">0</div>
                 <div class="stat-lbl">Kosong</div>
             </div>
         </div>
 
+        <!-- Form Manager -->
         <div class="card">
-            <div class="card-title"><i class="fa-solid fa-plus-circle"></i> Kelola Slot Kartu</div>
+            <div class="card-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Kelola Slot Kartu</div>
             <form onsubmit="handleSaveCard(event)">
                 <div class="form-group">
-                    <label>ID Kartu</label>
+                    <label>Nomor Kartu (ID)</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-id-card"></i>
-                        <input type="text" id="targetCardId" placeholder="Contoh: 001" required>
+                        <input type="text" id="targetCardId" placeholder="Contoh: 001, 002..." required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Link Google Maps Bisnis</label>
+                    <label>Link Google Maps / Review Klien</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-location-dot"></i>
                         <input type="url" id="targetUrl" placeholder="Kosongkan jika mau diisi user via setup.html">
                     </div>
                 </div>
                 <div class="btn-group">
-                    <button type="submit" id="saveBtn"><i class="fa-solid fa-check"></i> Simpan Kartu</button>
-                    <button type="button" class="btn-danger" onclick="handleDeleteCard()"><i class="fa-solid fa-trash"></i> Reset</button>
+                    <button type="submit" id="saveBtn"><i class="fa-solid fa-floppy-disk"></i> Simpan & Aktifkan</button>
+                    <button type="button" class="btn-danger" onclick="handleDeleteCard()"><i class="fa-solid fa-trash-can"></i> Hapus Slot</button>
                 </div>
             </form>
         </div>
 
+        <!-- Card List & Management -->
         <div class="card">
             <div class="card-title" style="justify-content:space-between">
-                <span><i class="fa-solid fa-list"></i> Daftar Kartu</span>
-                <button onclick="loadDashboardData()" style="width:auto; padding:6px 14px; font-size:12px; background:var(--surface-variant); color:var(--text-main);"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+                <span><i class="fa-solid fa-list-check"></i> Daftar Slot Kartu</span>
+                <button onclick="loadDashboardData()" style="width:auto; padding:6px 14px; font-size:12px; box-shadow:none;"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
             </div>
-            <div class="form-group">
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="tab-btn active" onclick="setFilter('all', this)">Semua</button>
+                <button class="tab-btn" onclick="setFilter('active', this)">Aktif</button>
+                <button class="tab-btn" onclick="setFilter('empty', this)">Kosong</button>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 14px;">
                 <div class="input-wrapper">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="Cari ID Kartu...">
                 </div>
             </div>
+
             <div id="cardsListContainer"></div>
         </div>
     </div>
 </div>
 
+<!-- Modal QR Code -->
 <div id="qrModal" class="modal">
     <div class="modal-content">
-        <h3 id="qrModalTitle" style="font-size:16px; margin-bottom:4px;">QR Code</h3>
-        <p style="font-size:12px; color:var(--text-sub); word-break:break-all;" id="qrModalSubtitle"></p>
+        <h3 id="qrModalTitle" style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">QR Code</h3>
+        <p style="font-size: 11px; color: var(--text-sub); word-break: break-all;" id="qrModalSubtitle"></p>
         <div id="qrcode"></div>
-        <button onclick="closeQrModal()" style="background:var(--surface-variant); color:var(--text-main); margin-top:10px;">Tutup</button>
+        <button onclick="closeQrModal()" style="background:var(--surface-hover); color:var(--text-main); border:1px solid var(--border); box-shadow:none;">Tutup</button>
     </div>
 </div>
 
@@ -211,31 +225,26 @@
     const REPO = 'rzlhmdproject';
     const PATH = 'vercel.json';
     let globalCardsData = [];
+    let currentFilter = 'all';
 
-    // Theme Switcher Logic
+    // Theme Logic
     function toggleTheme() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        updateThemeIcon(newTheme);
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        updateThemeIcon(next);
     }
 
     function updateThemeIcon(theme) {
-        const icon = document.getElementById('themeIcon');
-        if(theme === 'dark') {
-            icon.className = 'fa-solid fa-sun';
-        } else {
-            icon.className = 'fa-solid fa-moon';
-        }
+        document.getElementById('themeIcon').className = theme === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
     }
 
-    // Init Theme
-    const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    const initTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', initTheme);
+    updateThemeIcon(initTheme);
 
     document.addEventListener("DOMContentLoaded", () => {
-        updateThemeIcon(savedTheme);
         const savedToken = localStorage.getItem("rzl_gh_token");
         if (savedToken) {
             document.getElementById("loginToken").value = savedToken;
@@ -262,16 +271,25 @@
             const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, {
                 headers: { 'Authorization': `token ${token}` }
             });
-            if (!res.ok) throw new Error('Token salah.');
+            if (!res.ok) throw new Error('Token salah atau kadaluwarsa.');
+
             localStorage.setItem("rzl_gh_token", token);
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.remove('hidden');
-            if (notify) showToast('Login Berhasil');
+            document.getElementById('logoutIconBtn').classList.remove('hidden');
+            if (notify) showToast('Autentikasi Berhasil!');
             loadDashboardData();
         } catch (err) {
             localStorage.removeItem("rzl_gh_token");
             if (notify) showToast(err.message, 'error');
         }
+    }
+
+    function handleLogout() {
+        localStorage.removeItem("rzl_gh_token");
+        document.getElementById('dashboardSection').classList.add('hidden');
+        document.getElementById('loginSection').classList.add('hidden'); // wait
+        location.reload();
     }
 
     async function loadDashboardData() {
@@ -283,11 +301,12 @@
             });
             const fileData = await res.json();
             const jsonContent = JSON.parse(atob(fileData.content));
+            
             globalCardsData = jsonContent.redirects.filter(r => r.source && r.source.startsWith('/card/'));
             updateKPIs(globalCardsData);
             renderCards(globalCardsData);
         } catch (e) {
-            container.innerHTML = `<p style="font-size: 13px; color: var(--g-red); text-align: center;">Gagal memuat data.</p>`;
+            container.innerHTML = `<p style="font-size: 13px; color: var(--danger); text-align: center;">Gagal memuat data kartu.</p>`;
         }
     }
 
@@ -301,12 +320,17 @@
 
     function renderCards(cards) {
         const container = document.getElementById('cardsListContainer');
-        if (cards.length === 0) {
-            container.innerHTML = `<p style="font-size: 13px; color: var(--text-sub); text-align: center;">Belum ada kartu.</p>`;
+        
+        let filtered = cards;
+        if (currentFilter === 'active') filtered = cards.filter(c => !c.destination.includes('setup.html'));
+        if (currentFilter === 'empty') filtered = cards.filter(c => c.destination.includes('setup.html'));
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<p style="font-size: 13px; color: var(--text-sub); text-align: center; padding: 20px;">Tidak ada kartu ditemukan.</p>`;
             return;
         }
 
-        container.innerHTML = cards.map(item => {
+        container.innerHTML = filtered.map(item => {
             const cardId = item.source.replace('/card/', '');
             const fullAccessUrl = `https://rzlhmdproject.vercel.app${item.source}`;
             const isSetup = item.destination.includes('setup.html');
@@ -314,7 +338,7 @@
             return `
                 <div class="card-item">
                     <div class="card-header-row">
-                        <span style="font-weight:700;">ID Kartu #${cardId}</span>
+                        <span style="font-weight:700;">ID Kartu: #${cardId}</span>
                         <span class="card-badge ${isSetup ? 'badge-empty' : 'badge-active'}">
                             ${isSetup ? 'KOSONG' : 'AKTIF'}
                         </span>
@@ -322,7 +346,8 @@
                     <div class="card-url">${item.destination}</div>
                     <div class="card-actions">
                         <button onclick="copyNfcLink('${fullAccessUrl}')" class="action-btn"><i class="fa-solid fa-copy"></i> Copy Link</button>
-                        <button onclick="showQrModal('${cardId}', '${fullAccessUrl}')" class="action-btn"><i class="fa-solid fa-qrcode"></i> QR</button>
+                        <button onclick="window.open('${fullAccessUrl}', '_blank')" class="action-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Test</button>
+                        <button onclick="showQrModal('${cardId}', '${fullAccessUrl}')" class="action-btn"><i class="fa-solid fa-qrcode"></i> QR Code</button>
                         <button onclick="selectCardToEdit('${cardId}', '${item.destination}')" class="action-btn"><i class="fa-solid fa-pen"></i> Edit</button>
                     </div>
                 </div>
@@ -330,21 +355,29 @@
         }).join('');
     }
 
+    function setFilter(type, btn) {
+        currentFilter = type;
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderCards(globalCardsData);
+    }
+
     function filterCards() {
         const query = document.getElementById('searchInput').value.toLowerCase().trim();
-        renderCards(globalCardsData.filter(item => item.source.replace('/card/', '').toLowerCase().includes(query)));
+        const results = globalCardsData.filter(item => item.source.replace('/card/', '').toLowerCase().includes(query));
+        renderCards(results);
     }
 
     function copyNfcLink(url) {
-        navigator.clipboard.writeText(url).then(() => showToast('Link NFC Tersalin!'));
+        navigator.clipboard.writeText(url).then(() => showToast('Link berhasil disalin ke clipboard!'));
     }
 
     function showQrModal(id, url) {
-        document.getElementById('qrModalTitle').innerText = `QR Code #${id}`;
+        document.getElementById('qrModalTitle').innerText = `QR Code Kartu #${id}`;
         document.getElementById('qrModalSubtitle').innerText = url;
-        const qr = document.getElementById('qrcode');
-        qr.innerHTML = '';
-        new QRCode(qr, { text: url, width: 160, height: 160 });
+        const qrContainer = document.getElementById('qrcode');
+        qrContainer.innerHTML = '';
+        new QRCode(qrContainer, { text: url, width: 160, height: 160 });
         document.getElementById('qrModal').style.display = 'flex';
     }
 
@@ -395,14 +428,14 @@
             showToast(err.message, 'error');
         } finally {
             btn.disabled = false;
-            btn.innerHTML = `<i class="fa-solid fa-check"></i> Simpan Kartu`;
+            btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan & Aktifkan`;
         }
     }
 
     async function handleDeleteCard() {
         const token = localStorage.getItem("rzl_gh_token");
         const cardId = document.getElementById('targetCardId').value.trim();
-        if (!cardId || !confirm(`Reset Kartu #${cardId}?`)) return;
+        if (!cardId || !confirm(`Hapus/Reset Kartu #${cardId}?`)) return;
 
         try {
             const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
@@ -418,7 +451,7 @@
                 body: JSON.stringify({ message: `Delete /card/${cardId}`, content: btoa(JSON.stringify(jsonContent, null, 2)), sha: fileData.sha })
             });
 
-            showToast(`Kartu #${cardId} Direset`);
+            showToast(`Kartu #${cardId} Dihapus!`);
             document.getElementById('targetCardId').value = '';
             document.getElementById('targetUrl').value = '';
             loadDashboardData();
