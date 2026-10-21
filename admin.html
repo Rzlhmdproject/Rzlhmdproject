@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rzlhmdproject — Enterprise SaaS Analytics</title>
+    <title>Rzlhmdproject — Pusat Kendali Kartu Digital</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -32,7 +32,7 @@
 
         /* Sidebar Navigation */
         .sidebar { width: 80px; background: rgba(0, 0, 0, 0.25); border-right: 1px solid var(--panel-border); display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 24px 0; }
-        .brand-logo { width: 44px; height: 44px; background: var(--text-primary); color: var(--bg-main); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; cursor: pointer; }
+        .brand-logo { width: 44px; height: 44px; background: var(--primary-orange); color: #fff; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; cursor: pointer; }
         .nav-menu { display: flex; flex-direction: column; gap: 16px; }
         .nav-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); background: transparent; border: none; font-size: 16px; cursor: pointer; transition: all 0.2s; position: relative; }
         .nav-icon:hover, .nav-icon.active { background: var(--panel-card); color: var(--primary-orange); border: 1px solid var(--panel-border); }
@@ -43,7 +43,8 @@
         
         /* Top Header */
         .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
-        .page-title { font-size: 30px; font-weight: 700; letter-spacing: -0.5px; }
+        .page-title { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+        .page-sub { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
         .header-tools { display: flex; align-items: center; gap: 14px; }
         .tool-btn { width: 42px; height: 42px; background: var(--panel-card); border: 1px solid var(--panel-border); border-radius: 14px; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; font-size: 15px; }
         .tool-btn:hover { color: var(--text-primary); border-color: var(--primary-orange); }
@@ -60,7 +61,7 @@
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
-        .hero-heading { font-size: 38px; font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
+        .hero-heading { font-size: 32px; font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
         .hero-sub { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
         
         .cta-btn { 
@@ -145,22 +146,25 @@
     <div class="sidebar">
         <div class="brand-logo" onclick="switchTab('dash')" title="Dashboard Utama"><i class="fa-solid fa-cube"></i></div>
         <div class="nav-menu">
-            <button class="nav-icon active" id="btnNavDash" onclick="switchTab('dash')" title="Channel Analytics"><i class="fa-solid fa-chart-pie"></i></button>
-            <button class="nav-icon" id="btnNavCards" onclick="switchTab('cards')" title="Card Inventory"><i class="fa-solid fa-credit-card"></i></button>
+            <button class="nav-icon active" id="btnNavDash" onclick="switchTab('dash')" title="Ringkasan Sistem"><i class="fa-solid fa-chart-pie"></i></button>
+            <button class="nav-icon" id="btnNavCards" onclick="switchTab('cards')" title="Inventaris Kartu"><i class="fa-solid fa-credit-card"></i></button>
             <button class="nav-icon" id="btnNavBatch" onclick="switchTab('batch')" title="Batch Generator"><i class="fa-solid fa-layer-group"></i></button>
-            <button class="nav-icon" id="btnNavSettings" onclick="switchTab('settings')" title="Settings"><i class="fa-solid fa-gear"></i></button>
+            <button class="nav-icon" id="btnNavSettings" onclick="switchTab('settings')" title="Pengaturan Sistem"><i class="fa-solid fa-gear"></i></button>
         </div>
-        <button class="nav-icon" onclick="handleLogout()" title="Logout"><i class="fa-solid fa-power-off" style="color:var(--danger)"></i></button>
+        <button class="nav-icon" onclick="handleLogout()" title="Keluar"><i class="fa-solid fa-power-off" style="color:var(--danger)"></i></button>
     </div>
 
     <!-- Main Workspace -->
     <div class="workspace">
         <!-- Top Header -->
         <div class="top-header">
-            <h1 class="page-title" id="pageTitle">Channel Analytics</h1>
+            <div>
+                <h1 class="page-title" id="pageTitle">Ringkasan Sistem</h1>
+                <div class="page-sub">Rzlhmdproject — Smart Redirection Console</div>
+            </div>
             <div class="header-tools">
-                <button class="tool-btn" onclick="notify('Tidak ada notifikasi baru.')" title="Notifications"><i class="fa-regular fa-bell"></i></button>
-                <button class="tool-btn" onclick="switchTab('cards')" title="Quick Search Inventory"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="tool-btn" onclick="notify('Tidak ada pemberitahuan baru.')" title="Notifikasi"><i class="fa-regular fa-bell"></i></button>
+                <button class="tool-btn" onclick="switchTab('cards')" title="Cari Slot Kartu"><i class="fa-solid fa-magnifying-glass"></i></button>
                 <div class="user-avatar" title="Profile Admin">RZ</div>
             </div>
         </div>
@@ -175,59 +179,59 @@
                     <label>GitHub Personal Access Token</label>
                     <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" required>
                 </div>
-                <button type="submit" class="btn-primary">Masuk Console</button>
+                <button type="submit" class="btn-primary">Masuk Konsol Admin</button>
             </form>
         </div>
 
         <!-- TAB 1: ANALYTICS & DASHBOARD -->
         <div id="tabDash" class="hidden">
             <div class="hero-banner">
-                <div class="hero-heading">Optimize Your Metrics</div>
-                <div class="hero-sub">Kelola sistem pengalihan NFC & pantau status inventaris kartu secara real-time.</div>
-                <button class="cta-btn" onclick="focusCardForm()">Start Now <i class="fa-solid fa-arrow-right"></i></button>
+                <div class="hero-heading">Pusat Kendali Kartu Digital</div>
+                <div class="hero-sub">Atur pengalihan link dan pantau status aktivasi kartu ulasan pelanggan secara fleksibel.</div>
+                <button class="cta-btn" onclick="focusCardForm()">Atur Slot Kartu <i class="fa-solid fa-arrow-right"></i></button>
 
                 <!-- Floating Glass Metrics -->
                 <div class="metrics-bar">
                     <div class="metric-item" onclick="switchTab('cards')">
                         <div class="metric-num" id="mTotal">0</div>
-                        <div class="metric-lbl">Total Slots</div>
+                        <div class="metric-lbl">Total Slot</div>
                     </div>
                     <div class="metric-item" onclick="switchTab('cards')">
                         <div class="metric-num" style="color:var(--accent-mint)" id="mActive">0</div>
-                        <div class="metric-lbl">Active Cards</div>
+                        <div class="metric-lbl">Kartu Aktif</div>
                     </div>
                     <div class="metric-item" onclick="switchTab('cards')">
                         <div class="metric-num" style="color:var(--soft-yellow)" id="mEmpty">0</div>
-                        <div class="metric-lbl">Unassigned</div>
+                        <div class="metric-lbl">Belum Didaftar</div>
                     </div>
                     <div class="metric-item">
                         <div class="metric-num" style="color:var(--accent-cyan)">100%</div>
-                        <div class="metric-lbl">Uptime API</div>
+                        <div class="metric-lbl">Status Server</div>
                     </div>
                 </div>
             </div>
 
             <!-- Single Card Editor Panel -->
             <div class="panel-card" id="editorPanel">
-                <div class="panel-header"><i class="fa-solid fa-pen-to-square"></i> Kelola / Direct Slot Kartu</div>
+                <div class="panel-header"><i class="fa-solid fa-pen-to-square"></i> Atur Pengalihan Slot Kartu</div>
                 <form onsubmit="handleSave(event)">
                     <div class="form-group">
-                        <label>ID Kartu (Nomor Slot)</label>
+                        <label>Nomor ID Kartu</label>
                         <input type="text" id="cardId" placeholder="Contoh: 001" required>
                     </div>
                     <div class="form-group">
-                        <label>Mode Routing</label>
+                        <label>Mode Pengalihan Link</label>
                         <select id="routingMode">
-                            <option value="direct">Direct Redirect (Langsung ke Google Maps)</option>
-                            <option value="setup">Aktivasi Mandiri Klien (setup.html)</option>
+                            <option value="direct">Langsung ke Google Review / Maps</option>
+                            <option value="setup">Form Aktivasi Mandiri oleh Klien (setup.html)</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Destination URL (Google Maps / Target)</label>
+                        <label>Link Tujuan (Google Review / Maps)</label>
                         <input type="url" id="cardUrl" placeholder="https://maps.app.goo.gl/...">
                     </div>
                     <div style="display:flex; gap:12px; margin-top:18px;">
-                        <button type="submit" class="btn-primary" id="saveBtn" style="flex:2;">Simpan Konfigurasi</button>
+                        <button type="submit" class="btn-primary" id="saveBtn" style="flex:2;">Simpan Pengalihan</button>
                         <button type="button" class="btn-danger" onclick="handleDelete()" style="flex:1;">Reset Slot</button>
                     </div>
                 </form>
@@ -238,19 +242,19 @@
         <div id="tabCards" class="hidden">
             <div class="panel-card">
                 <div class="panel-header">
-                    <span><i class="fa-solid fa-list-check"></i> Master Card Inventory</span>
-                    <button class="btn-outline" onclick="loadData()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                    <span><i class="fa-solid fa-list-check"></i> Daftar Inventaris Kartu</span>
+                    <button class="btn-outline" onclick="loadData()"><i class="fa-solid fa-rotate"></i> Refresh Data</button>
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="searchBox" onkeyup="filterCards()" placeholder="Cari ID Kartu atau Target URL...">
+                    <input type="text" id="searchBox" onkeyup="filterCards()" placeholder="Cari ID Kartu atau Link Tujuan...">
                 </div>
 
                 <!-- Select Toolbar -->
                 <div class="select-toolbar">
                     <div style="display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600;">
                         <input type="checkbox" id="selectAllCheckbox" class="checkbox-custom" onclick="toggleSelectAll(this)">
-                        <label for="selectAllCheckbox" style="margin:0; text-transform:none; cursor:pointer;">Pilih Semua</label>
+                        <label for="selectAllCheckbox" style="margin:0; text-transform:none; cursor:pointer;">Pilih Semua Slot</label>
                     </div>
                     <button class="btn-danger hidden" id="bulkDeleteBtn" onclick="handleBulkDelete()">
                         <i class="fa-solid fa-trash-can"></i> Hapus Terpilih (<span id="selectedCount">0</span>)
@@ -264,20 +268,20 @@
         <!-- TAB 3: BATCH GENERATOR -->
         <div id="tabBatch" class="hidden">
             <div class="panel-card">
-                <div class="panel-header"><i class="fa-solid fa-cubes-stacked"></i> Batch Card Generator</div>
-                <p style="font-size:13px; color:var(--text-secondary); margin-bottom:18px;">Buat slot kartu kosong secara massal untuk persiapan produksi fisik.</p>
+                <div class="panel-header"><i class="fa-solid fa-cubes-stacked"></i> Batch Card Generator (Pembuatan Massal)</div>
+                <p style="font-size:13px; color:var(--text-secondary); margin-bottom:18px;">Buat rentang slot kartu baru secara cepat dan otomatis untuk persiapan cetak fisik.</p>
                 <form onsubmit="handleBatchGenerate(event)">
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
                         <div class="form-group">
                             <label>Dari ID Nomor</label>
-                            <input type="number" id="batchStart" placeholder="10" required>
+                            <input type="number" id="batchStart" placeholder="Contoh: 001" required>
                         </div>
                         <div class="form-group">
                             <label>Sampai ID Nomor</label>
-                            <input type="number" id="batchEnd" placeholder="25" required>
+                            <input type="number" id="batchEnd" placeholder="Contoh: 050" required>
                         </div>
                     </div>
-                    <button type="submit" class="btn-primary" id="batchBtn" style="margin-top:10px;">Generate Batch Sekarang</button>
+                    <button type="submit" class="btn-primary" id="batchBtn" style="margin-top:10px;">Generate Slot Massal</button>
                 </form>
             </div>
         </div>
@@ -285,12 +289,12 @@
         <!-- TAB 4: SETTINGS -->
         <div id="tabSettings" class="hidden">
             <div class="panel-card">
-                <div class="panel-header"><i class="fa-solid fa-sliders"></i> Pengaturan Sistem & API</div>
+                <div class="panel-header"><i class="fa-solid fa-sliders"></i> Pengaturan Sistem & Akses API</div>
                 <div class="form-group">
                     <label>GitHub Personal Access Token</label>
                     <input type="password" id="updateTokenInput" placeholder="ghp_xxxx">
                 </div>
-                <button class="btn-primary" onclick="updateToken()">Perbarui Token API</button>
+                <button class="btn-primary" onclick="updateToken()">Perbarui Token Akses</button>
                 <div style="margin-top:16px;">
                     <button class="btn-outline" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> Download Rekap CSV</button>
                 </div>
@@ -302,7 +306,7 @@
 <!-- Modal QR Code -->
 <div id="qrModal" class="modal">
     <div class="modal-box">
-        <h3 id="qrModalTitle" style="font-size:16px; font-weight:700;">QR Code Preview</h3>
+        <h3 id="qrModalTitle" style="font-size:16px; font-weight:700;">Pratinjau QR Code</h3>
         <p id="qrModalSubtitle" style="font-size:11px; color:var(--text-secondary); word-break:break-all; margin-top:4px;"></p>
         <div id="qrcode"></div>
         <div style="display:flex; gap:8px;">
@@ -339,11 +343,11 @@
         if(tab === 'dash') {
             document.getElementById('tabDash').classList.remove('hidden');
             document.getElementById('btnNavDash').classList.add('active');
-            document.getElementById('pageTitle').innerText = "Channel Analytics";
+            document.getElementById('pageTitle').innerText = "Ringkasan Sistem";
         } else if(tab === 'cards') {
             document.getElementById('tabCards').classList.remove('hidden');
             document.getElementById('btnNavCards').classList.add('active');
-            document.getElementById('pageTitle').innerText = "Card Inventory";
+            document.getElementById('pageTitle').innerText = "Inventaris Kartu";
         } else if(tab === 'batch') {
             document.getElementById('tabBatch').classList.remove('hidden');
             document.getElementById('btnNavBatch').classList.add('active');
@@ -351,7 +355,7 @@
         } else if(tab === 'settings') {
             document.getElementById('tabSettings').classList.remove('hidden');
             document.getElementById('btnNavSettings').classList.add('active');
-            document.getElementById('pageTitle').innerText = "System Settings";
+            document.getElementById('pageTitle').innerText = "Pengaturan Sistem";
         }
     }
 
@@ -385,7 +389,7 @@
     }
 
     function handleLogout() {
-        if(confirm("Keluar dari dashboard?")) {
+        if(confirm("Keluar dari konsol admin?")) {
             localStorage.removeItem("rzl_tok");
             location.reload();
         }
@@ -445,7 +449,7 @@
                         </div>
                     </div>
                     <div style="display:flex; align-items:center; gap:8px;">
-                        <span class="status-badge ${isSetup ? 'badge-empty' : 'badge-active'}">${isSetup ? 'UNASSIGNED' : 'ACTIVE'}</span>
+                        <span class="status-badge ${isSetup ? 'badge-empty' : 'badge-active'}">${isSetup ? 'BELUM AKTIF' : 'AKTIF'}</span>
                         <button class="btn-outline" onclick="navigator.clipboard.writeText('${fullUrl}'); notify('Link disalin!');" title="Copy Link"><i class="fa-solid fa-copy"></i></button>
                         <button class="btn-outline" onclick="showQrModal('${id}', '${fullUrl}')" title="QR Code"><i class="fa-solid fa-qrcode"></i></button>
                         <button class="btn-outline" onclick="editCard('${id}', '${item.destination}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
@@ -552,7 +556,7 @@
         let csv = "ID Kartu,Destination URL,Status\n";
         rawData.forEach(r => {
             const id = r.source.replace('/card/', '');
-            const status = r.destination.includes('setup.html') ? 'UNASSIGNED' : 'ACTIVE';
+            const status = r.destination.includes('setup.html') ? 'BELUM AKTIF' : 'AKTIF';
             csv += `"${id}","${r.destination}","${status}"\n`;
         });
         const blob = new Blob([csv], { type: 'text/csv' });
@@ -599,7 +603,7 @@
             document.getElementById('cardUrl').value = '';
             loadData();
         } catch(e) { notify(e.message, true); }
-        finally { btn.disabled = false; btn.innerText = "Simpan Konfigurasi"; }
+        finally { btn.disabled = false; btn.innerText = "Simpan Pengalihan"; }
     }
 
     async function handleBatchGenerate(e) {
@@ -642,7 +646,7 @@
             loadData();
             switchTab('cards');
         } catch(e) { notify(e.message, true); }
-        finally { btn.disabled = false; btn.innerText = "Generate Batch Sekarang"; }
+        finally { btn.disabled = false; btn.innerText = "Generate Slot Massal"; }
     }
 
     async function handleDelete() {
