@@ -34,11 +34,6 @@
       "source": "/card/009",
       "destination": "https://rzlhmdproject.vercel.app/setup.html?id=009",
       "permanent": false
-    },
-    {
-      "source": "/card/010",
-      "destination": "https://rzlhmdproject.vercel.app/setup.html?id=010",
-      "permanent": false
     }
   ]
 }
