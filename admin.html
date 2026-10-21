@@ -18,7 +18,6 @@
             --border: #e2e8f0;
             --success: #10b981;
             --danger: #ef4444;
-            --warning: #f59e0b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -55,7 +54,6 @@
         .badge-active { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
         .badge-empty { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
 
-        .card-client-name { font-weight: 700; font-size: 14px; color: var(--text-main); margin-bottom: 4px; }
         .card-url { color: var(--text-muted); font-size: 12px; word-break: break-all; margin-bottom: 8px; }
         .card-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border); padding-top: 8px; font-size: 12px; gap: 6px; }
 
@@ -77,14 +75,14 @@
 
 <div class="container">
     <div class="header">
-        <div class="brand-badge"><i class="fa-solid fa-shield-halved"></i> Admin Management</div>
+        <div class="brand-badge"><i class="fa-solid fa-shield-halved"></i> Admin Panel</div>
         <h1>Smart Review Dashboard</h1>
         <p>Sistem Pengelolaan Kartu NFC & QR Code Rzlhmdproject</p>
     </div>
 
     <div id="toast" class="toast"></div>
 
-    <!-- 1. HALAMAN LOGIN ADMIN -->
+    <!-- LOGIN SECTION -->
     <div id="loginSection" class="card">
         <div class="card-title"><i class="fa-solid fa-lock"></i> Autentikasi Admin</div>
         <form onsubmit="handleLogin(event)">
@@ -99,7 +97,7 @@
         </form>
     </div>
 
-    <!-- 2. DASHBOARD UTAMA -->
+    <!-- MAIN DASHBOARD -->
     <div id="dashboardSection" class="hidden">
         <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 18px;">
             <div>
@@ -109,22 +107,15 @@
             <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-power-off"></i> Keluar</button>
         </div>
 
-        <!-- Form Input Slot / Kartu -->
+        <!-- Form Input Card -->
         <div class="card">
             <div class="card-title"><i class="fa-solid fa-pen-to-square"></i> Input / Perbarui Kartu Klien</div>
             <form onsubmit="handleSaveCard(event)">
                 <div class="form-group">
-                    <label>Nomor Kartu (ID) — Ketik Baru / Pilih</label>
+                    <label>Nomor Kartu (ID)</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-id-card"></i>
                         <input type="text" id="targetCardId" placeholder="Contoh: 001, 002, 003..." required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Nama Bisnis / Toko Klien (Opsional Label)</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-store"></i>
-                        <input type="text" id="clientName" placeholder="Contoh: Ayam Geprek Mentari">
                     </div>
                 </div>
                 <div class="form-group">
@@ -141,18 +132,17 @@
             </form>
         </div>
 
-        <!-- Daftar Kartu & Filter Pencarian -->
+        <!-- Card List -->
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <div class="card-title" style="border:none; margin:0; padding:0;"><i class="fa-solid fa-list-check"></i> Daftar Kartu</div>
                 <button onclick="loadDashboardData()" style="width: auto; padding: 5px 10px; font-size: 11px; background: #f1f5f9; color: var(--text-main); box-shadow:none;"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
             </div>
             
-            <!-- Kotak Pencarian (Search Bar) -->
             <div class="form-group" style="margin-bottom: 14px;">
                 <div class="input-wrapper">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="Cari ID Kartu atau Nama Bisnis...">
+                    <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="Cari ID Kartu...">
                 </div>
             </div>
 
@@ -226,7 +216,7 @@
             const fileData = await res.json();
             const jsonContent = JSON.parse(atob(fileData.content));
             
-            globalCardsData = jsonContent.redirects.filter(r => r.source.startsWith('/card/'));
+            globalCardsData = jsonContent.redirects.filter(r => r.source && r.source.startsWith('/card/'));
             renderCards(globalCardsData);
         } catch (e) {
             container.innerHTML = `<p style="font-size: 12px; color: var(--danger); text-align: center;">Gagal memuat daftar kartu.</p>`;
@@ -244,7 +234,6 @@
             const cardId = item.source.replace('/card/', '');
             const fullAccessUrl = `https://rzlhmdproject.vercel.app${item.source}`;
             const isSetup = item.destination.includes('setup.html');
-            const clientName = item.clientName || (isSetup ? 'Belum Diaktifkan Klien' : 'Kartu Tanpa Nama');
 
             return `
                 <div class="card-item">
@@ -254,11 +243,10 @@
                             ${isSetup ? 'BELUM AKTIF' : 'AKTIF'}
                         </span>
                     </div>
-                    <div class="card-client-name">${clientName}</div>
                     <div class="card-url"><strong>Tujuan:</strong> ${item.destination}</div>
                     <div class="card-actions">
                         <button onclick="copyNfcLink('${fullAccessUrl}')" class="action-btn btn-copy"><i class="fa-solid fa-copy"></i> Copy Link NFC</button>
-                        <button onclick="selectCardToEdit('${cardId}', '${clientName}', '${item.destination}')" class="action-btn btn-edit"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button onclick="selectCardToEdit('${cardId}', '${item.destination}')" class="action-btn btn-edit"><i class="fa-solid fa-pen"></i> Edit</button>
                     </div>
                 </div>
             `;
@@ -269,8 +257,7 @@
         const query = document.getElementById('searchInput').value.toLowerCase().trim();
         const filtered = globalCardsData.filter(item => {
             const cardId = item.source.replace('/card/', '').toLowerCase();
-            const clientName = (item.clientName || '').toLowerCase();
-            return cardId.includes(query) || clientName.includes(query);
+            return cardId.includes(query);
         });
         renderCards(filtered);
     }
@@ -281,9 +268,8 @@
         });
     }
 
-    function selectCardToEdit(id, name, url) {
+    function selectCardToEdit(id, url) {
         document.getElementById('targetCardId').value = id;
-        document.getElementById('clientName').value = name.includes('Belum Diaktifkan') || name.includes('Kartu Tanpa Nama') ? '' : name;
         document.getElementById('targetUrl').value = url.includes('setup.html') ? '' : url;
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -292,7 +278,6 @@
         e.preventDefault();
         const token = localStorage.getItem("rzl_gh_token");
         const cardId = document.getElementById('targetCardId').value.trim();
-        const clientName = document.getElementById('clientName').value.trim();
         let targetUrl = document.getElementById('targetUrl').value.trim();
 
         if (!targetUrl) {
@@ -312,25 +297,33 @@
             const sourcePath = `/card/${cardId}`;
             let found = false;
 
+            // Bersihkan properti non-standar Vercel
+            jsonContent.redirects = jsonContent.redirects.map(item => ({
+                source: item.source,
+                destination: item.destination,
+                permanent: false
+            }));
+
             jsonContent.redirects.forEach(item => {
                 if (item.source === sourcePath) {
                     item.destination = targetUrl;
-                    if (clientName) item.clientName = clientName;
                     found = true;
                 }
             });
 
             if (!found) {
-                const newItem = { source: sourcePath, destination: targetUrl, permanent: false };
-                if (clientName) newItem.clientName = clientName;
-                jsonContent.redirects.push(newItem);
+                jsonContent.redirects.push({
+                    source: sourcePath,
+                    destination: targetUrl,
+                    permanent: false
+                });
             }
 
             const putRes = await fetch(apiUrl, {
                 method: 'PUT',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: `Save card /card/${cardId} via Rzlhmdproject Admin`,
+                    message: `Update /card/${cardId} via Rzlhmdproject Admin`,
                     content: btoa(JSON.stringify(jsonContent, null, 2)),
                     sha: fileData.sha
                 })
@@ -340,7 +333,6 @@
 
             showToast(`Kartu ID #${cardId} berhasil disimpan!`);
             document.getElementById('targetCardId').value = '';
-            document.getElementById('clientName').value = '';
             document.getElementById('targetUrl').value = '';
             loadDashboardData();
         } catch (err) {
@@ -368,7 +360,11 @@
             const fileData = await res.json();
             let jsonContent = JSON.parse(atob(fileData.content));
 
-            jsonContent.redirects = jsonContent.redirects.filter(item => item.source !== `/card/${cardId}`);
+            jsonContent.redirects = jsonContent.redirects.filter(item => item.source !== `/card/${cardId}`).map(item => ({
+                source: item.source,
+                destination: item.destination,
+                permanent: false
+            }));
 
             const putRes = await fetch(apiUrl, {
                 method: 'PUT',
@@ -384,7 +380,6 @@
 
             showToast(`Kartu ID #${cardId} berhasil dihapus!`);
             document.getElementById('targetCardId').value = '';
-            document.getElementById('clientName').value = '';
             document.getElementById('targetUrl').value = '';
             loadDashboardData();
         } catch (err) {
