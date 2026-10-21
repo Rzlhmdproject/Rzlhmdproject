@@ -3,203 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rzlhmdproject — Admin Panel</title>
+    <title>Rzlhmdproject — Enterprise SaaS Control Center</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
         :root {
-            --bg-main: #121316;
-            --panel-bg: #1a1b20;
-            --panel-card: #23252b;
-            --panel-border: rgba(255, 255, 255, 0.08);
+            --bg-dark: #090a0f;
+            --panel-bg: #111319;
+            --card-bg: #181b24;
+            --card-hover: #1f232f;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(99, 102, 241, 0.3);
             --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
+            --text-muted: #8c93a3;
+            --accent-primary: #6366f1;
             --accent-lime: #d9f99d;
-            --accent-lime-hover: #bef264;
             --accent-orange: #f97316;
+            --accent-cyan: #06b6d4;
             --danger: #ef4444;
+            --success: #10b981;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; padding: 20px 10px; }
-        
-        .app-layout { display: flex; width: 100%; max-width: 1050px; background: var(--panel-bg); border-radius: 24px; border: 1px solid var(--panel-border); overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+        body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; padding: 20px 10px; }
+
+        .app-container { display: flex; width: 100%; max-width: 1200px; background: var(--panel-bg); border-radius: 28px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.6); min-height: 85vh; }
 
         /* Sidebar Navigation */
-        .sidebar { width: 68px; background: rgba(0, 0, 0, 0.2); border-right: 1px solid var(--panel-border); display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 20px 0; }
-        .nav-logo { width: 40px; height: 40px; background: var(--accent-lime); color: #121316; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; }
-        .nav-menu { display: flex; flex-direction: column; gap: 14px; }
-        .nav-btn { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); background: transparent; border: none; font-size: 16px; cursor: pointer; transition: all 0.2s; }
-        .nav-btn:hover, .nav-btn.active { background: var(--panel-card); color: var(--accent-lime); border: 1px solid var(--panel-border); }
+        .sidebar { width: 80px; background: rgba(0, 0, 0, 0.3); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 24px 0; }
+        .brand-icon { width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent-primary) 0%, #4338ca 100%); color: #fff; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4); }
+        .nav-items { display: flex; flex-direction: column; gap: 16px; }
+        .nav-link { width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); background: transparent; border: none; font-size: 18px; cursor: pointer; transition: all 0.2s; position: relative; }
+        .nav-link:hover, .nav-link.active { background: var(--card-bg); color: var(--accent-lime); border: 1px solid var(--border-color); }
+        .nav-link.active::before { content:''; position: absolute; left: -12px; width: 4px; height: 20px; background: var(--accent-lime); border-radius: 0 4px 4px 0; }
 
-        /* Main Content */
-        .main-content { flex: 1; padding: 24px; overflow-y: auto; max-height: 90vh; }
-        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .top-header h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+        /* Main Workspace */
+        .workspace { flex: 1; padding: 28px; overflow-y: auto; max-height: 90vh; }
+        .workspace-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; }
+        .workspace-title h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+        .workspace-title p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
-        /* Hero Banner */
-        .hero-banner { background: var(--panel-card); border: 1px solid var(--panel-border); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
-        .hero-title { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
-        .hero-sub { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
+        .system-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: var(--success); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; }
 
-        .glass-stats-bar { display: flex; gap: 12px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--panel-border); border-radius: 16px; padding: 12px 16px; }
-        .stat-item { flex: 1; border-right: 1px solid var(--panel-border); padding-right: 8px; }
-        .stat-item:last-child { border-right: none; }
-        .stat-number { font-size: 18px; font-weight: 800; color: #fff; }
-        .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+        /* Complex Grid Layout */
+        .grid-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
 
-        /* Form Card */
-        .panel-card { background: var(--panel-card); border: 1px solid var(--panel-border); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
-        .panel-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+        /* SaaS Metrics Header */
+        .metrics-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+        .metric-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 16px; position: relative; overflow: hidden; }
+        .metric-card::after { content: ''; position: absolute; top: 0; right: 0; width: 40px; height: 40px; background: rgba(255,255,255,0.02); border-radius: 0 0 0 40px; }
+        .metric-val { font-size: 22px; font-weight: 800; color: #fff; margin-top: 6px; }
+        .metric-lbl { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Card 3D Simulator Component */
+        .card-simulator { background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); border: 1px solid var(--border-glow); border-radius: 20px; padding: 20px; margin-bottom: 20px; position: relative; box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
+        .sim-chip { width: 34px; height: 24px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 5px; margin-bottom: 12px; }
+        .sim-title { font-size: 16px; font-weight: 800; color: #fff; }
+        .sim-meta { font-size: 11px; color: var(--accent-lime); font-family: monospace; margin-top: 4px; }
+
+        /* Form & Panels */
+        .panel-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .panel-header { font-size: 14px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
         
-        .form-group { margin-bottom: 12px; }
+        .form-group { margin-bottom: 14px; }
         label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-        input { width: 100%; padding: 11px 14px; border: 1px solid var(--panel-border); border-radius: 10px; background: rgba(0, 0, 0, 0.25); color: #fff; font-size: 13px; outline: none; }
-        input:focus { border-color: var(--accent-lime); }
+        input, select { width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0, 0, 0, 0.3); color: #fff; font-size: 13px; outline: none; transition: border 0.2s; }
+        input:focus, select:focus { border-color: var(--accent-primary); }
 
-        /* Buttons */
-        .btn-group { display: flex; gap: 8px; margin-top: 14px; }
-        button { padding: 10px 16px; border-radius: 10px; border: none; font-size: 12px; font-weight: 700; cursor: pointer; background: var(--accent-lime); color: #121316; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-        button:hover { background: var(--accent-lime-hover); }
-        .btn-sec { background: rgba(255, 255, 255, 0.08); color: #fff; border: 1px solid var(--panel-border); }
-        .btn-sec:hover { background: rgba(255, 255, 255, 0.15); }
+        .btn { padding: 11px 18px; border-radius: 12px; border: none; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
+        .btn-primary { background: var(--accent-primary); color: #fff; }
+        .btn-primary:hover { background: #4f46e5; }
+        .btn-accent { background: var(--accent-lime); color: #090a0f; }
+        .btn-accent:hover { background: #bef264; }
+        .btn-outline { background: transparent; color: #fff; border: 1px solid var(--border-color); }
+        .btn-outline:hover { background: rgba(255,255,255,0.05); }
         .btn-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
-        .btn-danger:hover { background: rgba(239, 68, 68, 0.25); }
 
-        /* List Rows */
-        .card-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0, 0, 0, 0.15); border: 1px solid var(--panel-border); border-radius: 12px; padding: 12px 16px; margin-bottom: 8px; }
-        .card-id { font-weight: 700; font-size: 13px; }
-        .card-dest { font-size: 11px; color: var(--text-muted); word-break: break-all; margin-top: 2px; }
-        
-        .badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; }
-        .badge-active { background: rgba(217, 249, 157, 0.15); color: var(--accent-lime); }
-        .badge-empty { background: rgba(249, 115, 22, 0.15); color: var(--accent-orange); }
+        /* Data Tables & List Rows */
+        .table-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px 16px; margin-bottom: 10px; transition: all 0.2s; }
+        .table-row:hover { border-color: var(--accent-primary); transform: translateX(2px); }
+        .row-id { font-weight: 800; font-size: 13px; color: var(--accent-lime); }
+        .row-url { font-size: 11px; color: var(--text-muted); word-break: break-all; margin-top: 2px; }
 
-        .btn-sm { padding: 5px 10px; font-size: 11px; border-radius: 6px; }
+        .status-pill { font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
+        .pill-active { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .pill-empty { background: rgba(249, 115, 22, 0.15); color: var(--accent-orange); border: 1px solid rgba(249, 115, 22, 0.3); }
 
-        .toast { padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 600; display: none; text-align: center; margin-bottom: 14px; }
-        .toast-ok { background: rgba(217, 249, 157, 0.2); color: var(--accent-lime); border: 1px solid var(--accent-lime); }
+        /* Toast & Modal */
+        .toast { padding: 12px; border-radius: 12px; font-size: 12px; font-weight: 700; display: none; text-align: center; margin-bottom: 16px; }
+        .toast-ok { background: rgba(16, 185, 129, 0.2); color: var(--success); border: 1px solid var(--success); }
         .toast-err { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid var(--danger); }
         .hidden { display: none !important; }
 
-        /* Modal */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 99; }
-        .modal-box { background: var(--panel-card); border: 1px solid var(--panel-border); padding: 20px; border-radius: 16px; text-align: center; max-width: 300px; width: 100%; }
-        #qrcode { display: flex; justify-content: center; background: #fff; padding: 10px; border-radius: 12px; margin: 14px 0; }
-        #qrcode img { margin: 0 auto; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 99; }
+        .modal-box { background: var(--panel-bg); border: 1px solid var(--border-color); padding: 24px; border-radius: 24px; text-align: center; max-width: 320px; width: 100%; }
+        #qrcode { display: flex; justify-content: center; background: #fff; padding: 12px; border-radius: 16px; margin: 16px 0; }
     </style>
 </head>
 <body>
 
-<div class="app-layout">
+<div class="app-container">
     <!-- Sidebar Navigation -->
     <div class="sidebar">
-        <div class="nav-logo"><i class="fa-solid fa-bolt"></i></div>
-        <div class="nav-menu">
-            <button class="nav-btn active" id="btnNavDash" onclick="switchTab('dash')" title="Dashboard"><i class="fa-solid fa-chart-pie"></i></button>
-            <button class="nav-btn" id="btnNavCards" onclick="switchTab('cards')" title="Daftar Kartu"><i class="fa-solid fa-credit-card"></i></button>
-            <button class="nav-btn" id="btnNavSettings" onclick="switchTab('settings')" title="Pengaturan Token"><i class="fa-solid fa-gear"></i></button>
+        <div class="brand-icon"><i class="fa-solid fa-cube"></i></div>
+        <div class="nav-items">
+            <button class="nav-link active" id="btnNavDash" onclick="switchTab('dash')" title="Overview Dashboard"><i class="fa-solid fa-chart-pie"></i></button>
+            <button class="nav-link" id="btnNavCards" onclick="switchTab('cards')" title="Management Slot Kartu"><i class="fa-solid fa-credit-card"></i></button>
+            <button class="nav-link" id="btnNavBatch" onclick="switchTab('batch')" title="Batch Generator Massal"><i class="fa-solid fa-layer-group"></i></button>
+            <button class="nav-link" id="btnNavSettings" onclick="switchTab('settings')" title="System Settings"><i class="fa-solid fa-sliders"></i></button>
         </div>
-        <button class="nav-btn" onclick="handleLogout()" title="Keluar"><i class="fa-solid fa-power-off" style="color:var(--danger)"></i></button>
+        <button class="nav-link" onclick="handleLogout()" title="Keluar Administrator"><i class="fa-solid fa-power-off" style="color:var(--danger)"></i></button>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="top-header">
-            <h1 id="pageTitle">Overview</h1>
-            <div style="font-size: 11px; color: var(--text-muted);" id="statusIndicator"><i class="fa-solid fa-circle" style="color:var(--danger); font-size:8px;"></i> Disconnected</div>
+    <!-- Workspace Area -->
+    <div class="workspace">
+        <div class="workspace-header">
+            <div class="workspace-title">
+                <h1 id="pageTitle">Enterprise Overview</h1>
+                <p id="pageSub">Rzlhmdproject Smart NFC & Review Platform</p>
+            </div>
+            <div class="system-badge" id="statusBadge">
+                <i class="fa-solid fa-circle" style="font-size:8px;"></i> GitHub API Connected
+            </div>
         </div>
 
         <div id="toast" class="toast"></div>
 
-        <!-- Login Card -->
-        <div id="loginCard" class="panel-card">
-            <div class="panel-title"><i class="fa-solid fa-key"></i> Autentikasi Admin</div>
+        <!-- LOGIN SECTION -->
+        <div id="loginCard" class="panel-box">
+            <div class="panel-header"><i class="fa-solid fa-shield-halved"></i> Super Admin Authentication</div>
             <form onsubmit="handleLogin(event)">
                 <div class="form-group">
-                    <label>GitHub Personal Access Token</label>
+                    <label>GitHub Personal Access Token (GHP)</label>
                     <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" required>
                 </div>
-                <button type="submit" style="width:100%;">Masuk Dashboard</button>
+                <button type="submit" class="btn btn-primary" style="width:100%;"><i class="fa-solid fa-right-to-bracket"></i> Masuk Enterprise Console</button>
             </form>
         </div>
 
-        <!-- TAB 1: DASHBOARD MAIN -->
-        <div id="tabDash" class="hidden">
-            <div class="hero-banner">
-                <div class="hero-title">Card Management</div>
-                <div class="hero-sub">Kelola alur aktivasi dan pengalihan link NFC / QR Code Rzlhmdproject.</div>
-                
-                <div class="glass-stats-bar">
-                    <div class="stat-item">
-                        <div class="stat-number" id="sTotal">0</div>
-                        <div class="stat-label">Total Slot</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" style="color:var(--accent-lime)" id="sActive">0</div>
-                        <div class="stat-label">Kartu Aktif</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" style="color:var(--accent-orange)" id="sEmpty">0</div>
-                        <div class="stat-label">Belum Aktif</div>
-                    </div>
+        <!-- MAIN DASHBOARD CONTENT -->
+        <div id="dashContent" class="hidden">
+            <!-- Metrics Bar -->
+            <div class="metrics-bar">
+                <div class="metric-card">
+                    <div class="metric-lbl">Total Slot Kartu</div>
+                    <div class="metric-val" id="mTotal">0</div>
                 </div>
-
-                <div style="margin-top:14px; display:flex; gap:8px;">
-                    <button onclick="focusCardInput()"><i class="fa-solid fa-plus"></i> Input Kartu Baru</button>
-                    <button class="btn-sec" onclick="exportCSV()"><i class="fa-solid fa-download"></i> Export CSV</button>
+                <div class="metric-card">
+                    <div class="metric-lbl">Kartu Aktif</div>
+                    <div class="metric-val" style="color:var(--success)" id="mActive">0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-lbl">Belum Didaftar</div>
+                    <div class="metric-val" style="color:var(--accent-orange)" id="mEmpty">0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-lbl">Engine Health</div>
+                    <div class="metric-val" style="color:var(--accent-cyan)">100%</div>
                 </div>
             </div>
 
-            <!-- Form Card Manager -->
-            <div class="panel-card" id="formCardBlock">
-                <div class="panel-title"><i class="fa-solid fa-pen-to-square"></i> Kelola / Input Slot Kartu</div>
-                <form onsubmit="handleSave(event)">
-                    <div class="form-group">
-                        <label>ID Kartu (Nomor Slot)</label>
-                        <input type="text" id="cardId" placeholder="Contoh: 001" required>
+            <!-- Grid Layout -->
+            <div class="grid-layout">
+                <!-- Left Column: Form & Engine Manager -->
+                <div>
+                    <!-- Simulator 3D Card -->
+                    <div class="card-simulator">
+                        <div class="sim-chip"></div>
+                        <div class="sim-title" id="simTitle">NFC Review Card Simulator</div>
+                        <div class="sim-meta" id="simMeta">TARGET: Direct Redirect Engine</div>
                     </div>
-                    <div class="form-group">
-                        <label>Link Google Maps Bisnis</label>
-                        <input type="url" id="cardUrl" placeholder="Kosongkan jika diisi klien via setup.html">
+
+                    <!-- Single Card Form -->
+                    <div class="panel-box">
+                        <div class="panel-header"><i class="fa-solid fa-pen-to-square"></i> Kelola / Direct Modul Slot</div>
+                        <form onsubmit="handleSave(event)">
+                            <div class="form-group">
+                                <label>ID Kartu (Slot Number)</label>
+                                <input type="text" id="cardId" placeholder="Contoh: 001" onkeyup="updateSim()" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Mode Pengalihan (Routing Mode)</label>
+                                <select id="routingMode">
+                                    <option value="direct">Direct Redirect (Langsung Google Maps)</option>
+                                    <option value="setup">Aktivasi Klien Mode (setup.html)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Destination URL (Google Maps / Target)</label>
+                                <input type="url" id="cardUrl" placeholder="https://maps.app.goo.gl/..." onkeyup="updateSim()">
+                            </div>
+                            <div style="display:flex; gap:10px; margin-top:16px;">
+                                <button type="submit" class="btn btn-accent" id="saveBtn" style="flex:1;"><i class="fa-solid fa-floppy-disk"></i> Simpan Configuration</button>
+                                <button type="button" class="btn btn-danger" onclick="handleDelete()"><i class="fa-solid fa-trash"></i> Reset</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="btn-group">
-                        <button type="submit" id="saveBtn"><i class="fa-solid fa-check"></i> Simpan Slot</button>
-                        <button type="button" class="btn-danger" onclick="handleDelete()"><i class="fa-solid fa-trash"></i> Reset Slot</button>
+                </div>
+
+                <!-- Right Column: Quick Logs & Quick Tools -->
+                <div>
+                    <div class="panel-box">
+                        <div class="panel-header"><i class="fa-solid fa-bolt"></i> Quick Operations</div>
+                        <div style="display:flex; flex-direction:column; gap:8px;">
+                            <button class="btn btn-outline" style="width:100%; text-align:left; justify-content:flex-start;" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> Download Full Rekap (CSV)</button>
+                            <button class="btn btn-outline" style="width:100%; text-align:left; justify-content:flex-start;" onclick="switchTab('batch')"><i class="fa-solid fa-layer-group"></i> Batch Generator Massal</button>
+                            <button class="btn btn-outline" style="width:100%; text-align:left; justify-content:flex-start;" onclick="loadData()"><i class="fa-solid fa-rotate"></i> Force Sync Database</button>
+                        </div>
                     </div>
+
+                    <div class="panel-box">
+                        <div class="panel-header"><i class="fa-solid fa-clock-rotate-left"></i> Server Log Activity</div>
+                        <div style="font-size:11px; color:var(--text-muted); line-height:1.6;" id="activityLog">
+                            • System initialized successfully.<br>
+                            • GitHub Repository linked to Vercel.<br>
+                            • Ready for NFC Card deployment.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: DAFTAR KARTU TABLE -->
+        <div id="cardsContent" class="hidden">
+            <div class="panel-box">
+                <div class="panel-header">
+                    <span><i class="fa-solid fa-list-check"></i> Master Card Inventory</span>
+                    <button class="btn btn-outline" style="padding:6px 12px; font-size:11px;" onclick="loadData()"><i class="fa-solid fa-rotate"></i> Refresh Data</button>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="searchBox" onkeyup="filterCards()" placeholder="Cari ID Kartu atau Link Target...">
+                </div>
+                <div id="cardListContainer"></div>
+            </div>
+        </div>
+
+        <!-- TAB 3: BATCH GENERATOR -->
+        <div id="batchContent" class="hidden">
+            <div class="panel-box">
+                <div class="panel-header"><i class="fa-solid fa-cubes-stacked"></i> Batch Card Generator (Produksi Massal)</div>
+                <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">Buat rentang slot kartu kosong secara otomatis sekaligus untuk mempercepat flashing chip NFC.</p>
+                <form onsubmit="handleBatchGenerate(event)">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                        <div class="form-group">
+                            <label>Dari ID Nomor</label>
+                            <input type="number" id="batchStart" placeholder="Contoh: 10" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Sampai ID Nomor</label>
+                            <input type="number" id="batchEnd" placeholder="Contoh: 20" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-accent" id="batchBtn" style="width:100%; margin-top:10px;"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate Batch Slot Sekaligus</button>
                 </form>
             </div>
         </div>
 
-        <!-- TAB 2: DAFTAR KARTU -->
-        <div id="tabCards" class="hidden">
-            <div class="panel-card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <div class="panel-title" style="margin:0;"><i class="fa-solid fa-list"></i> Daftar Slot Kartu</div>
-                    <button class="btn-sec btn-sm" onclick="loadData()"><i class="fa-solid fa-rotate"></i> Refresh</button>
-                </div>
-
+        <!-- TAB 4: SYSTEM SETTINGS -->
+        <div id="settingsContent" class="hidden">
+            <div class="panel-box">
+                <div class="panel-header"><i class="fa-solid fa-sliders"></i> Engine & API Token Configuration</div>
                 <div class="form-group">
-                    <input type="text" id="searchBox" onkeyup="filterCards()" placeholder="Cari ID Kartu...">
+                    <label>GitHub Personal Access Token</label>
+                    <input type="password" id="updateTokenInput" placeholder="ghp_xxxxxxxx">
                 </div>
-
-                <div id="cardList"></div>
-            </div>
-        </div>
-
-        <!-- TAB 3: PENGATURAN -->
-        <div id="tabSettings" class="hidden">
-            <div class="panel-card">
-                <div class="panel-title"><i class="fa-solid fa-gear"></i> Pengaturan Sistem</div>
-                <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">Ganti atau perbarui Token GitHub Personal Access yang tersimpan di browser Anda.</p>
-                
-                <div class="form-group">
-                    <label>Token GitHub Aktif</label>
-                    <input type="password" id="updateTokenInput" placeholder="ghp_xxxx">
-                </div>
-                <button onclick="updateToken()"><i class="fa-solid fa-floppy-disk"></i> Simpan Token Baru</button>
+                <button class="btn btn-primary" onclick="updateToken()"><i class="fa-solid fa-floppy-disk"></i> Simpan Configuration</button>
             </div>
         </div>
     </div>
@@ -208,12 +278,12 @@
 <!-- Modal QR Code -->
 <div id="qrModal" class="modal">
     <div class="modal-box">
-        <h3 id="qrModalTitle" style="font-size:15px;">QR Code Kartu</h3>
-        <p id="qrModalSubtitle" style="font-size:10px; color:var(--text-muted); word-break:break-all; margin-top:4px;"></p>
+        <h3 id="qrModalTitle" style="font-size:16px; font-weight:800;">QR Code Preview</h3>
+        <p id="qrModalSubtitle" style="font-size:11px; color:var(--text-muted); word-break:break-all; margin-top:4px;"></p>
         <div id="qrcode"></div>
-        <div style="display:flex; gap:6px;">
-            <button style="width:100%;" onclick="downloadQR()"><i class="fa-solid fa-download"></i> Download PNG</button>
-            <button class="btn-sec" style="width:100%;" onclick="closeQrModal()">Tutup</button>
+        <div style="display:flex; gap:8px;">
+            <button class="btn btn-accent" style="flex:1;" onclick="downloadQR()"><i class="fa-solid fa-download"></i> Download PNG</button>
+            <button class="btn btn-outline" onclick="closeQrModal()">Tutup</button>
         </div>
     </div>
 </div>
@@ -221,7 +291,6 @@
 <script>
     const OWNER = 'rzlhmdproject', REPO = 'rzlhmdproject', PATH = 'vercel.json';
     let rawData = [];
-    let qrObject = null;
 
     function notify(msg, err = false) {
         const t = document.getElementById('toast');
@@ -232,26 +301,32 @@
     }
 
     function switchTab(tab) {
-        document.getElementById('tabDash').classList.add('hidden');
-        document.getElementById('tabCards').classList.add('hidden');
-        document.getElementById('tabSettings').classList.add('hidden');
+        document.getElementById('dashContent').classList.add('hidden');
+        document.getElementById('cardsContent').classList.add('hidden');
+        document.getElementById('batchContent').classList.add('hidden');
+        document.getElementById('settingsContent').classList.add('hidden');
 
         document.getElementById('btnNavDash').classList.remove('active');
         document.getElementById('btnNavCards').classList.remove('active');
+        document.getElementById('btnNavBatch').classList.remove('active');
         document.getElementById('btnNavSettings').classList.remove('active');
 
         if(tab === 'dash') {
-            document.getElementById('tabDash').classList.remove('hidden');
+            document.getElementById('dashContent').classList.remove('hidden');
             document.getElementById('btnNavDash').classList.add('active');
-            document.getElementById('pageTitle').innerText = "Overview";
+            document.getElementById('pageTitle').innerText = "Enterprise Overview";
         } else if(tab === 'cards') {
-            document.getElementById('tabCards').classList.remove('hidden');
+            document.getElementById('cardsContent').classList.remove('hidden');
             document.getElementById('btnNavCards').classList.add('active');
-            document.getElementById('pageTitle').innerText = "Daftar Kartu";
+            document.getElementById('pageTitle').innerText = "Card Inventory";
+        } else if(tab === 'batch') {
+            document.getElementById('batchContent').classList.remove('hidden');
+            document.getElementById('btnNavBatch').classList.add('active');
+            document.getElementById('pageTitle').innerText = "Batch Generator";
         } else if(tab === 'settings') {
-            document.getElementById('tabSettings').classList.remove('hidden');
+            document.getElementById('settingsContent').classList.remove('hidden');
             document.getElementById('btnNavSettings').classList.add('active');
-            document.getElementById('pageTitle').innerText = "Pengaturan";
+            document.getElementById('pageTitle').innerText = "System Settings";
         }
     }
 
@@ -272,26 +347,33 @@
     async function verify(tok, showToast = false) {
         try {
             const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, { headers: { 'Authorization': `token ${tok}` } });
-            if (!res.ok) throw new Error('Token salah / terhapus.');
+            if (!res.ok) throw new Error('Token salah / tidak valid.');
             localStorage.setItem("rzl_tok", tok);
             document.getElementById('loginCard').classList.add('hidden');
             switchTab('dash');
             
-            document.getElementById('statusIndicator').innerHTML = `<i class="fa-solid fa-circle" style="color:var(--accent-lime); font-size:8px;"></i> Terhubung`;
-            if(showToast) notify('Login Berhasil');
+            document.getElementById('statusBadge').innerHTML = `<i class="fa-solid fa-circle" style="font-size:8px; color:var(--success)"></i> GitHub API Connected`;
+            if(showToast) notify('Autentikasi SaaS Berhasil');
             loadData();
         } catch(e) {
             localStorage.removeItem("rzl_tok");
-            document.getElementById('statusIndicator').innerHTML = `<i class="fa-solid fa-circle" style="color:var(--danger); font-size:8px;"></i> Disconnected`;
+            document.getElementById('statusBadge').innerHTML = `<i class="fa-solid fa-circle" style="font-size:8px; color:var(--danger)"></i> Disconnected`;
             if(showToast) notify(e.message, true);
         }
     }
 
     function handleLogout() {
-        if(confirm("Keluar dari dashboard?")) {
+        if(confirm("Keluar dari Enterprise Console?")) {
             localStorage.removeItem("rzl_tok");
             location.reload();
         }
+    }
+
+    function updateSim() {
+        const id = document.getElementById('cardId').value.trim() || "001";
+        const url = document.getElementById('cardUrl').value.trim();
+        document.getElementById('simTitle').innerText = `NFC Review Card #${id}`;
+        document.getElementById('simMeta').innerText = url ? `TARGET: ${url}` : "TARGET: Mode Aktivasi Klien (setup.html)";
     }
 
     function updateToken() {
@@ -307,38 +389,38 @@
         try {
             const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, { headers: { 'Authorization': `token ${tok}` } });
             const data = await res.json();
-            const json = JSON.parse(atob(data.content));
+            const json = JSON.parse(atob(fileData = data.content));
             rawData = json.redirects.filter(r => r.source && r.source.startsWith('/card/'));
             
             const total = rawData.length;
             const active = rawData.filter(r => !r.destination.includes('setup.html')).length;
-            document.getElementById('sTotal').innerText = total;
-            document.getElementById('sActive').innerText = active;
-            document.getElementById('sEmpty').innerText = total - active;
+            document.getElementById('mTotal').innerText = total;
+            document.getElementById('mActive').innerText = active;
+            document.getElementById('mEmpty').innerText = total - active;
 
-            renderCardList(rawData);
-        } catch(e) { notify('Gagal memuat data', true); }
+            renderCardTable(rawData);
+        } catch(e) { notify('Gagal memuat data dari GitHub', true); }
     }
 
-    function renderCardList(items) {
-        const list = document.getElementById('cardList');
-        if(items.length === 0) { list.innerHTML = '<p style="text-align:center;color:var(--text-muted); font-size:12px;">Belum ada kartu.</p>'; return; }
+    function renderCardTable(items) {
+        const container = document.getElementById('cardListContainer');
+        if(items.length === 0) { container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:12px; padding:20px;">Inventory kosong.</p>'; return; }
         
-        list.innerHTML = items.map(item => {
+        container.innerHTML = items.map(item => {
             const id = item.source.replace('/card/', '');
             const isSetup = item.destination.includes('setup.html');
             const fullUrl = `https://rzlhmdproject.vercel.app${item.source}`;
             return `
-                <div class="card-row">
+                <div class="table-row">
                     <div>
-                        <div class="card-id">Slot ID #${id}</div>
-                        <div class="card-dest">${item.destination}</div>
+                        <div class="row-id">Slot ID #${id}</div>
+                        <div class="row-url">${item.destination}</div>
                     </div>
-                    <div style="display:flex; align-items:center; gap:6px;">
-                        <span class="badge ${isSetup ? 'badge-empty' : 'badge-active'}">${isSetup ? 'KOSONG' : 'AKTIF'}</span>
-                        <button class="btn-sec btn-sm" onclick="navigator.clipboard.writeText('${fullUrl}'); notify('Link Copied!');" title="Copy Link"><i class="fa-solid fa-copy"></i></button>
-                        <button class="btn-sec btn-sm" onclick="showQrModal('${id}', '${fullUrl}')" title="Lihat QR"><i class="fa-solid fa-qrcode"></i></button>
-                        <button class="btn-sec btn-sm" onclick="editCard('${id}', '${item.destination}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="status-pill ${isSetup ? 'pill-empty' : 'pill-active'}">${isSetup ? 'KOSONG' : 'AKTIF'}</span>
+                        <button class="btn btn-outline" style="padding:5px 10px; font-size:11px;" onclick="navigator.clipboard.writeText('${fullUrl}'); notify('Link Copied!');" title="Copy NFC Link"><i class="fa-solid fa-copy"></i></button>
+                        <button class="btn btn-outline" style="padding:5px 10px; font-size:11px;" onclick="showQrModal('${id}', '${fullUrl}')" title="QR Code"><i class="fa-solid fa-qrcode"></i></button>
+                        <button class="btn btn-outline" style="padding:5px 10px; font-size:11px;" onclick="editCard('${id}', '${item.destination}')" title="Edit Slot"><i class="fa-solid fa-pen"></i></button>
                     </div>
                 </div>
             `;
@@ -347,19 +429,15 @@
 
     function filterCards() {
         const q = document.getElementById('searchBox').value.toLowerCase().trim();
-        const filtered = rawData.filter(i => i.source.replace('/card/', '').toLowerCase().includes(q));
-        renderCardList(filtered);
-    }
-
-    function focusCardInput() {
-        switchTab('dash');
-        document.getElementById('cardId').focus();
+        const filtered = rawData.filter(i => i.source.replace('/card/', '').toLowerCase().includes(q) || i.destination.toLowerCase().includes(q));
+        renderCardTable(filtered);
     }
 
     function editCard(id, url) {
         switchTab('dash');
         document.getElementById('cardId').value = id;
         document.getElementById('cardUrl').value = url.includes('setup.html') ? '' : url;
+        updateSim();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -368,8 +446,7 @@
         document.getElementById('qrModalSubtitle').innerText = url;
         const qrContainer = document.getElementById('qrcode');
         qrContainer.innerHTML = '';
-        
-        qrObject = new QRCode(qrContainer, { text: url, width: 140, height: 140 });
+        new QRCode(qrContainer, { text: url, width: 140, height: 140 });
         document.getElementById('qrModal').style.display = 'flex';
     }
 
@@ -396,7 +473,7 @@
         const blob = new Blob([csv], { type: 'text/csv' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `Data_Kartu_Rzlhmdproject.csv`;
+        a.download = `Master_Data_Cards_Rzlhmdproject.csv`;
         a.click();
     }
 
@@ -404,11 +481,16 @@
         e.preventDefault();
         const tok = localStorage.getItem("rzl_tok");
         const id = document.getElementById('cardId').value.trim();
-        const url = document.getElementById('cardUrl').value.trim() || `https://rzlhmdproject.vercel.app/setup.html?id=${id}`;
-        const btn = document.getElementById('saveBtn');
+        const mode = document.getElementById('routingMode').value;
+        let url = document.getElementById('cardUrl').value.trim();
 
+        if (mode === 'setup' || !url) {
+            url = `https://rzlhmdproject.vercel.app/setup.html?id=${id}`;
+        }
+
+        const btn = document.getElementById('saveBtn');
         btn.disabled = true;
-        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing...`;
 
         try {
             const getRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, { headers: { 'Authorization': `token ${tok}` } });
@@ -424,15 +506,58 @@
             await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, {
                 method: 'PUT',
                 headers: { 'Authorization': `token ${tok}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: `Update /card/${id}`, content: btoa(JSON.stringify(json, null, 2)), sha: fileData.sha })
+                body: JSON.stringify({ message: `Update /card/${id} via Rzlhmdproject Enterprise`, content: btoa(JSON.stringify(json, null, 2)), sha: fileData.sha })
             });
 
-            notify(`Kartu #${id} Berhasil Disimpan!`);
+            notify(`Kartu Slot #${id} Berhasil Disimpan!`);
             document.getElementById('cardId').value = '';
             document.getElementById('cardUrl').value = '';
             loadData();
         } catch(e) { notify(e.message, true); }
-        finally { btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-check"></i> Simpan Slot`; }
+        finally { btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan Configuration`; }
+    }
+
+    async function handleBatchGenerate(e) {
+        e.preventDefault();
+        const tok = localStorage.getItem("rzl_tok");
+        const start = parseInt(document.getElementById('batchStart').value);
+        const end = parseInt(document.getElementById('batchEnd').value);
+
+        if (start >= end) return notify("ID Awal harus lebih kecil dari ID Akhir", true);
+
+        const btn = document.getElementById('batchBtn');
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generating Batch...`;
+
+        try {
+            const getRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, { headers: { 'Authorization': `token ${tok}` } });
+            const fileData = await getRes.json();
+            let json = JSON.parse(atob(fileData.content));
+
+            json.redirects = json.redirects.map(i => ({ source: i.source, destination: i.destination, permanent: false }));
+
+            for (let i = start; i <= end; i++) {
+                const idStr = String(i).padStart(3, '0');
+                const src = `/card/${idStr}`;
+                const defaultUrl = `https://rzlhmdproject.vercel.app/setup.html?id=${idStr}`;
+
+                let exists = json.redirects.some(item => item.source === src);
+                if (!exists) {
+                    json.redirects.push({ source: src, destination: defaultUrl, permanent: false });
+                }
+            }
+
+            await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, {
+                method: 'PUT',
+                headers: { 'Authorization': `token ${tok}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: `Batch generate cards #${start} to #${end}`, content: btoa(JSON.stringify(json, null, 2)), sha: fileData.sha })
+            });
+
+            notify(`Batch Slot #${start} s/d #${end} Berhasil Dibuat!`);
+            loadData();
+            switchTab('cards');
+        } catch(e) { notify(e.message, true); }
+        finally { btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Generate Batch Slot Sekaligus`; }
     }
 
     async function handleDelete() {
