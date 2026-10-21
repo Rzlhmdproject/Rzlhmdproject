@@ -725,7 +725,7 @@
         } catch(e) { notify(e.message, true); }
     }
 
-    // --- FITUR PRATINJAU & GENERATOR AKRILIK ---
+    // --- FITUR PRATINJAU & GENERATOR AKRILIK (Bebas Bug Rendering) ---
     function populateAcrylicSlots() {
         const select = document.getElementById('acrylicSlotSelect');
         if(rawData.length === 0) {
@@ -733,7 +733,7 @@
         } else {
             select.innerHTML = rawData.map(item => {
                 const id = item.source.replace('/card/', '');
-                return `<option value="${id}">Slot #${id}</option>`;
+                return `<option value="${id}">Slot #${id} (${item.destination.includes('setup.html') ? 'Belum Aktif' : 'Aktif'})</option>`;
             }).join('');
         }
         generateAcrylicMockup();
@@ -758,48 +758,51 @@
 
     function generateAcrylicMockup() {
         const slotId = document.getElementById('acrylicSlotSelect').value || '001';
-        const targetUrl = `https://rzlhmdproject.vercel.app/card/${slotId}`;
+        let targetUrl = `https://rzlhmdproject.vercel.app/card/${slotId}`;
         
-        document.getElementById('acrylicCardLabel').innerText = `SMART REVIEW CARD #${slotId}`;
+        document.getElementById('acrylicCardLabel').innerText = `SMART CARD REVIEW #${slotId}`;
         
         const qrTarget = document.getElementById('acrylicQrTarget');
         qrTarget.innerHTML = '';
         
-        new QRCode(qrTarget, {
-            text: targetUrl,
-            width: 130,
-            height: 130,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H
-        });
+        try {
+            new QRCode(qrTarget, {
+                text: targetUrl,
+                width: 130,
+                height: 130,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        } catch(err) {
+            console.error("Gagal merender QR:", err);
+            qrTarget.innerHTML = '<span style="color:red; font-size:10px;">Gagal memuat QR</span>';
+        }
     }
 
     function downloadAcrylicDesign() {
         const container = document.getElementById('acrylicCanvasContainer');
         const slotId = document.getElementById('acrylicSlotSelect').value || '001';
         
-        // Menggunakan library canvas sederhana untuk menangkap gambar mockup
         const qrImg = container.querySelector('img');
-        if(!qrImg) return notify("QR Code belum siap", true);
+        if(!qrImg || !qrImg.src) {
+            generateAcrylicMockup();
+            return notify("Sedang merender QR, coba klik Download sekali lagi.", true);
+        }
 
-        // Buat canvas sementara untuk merender file siap cetak high-res
         const canvas = document.createElement('canvas');
         canvas.width = 600;
         canvas.height = 800;
         const ctx = canvas.getContext('2d');
 
-        // Background template
         const theme = document.getElementById('acrylicTemplate').value;
         ctx.fillStyle = theme === 'gold' ? '#1a160d' : '#181A1E';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Border
         ctx.strokeStyle = theme === 'gold' ? '#FFB800' : '#333842';
         ctx.lineWidth = 8;
         ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
 
-        // Header Brand Text
         ctx.fillStyle = theme === 'gold' ? '#FFB800' : '#FF6B00';
         ctx.font = 'bold 28px "Plus Jakarta Sans", sans-serif';
         ctx.textAlign = 'center';
@@ -809,26 +812,25 @@
         ctx.font = '16px "Plus Jakarta Sans", sans-serif';
         ctx.fillText('Scan untuk Memberikan Ulasan', canvas.width / 2, 160);
 
-        // Draw QR Image ke canvas
         const img = new Image();
         img.crossOrigin = "anonymous";
         img.onload = function() {
-            // Kotak putih QR
             ctx.fillStyle = '#ffffff';
             ctx.fillRect((canvas.width - 320) / 2, 220, 320, 320);
             ctx.drawImage(img, (canvas.width - 280) / 2, 240, 280, 280);
 
-            // Footer Slot ID
             ctx.fillStyle = '#ffffff';
             ctx.font = 'bold 22px monospace';
             ctx.fillText(`SMART CARD REVIEW #${slotId}`, canvas.width / 2, 630);
 
-            // Trigger Download
             const a = document.createElement('a');
             a.href = canvas.toDataURL("image/png");
             a.download = `Desain_Akrilik_Slot_${slotId}.png`;
             a.click();
             notify(`Desain Akrilik #${slotId} siap cetak berhasil diunduh!`);
+        };
+        img.onerror = function() {
+            notify("Gagal memproses gambar QR ke dalam kanvas.", true);
         };
         img.src = qrImg.src;
     }
