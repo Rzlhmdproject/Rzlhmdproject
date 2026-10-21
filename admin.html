@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rzlhmdproject — Admin Slot Generator</title>
+    <title>Rzlhmdproject — Admin Management</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -18,22 +18,23 @@
             --border: #e2e8f0;
             --success: #10b981;
             --danger: #ef4444;
+            --warning: #f59e0b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 30px 15px; }
-        .container { width: 100%; max-width: 580px; }
+        body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 25px 15px; }
+        .container { width: 100%; max-width: 620px; }
 
-        .header { text-align: center; margin-bottom: 24px; }
+        .header { text-align: center; margin-bottom: 20px; }
         .brand-badge { display: inline-flex; align-items: center; gap: 8px; background: #eff6ff; color: var(--primary); padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 10px; border: 1px solid #dbeafe; }
-        .header h1 { font-size: 24px; font-weight: 700; color: var(--text-main); }
+        .header h1 { font-size: 22px; font-weight: 700; color: var(--text-main); }
         .header p { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
 
-        .card { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.03); padding: 24px; margin-bottom: 20px; }
+        .card { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.03); padding: 22px; margin-bottom: 18px; }
         .card-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: var(--text-main); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
         .card-title i { color: var(--primary); }
 
-        .form-group { margin-bottom: 16px; }
+        .form-group { margin-bottom: 14px; }
         label { display: block; font-size: 12px; font-weight: 600; color: var(--text-main); margin-bottom: 6px; }
         .input-wrapper { position: relative; display: flex; align-items: center; }
         .input-wrapper i { position: absolute; left: 14px; color: var(--text-muted); font-size: 14px; }
@@ -41,21 +42,27 @@
         input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
         .btn-group { display: flex; gap: 10px; margin-top: 15px; }
-        button { width: 100%; background: var(--primary); color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s; }
+        button { width: 100%; background: var(--primary); color: #fff; border: none; padding: 11px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s; }
         button:hover { background: var(--primary-hover); }
         button:disabled { background: #94a3b8; cursor: not-allowed; }
-
+        
         .btn-danger { background: var(--danger); }
         .btn-danger:hover { background: #dc2626; }
 
-        .card-item { padding: 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px; background: #fafafa; font-size: 13px; }
+        .card-item { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px; background: #fafafa; font-size: 13px; }
         .card-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
         .card-badge { font-weight: 700; font-size: 11px; padding: 3px 8px; border-radius: 4px; }
         .badge-active { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
-        .badge-empty { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        .badge-empty { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
 
+        .card-client-name { font-weight: 700; font-size: 14px; color: var(--text-main); margin-bottom: 4px; }
         .card-url { color: var(--text-muted); font-size: 12px; word-break: break-all; margin-bottom: 8px; }
-        .card-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border); padding-top: 8px; font-size: 12px; }
+        .card-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border); padding-top: 8px; font-size: 12px; gap: 6px; }
+
+        .action-btn { width: auto; padding: 5px 10px; font-size: 11px; box-shadow: none; border-radius: 6px; }
+        .btn-copy { background: #eff6ff; color: var(--primary); border: 1px solid #dbeafe; }
+        .btn-copy:hover { background: #dbeafe; }
+        .btn-edit { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border); }
 
         .toast { padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 500; display: none; align-items: center; gap: 8px; margin-bottom: 16px; }
         .toast-success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
@@ -70,16 +77,16 @@
 
 <div class="container">
     <div class="header">
-        <div class="brand-badge"><i class="fa-solid fa-shield-halved"></i> Admin Panel</div>
-        <h1>Slot Card Generator</h1>
-        <p>Buat & Kelola Slot Kartu NFC/QR Rzlhmdproject</p>
+        <div class="brand-badge"><i class="fa-solid fa-shield-halved"></i> Admin Management</div>
+        <h1>Smart Review Dashboard</h1>
+        <p>Sistem Pengelolaan Kartu NFC & QR Code Rzlhmdproject</p>
     </div>
 
     <div id="toast" class="toast"></div>
 
-    <!-- LOGIN SECTION -->
+    <!-- 1. HALAMAN LOGIN ADMIN -->
     <div id="loginSection" class="card">
-        <div class="card-title"><i class="fa-solid fa-lock"></i> Login Admin</div>
+        <div class="card-title"><i class="fa-solid fa-lock"></i> Autentikasi Admin</div>
         <form onsubmit="handleLogin(event)">
             <div class="form-group">
                 <label>GitHub Personal Access Token</label>
@@ -92,47 +99,63 @@
         </form>
     </div>
 
-    <!-- MAIN DASHBOARD -->
+    <!-- 2. DASHBOARD UTAMA -->
     <div id="dashboardSection" class="hidden">
-        <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px;">
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 18px;">
             <div>
-                <span style="font-size: 11px; color: var(--text-muted); display: block;">Status Admin:</span>
+                <span style="font-size: 11px; color: var(--text-muted); display: block;">Status Akses:</span>
                 <span style="font-size: 12px; font-weight: 600; color: var(--success);"><i class="fa-solid fa-circle" style="font-size: 7px;"></i> Terverifikasi</span>
             </div>
             <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-power-off"></i> Keluar</button>
         </div>
 
-        <!-- Create / Active Slot Form -->
+        <!-- Form Input Slot / Kartu -->
         <div class="card">
-            <div class="card-title"><i class="fa-solid fa-plus-circle"></i> Tambah Slot Kartu Baru</div>
-            <form onsubmit="handleCreateSlot(event)">
+            <div class="card-title"><i class="fa-solid fa-pen-to-square"></i> Input / Perbarui Kartu Klien</div>
+            <form onsubmit="handleSaveCard(event)">
                 <div class="form-group">
-                    <label>Nomor Kartu (ID Baru atau Pilih yang Ada)</label>
+                    <label>Nomor Kartu (ID) — Ketik Baru / Pilih</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-id-card"></i>
                         <input type="text" id="targetCardId" placeholder="Contoh: 001, 002, 003..." required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Link Maps Bisnis (Opsional - Biarkan Kosong Agar Diisi Klien)</label>
+                    <label>Nama Bisnis / Toko Klien (Opsional Label)</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-store"></i>
+                        <input type="text" id="clientName" placeholder="Contoh: Ayam Geprek Mentari">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Link Google Maps / Review Klien</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-location-dot"></i>
-                        <input type="url" id="targetUrl" placeholder="Kosongkan jika mau diisi user/klien">
+                        <input type="url" id="targetUrl" placeholder="Kosongkan jika ingin diisi oleh klien via setup.html">
                     </div>
                 </div>
                 <div class="btn-group">
-                    <button type="submit" id="saveBtn"><i class="fa-solid fa-floppy-disk"></i> Simpan & Aktifkan Slot Kartu</button>
+                    <button type="submit" id="saveBtn"><i class="fa-solid fa-floppy-disk"></i> Simpan Kartu</button>
                     <button type="button" class="btn-danger" onclick="handleDeleteCard()"><i class="fa-solid fa-trash-can"></i> Hapus / Reset</button>
                 </div>
             </form>
         </div>
 
-        <!-- Card List -->
+        <!-- Daftar Kartu & Filter Pencarian -->
         <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                <div class="card-title" style="border:none; margin:0; padding:0;"><i class="fa-solid fa-list-check"></i> Daftar Slot Kartu</div>
-                <button onclick="loadDashboardData()" style="width: auto; padding: 6px 10px; font-size: 11px; background: #f1f5f9; color: var(--text-main); box-shadow:none;"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div class="card-title" style="border:none; margin:0; padding:0;"><i class="fa-solid fa-list-check"></i> Daftar Kartu</div>
+                <button onclick="loadDashboardData()" style="width: auto; padding: 5px 10px; font-size: 11px; background: #f1f5f9; color: var(--text-main); box-shadow:none;"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
             </div>
+            
+            <!-- Kotak Pencarian (Search Bar) -->
+            <div class="form-group" style="margin-bottom: 14px;">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="Cari ID Kartu atau Nama Bisnis...">
+                </div>
+            </div>
+
             <div id="cardsListContainer">
                 <p style="font-size: 12px; color: var(--text-muted); text-align: center;">Memuat data kartu...</p>
             </div>
@@ -144,6 +167,7 @@
     const OWNER = 'rzlhmdproject';
     const REPO = 'rzlhmdproject';
     const PATH = 'vercel.json';
+    let globalCardsData = [];
 
     document.addEventListener("DOMContentLoaded", () => {
         const savedToken = localStorage.getItem("rzl_gh_token");
@@ -189,7 +213,7 @@
         localStorage.removeItem("rzl_gh_token");
         document.getElementById('dashboardSection').classList.add('hidden');
         document.getElementById('loginSection').classList.remove('hidden');
-        showToast('Berhasil keluar.');
+        showToast('Berhasil keluar sistem.');
     }
 
     async function loadDashboardData() {
@@ -201,52 +225,76 @@
             });
             const fileData = await res.json();
             const jsonContent = JSON.parse(atob(fileData.content));
-            const cards = jsonContent.redirects.filter(r => r.source.startsWith('/card/'));
-
-            if (cards.length === 0) {
-                container.innerHTML = `<p style="font-size: 12px; color: var(--text-muted); text-align: center;">Belum ada kartu terdaftar.</p>`;
-                return;
-            }
-
-            container.innerHTML = cards.map(item => {
-                const cardId = item.source.replace('/card/', '');
-                const fullAccessUrl = `https://rzlhmdproject.vercel.app${item.source}`;
-                const isPendingSetup = item.destination.includes('setup=true') || item.destination.includes('google.com') && !item.destination.includes('maps.app.goo.gl');
-                
-                return `
-                    <div class="card-item">
-                        <div class="card-header-row">
-                            <span style="font-weight:700;">Kartu ID: ${cardId}</span>
-                            <span class="card-badge ${isPendingSetup ? 'badge-empty' : 'badge-active'}">
-                                ${isPendingSetup ? 'BELUM DIISI KLIEN' : 'AKTIF (TERISI)'}
-                            </span>
-                        </div>
-                        <div class="card-url"><strong>Tujuan:</strong> ${item.destination}</div>
-                        <div class="card-actions">
-                            <span style="color: var(--text-muted); font-size:11px;">Link: <a href="${fullAccessUrl}" target="_blank">${fullAccessUrl}</a></span>
-                            <button onclick="selectCardToEdit('${cardId}', '${item.destination}')" style="width:auto; padding:4px 8px; font-size:11px; background:#e0f2fe; color:#0369a1; box-shadow:none;">Edit</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            
+            globalCardsData = jsonContent.redirects.filter(r => r.source.startsWith('/card/'));
+            renderCards(globalCardsData);
         } catch (e) {
             container.innerHTML = `<p style="font-size: 12px; color: var(--danger); text-align: center;">Gagal memuat daftar kartu.</p>`;
         }
     }
 
-    function selectCardToEdit(id, url) {
+    function renderCards(cards) {
+        const container = document.getElementById('cardsListContainer');
+        if (cards.length === 0) {
+            container.innerHTML = `<p style="font-size: 12px; color: var(--text-muted); text-align: center;">Tidak ada kartu ditemukan.</p>`;
+            return;
+        }
+
+        container.innerHTML = cards.map(item => {
+            const cardId = item.source.replace('/card/', '');
+            const fullAccessUrl = `https://rzlhmdproject.vercel.app${item.source}`;
+            const isSetup = item.destination.includes('setup.html');
+            const clientName = item.clientName || (isSetup ? 'Belum Diaktifkan Klien' : 'Kartu Tanpa Nama');
+
+            return `
+                <div class="card-item">
+                    <div class="card-header-row">
+                        <span style="font-weight:700;">ID Kartu: #${cardId}</span>
+                        <span class="card-badge ${isSetup ? 'badge-empty' : 'badge-active'}">
+                            ${isSetup ? 'BELUM AKTIF' : 'AKTIF'}
+                        </span>
+                    </div>
+                    <div class="card-client-name">${clientName}</div>
+                    <div class="card-url"><strong>Tujuan:</strong> ${item.destination}</div>
+                    <div class="card-actions">
+                        <button onclick="copyNfcLink('${fullAccessUrl}')" class="action-btn btn-copy"><i class="fa-solid fa-copy"></i> Copy Link NFC</button>
+                        <button onclick="selectCardToEdit('${cardId}', '${clientName}', '${item.destination}')" class="action-btn btn-edit"><i class="fa-solid fa-pen"></i> Edit</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function filterCards() {
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        const filtered = globalCardsData.filter(item => {
+            const cardId = item.source.replace('/card/', '').toLowerCase();
+            const clientName = (item.clientName || '').toLowerCase();
+            return cardId.includes(query) || clientName.includes(query);
+        });
+        renderCards(filtered);
+    }
+
+    function copyNfcLink(url) {
+        navigator.clipboard.writeText(url).then(() => {
+            showToast('Link NFC berhasil disalin!');
+        });
+    }
+
+    function selectCardToEdit(id, name, url) {
         document.getElementById('targetCardId').value = id;
-        document.getElementById('targetUrl').value = url.includes('setup=true') ? '' : url;
+        document.getElementById('clientName').value = name.includes('Belum Diaktifkan') || name.includes('Kartu Tanpa Nama') ? '' : name;
+        document.getElementById('targetUrl').value = url.includes('setup.html') ? '' : url;
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    async function handleCreateSlot(e) {
+    async function handleSaveCard(e) {
         e.preventDefault();
         const token = localStorage.getItem("rzl_gh_token");
         const cardId = document.getElementById('targetCardId').value.trim();
+        const clientName = document.getElementById('clientName').value.trim();
         let targetUrl = document.getElementById('targetUrl').value.trim();
-        
-        // Jika admin tidak memasukkan URL, set mengarah ke halaman pengisian setup user
+
         if (!targetUrl) {
             targetUrl = `https://rzlhmdproject.vercel.app/setup.html?id=${cardId}`;
         }
@@ -263,22 +311,26 @@
 
             const sourcePath = `/card/${cardId}`;
             let found = false;
+
             jsonContent.redirects.forEach(item => {
                 if (item.source === sourcePath) {
                     item.destination = targetUrl;
+                    if (clientName) item.clientName = clientName;
                     found = true;
                 }
             });
 
             if (!found) {
-                jsonContent.redirects.push({ source: sourcePath, destination: targetUrl, permanent: false });
+                const newItem = { source: sourcePath, destination: targetUrl, permanent: false };
+                if (clientName) newItem.clientName = clientName;
+                jsonContent.redirects.push(newItem);
             }
 
             const putRes = await fetch(apiUrl, {
                 method: 'PUT',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: `Create slot /card/${cardId} via Rzlhmdproject Admin`,
+                    message: `Save card /card/${cardId} via Rzlhmdproject Admin`,
                     content: btoa(JSON.stringify(jsonContent, null, 2)),
                     sha: fileData.sha
                 })
@@ -286,15 +338,16 @@
 
             if (!putRes.ok) throw new Error('Gagal menyimpan ke GitHub.');
 
-            showToast(`Slot Kartu ID ${cardId} berhasil dibuat & diaktifkan!`);
+            showToast(`Kartu ID #${cardId} berhasil disimpan!`);
             document.getElementById('targetCardId').value = '';
+            document.getElementById('clientName').value = '';
             document.getElementById('targetUrl').value = '';
             loadDashboardData();
         } catch (err) {
             showToast(err.message, 'error');
         } finally {
             btn.disabled = false;
-            btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan & Aktifkan Slot Kartu`;
+            btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan Kartu`;
         }
     }
 
@@ -307,7 +360,7 @@
             return;
         }
 
-        if (!confirm(`Hapus Slot Kartu ID ${cardId}?`)) return;
+        if (!confirm(`Hapus/Reset Kartu ID #${cardId}?`)) return;
 
         try {
             const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
@@ -329,8 +382,9 @@
 
             if (!putRes.ok) throw new Error('Gagal menghapus.');
 
-            showToast(`Slot Kartu ID ${cardId} berhasil dihapus!`);
+            showToast(`Kartu ID #${cardId} berhasil dihapus!`);
             document.getElementById('targetCardId').value = '';
+            document.getElementById('clientName').value = '';
             document.getElementById('targetUrl').value = '';
             loadDashboardData();
         } catch (err) {
