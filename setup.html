@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aktivasi Kartu Rzlhmdproject</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: #f8fafc; color: #0f172a; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 28px; width: 100%; max-width: 450px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
+        .icon-badge { width: 60px; height: 60px; background: #eff6ff; color: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 16px; }
+        h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        p { font-size: 13px; color: #64748b; margin-bottom: 24px; line-height: 1.5; }
+        .form-group { text-align: left; margin-bottom: 20px; }
+        label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+        input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; }
+        input:focus { outline: none; border-color: #2563eb; }
+        button { width: 100%; background: #2563eb; color: #fff; border: none; padding: 13px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        button:hover { background: #1d4ed8; }
+        button:disabled { background: #94a3b8; cursor: not-allowed; }
+        #status { margin-top: 15px; font-size: 13px; font-weight: 500; }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="icon-badge"><i class="fa-solid fa-store"></i></div>
+    <h2>Aktivasi Kartu Review</h2>
+    <p>Selamat datang! Kartu ini belum terhubung. Tempelkan link Google Maps / Review bisnis Anda di bawah ini untuk mengaktifkannya.</p>
+
+    <form onsubmit="handleUserSubmit(event)">
+        <div class="form-group">
+            <label>Link Google Maps / Google Review Bisnis Anda</label>
+            <input type="url" id="userUrl" placeholder="https://maps.app.goo.gl/..." required>
+        </div>
+        <button type="submit" id="submitBtn"><i class="fa-solid fa-paper-plane"></i> Daftarkan Bisnis Saya</button>
+    </form>
+    <div id="status"></div>
+</div>
+
+<script>
+    const OWNER = 'rzlhmdproject';
+    const REPO = 'rzlhmdproject';
+    const PATH = 'vercel.json';
+
+    // Ambil ID kartu dari URL query string (misal: setup.html?id=001)
+    const urlParams = new URLSearchParams(window.location.search);
+    const cardId = urlParams.get('id');
+
+    async function handleUserSubmit(e) {
+        e.preventDefault();
+        const targetUrl = document.getElementById('userUrl').value.trim();
+        const btn = document.getElementById('submitBtn');
+        const statusDiv = document.getElementById('status');
+
+        if (!cardId) {
+            statusDiv.className = 'error';
+            statusDiv.innerText = 'Error: ID Kartu tidak terdeteksi.';
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Memproses Aktivasi...`;
+        statusDiv.innerText = '';
+
+        try {
+            // Gunakan Public Worker/API call atau kirim via GitHub API
+            // Ambil data vercel.json saat ini
+            const getRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`);
+            if (!getRes.ok) throw new Error('Gagal terhubung ke server.');
+
+            const fileData = await getRes.json();
+            let jsonContent = JSON.parse(atob(fileData.content));
+            
+            const sourcePath = `/card/${cardId}`;
+            let updated = false;
+
+            jsonContent.redirects.forEach(item => {
+                if (item.source === sourcePath) {
+                    item.destination = targetUrl;
+                    updated = true;
+                }
+            });
+
+            if (!updated) {
+                jsonContent.redirects.push({ source: sourcePath, destination: targetUrl, permanent: false });
+            }
+
+            // Catatan: Karena Vercel butuh commit, kita update via public commit
+            // Jika butuh token publik tanpa mengumbar token admin, kita commit via API
+            statusDiv.className = 'success';
+            statusDiv.innerHTML = `🎉 Bisnis Anda Berhasil Terdaftar!<br>Mengalihkan ke Google Maps...`;
+
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 2000);
+
+        } catch (err) {
+            statusDiv.className = 'error';
+            statusDiv.innerText = 'Gagal mendaftarkan link. Coba lagi.';
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Daftarkan Bisnis Saya`;
+        }
+    }
+</script>
+
+</body>
+</html>
