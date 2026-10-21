@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rzlhmdproject — Admin Management System</title>
+    <title>Rzlhmdproject — Admin Slot Generator</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -18,12 +18,11 @@
             --border: #e2e8f0;
             --success: #10b981;
             --danger: #ef4444;
-            --warning: #f59e0b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 30px 15px; }
-        .container { width: 100%; max-width: 600px; }
+        .container { width: 100%; max-width: 580px; }
 
         .header { text-align: center; margin-bottom: 24px; }
         .brand-badge { display: inline-flex; align-items: center; gap: 8px; background: #eff6ff; color: var(--primary); padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 10px; border: 1px solid #dbeafe; }
@@ -38,14 +37,14 @@
         label { display: block; font-size: 12px; font-weight: 600; color: var(--text-main); margin-bottom: 6px; }
         .input-wrapper { position: relative; display: flex; align-items: center; }
         .input-wrapper i { position: absolute; left: 14px; color: var(--text-muted); font-size: 14px; }
-        input, select { width: 100%; padding: 11px 12px 11px 38px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text-main); background: #fff; transition: all 0.2s; }
-        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        input { width: 100%; padding: 11px 12px 11px 38px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text-main); background: #fff; transition: all 0.2s; }
+        input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
         .btn-group { display: flex; gap: 10px; margin-top: 15px; }
         button { width: 100%; background: var(--primary); color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s; }
         button:hover { background: var(--primary-hover); }
         button:disabled { background: #94a3b8; cursor: not-allowed; }
-        
+
         .btn-danger { background: var(--danger); }
         .btn-danger:hover { background: #dc2626; }
 
@@ -71,19 +70,19 @@
 
 <div class="container">
     <div class="header">
-        <div class="brand-badge"><i class="fa-solid fa-shield-halved"></i> Rzlhmdproject Secure Admin</div>
-        <h1>Smart Review Dashboard</h1>
-        <p>Kontrol & Manajemen Redirect Kartu NFC / QR Code</p>
+        <div class="brand-badge"><i class="fa-solid fa-shield-halved"></i> Admin Panel</div>
+        <h1>Slot Card Generator</h1>
+        <p>Buat & Kelola Slot Kartu NFC/QR Rzlhmdproject</p>
     </div>
 
     <div id="toast" class="toast"></div>
 
-    <!-- 1. HALAMAN LOGIN ADMIN -->
+    <!-- LOGIN SECTION -->
     <div id="loginSection" class="card">
-        <div class="card-title"><i class="fa-solid fa-lock"></i> Autentikasi Admin (GitHub Token)</div>
+        <div class="card-title"><i class="fa-solid fa-lock"></i> Login Admin</div>
         <form onsubmit="handleLogin(event)">
             <div class="form-group">
-                <label>Masukkan GitHub Personal Access Token</label>
+                <label>GitHub Personal Access Token</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-key"></i>
                     <input type="password" id="loginToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" required>
@@ -93,45 +92,45 @@
         </form>
     </div>
 
-    <!-- 2. DASHBOARD UTAMA -->
+    <!-- MAIN DASHBOARD -->
     <div id="dashboardSection" class="hidden">
         <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px;">
             <div>
-                <span style="font-size: 11px; color: var(--text-muted); display: block;">Status Akses:</span>
-                <span style="font-size: 12px; font-weight: 600; color: var(--success);"><i class="fa-solid fa-circle" style="font-size: 7px;"></i> Admin Terverifikasi</span>
+                <span style="font-size: 11px; color: var(--text-muted); display: block;">Status Admin:</span>
+                <span style="font-size: 12px; font-weight: 600; color: var(--success);"><i class="fa-solid fa-circle" style="font-size: 7px;"></i> Terverifikasi</span>
             </div>
             <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-power-off"></i> Keluar</button>
         </div>
 
-        <!-- Form Input & Update Link Maps -->
+        <!-- Create / Active Slot Form -->
         <div class="card">
-            <div class="card-title"><i class="fa-solid fa-pen-to-square"></i> Input / Update Link Google Maps Klien</div>
-            <form onsubmit="handleSaveCard(event)">
+            <div class="card-title"><i class="fa-solid fa-plus-circle"></i> Tambah Slot Kartu Baru</div>
+            <form onsubmit="handleCreateSlot(event)">
                 <div class="form-group">
-                    <label>Nomor Kartu (ID) — Ketik ID Baru atau Pilih</label>
+                    <label>Nomor Kartu (ID Baru atau Pilih yang Ada)</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-id-card"></i>
-                        <input type="text" id="targetCardId" placeholder="Contoh: 001, 002, dst." required>
+                        <input type="text" id="targetCardId" placeholder="Contoh: 001, 002, 003..." required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Alamat Link Google Maps / Google Review Klien</label>
+                    <label>Link Maps Bisnis (Opsional - Biarkan Kosong Agar Diisi Klien)</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-location-dot"></i>
-                        <input type="url" id="targetUrl" placeholder="https://maps.app.goo.gl/..." required>
+                        <input type="url" id="targetUrl" placeholder="Kosongkan jika mau diisi user/klien">
                     </div>
                 </div>
                 <div class="btn-group">
-                    <button type="submit" id="saveBtn"><i class="fa-solid fa-floppy-disk"></i> Simpan & Aktifkan</button>
-                    <button type="button" class="btn-danger" onclick="handleDeleteCard()"><i class="fa-solid fa-trash-can"></i> Hapus / Reset Link</button>
+                    <button type="submit" id="saveBtn"><i class="fa-solid fa-floppy-disk"></i> Simpan & Aktifkan Slot Kartu</button>
+                    <button type="button" class="btn-danger" onclick="handleDeleteCard()"><i class="fa-solid fa-trash-can"></i> Hapus / Reset</button>
                 </div>
             </form>
         </div>
 
-        <!-- Daftar Kartu & Link Akses Per Card -->
+        <!-- Card List -->
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                <div class="card-title" style="border:none; margin:0; padding:0;"><i class="fa-solid fa-list-check"></i> Daftar Kartu & Link Akses</div>
+                <div class="card-title" style="border:none; margin:0; padding:0;"><i class="fa-solid fa-list-check"></i> Daftar Slot Kartu</div>
                 <button onclick="loadDashboardData()" style="width: auto; padding: 6px 10px; font-size: 11px; background: #f1f5f9; color: var(--text-main); box-shadow:none;"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
             </div>
             <div id="cardsListContainer">
@@ -186,12 +185,11 @@
         }
     }
 
-    fnLogout = () => handleLogout();
     function handleLogout() {
         localStorage.removeItem("rzl_gh_token");
         document.getElementById('dashboardSection').classList.add('hidden');
         document.getElementById('loginSection').classList.remove('hidden');
-        showToast('Berhasil keluar sistem.');
+        showToast('Berhasil keluar.');
     }
 
     async function loadDashboardData() {
@@ -213,14 +211,14 @@
             container.innerHTML = cards.map(item => {
                 const cardId = item.source.replace('/card/', '');
                 const fullAccessUrl = `https://rzlhmdproject.vercel.app${item.source}`;
-                const isDefault = item.destination.includes('google.com') && !item.destination.includes('maps.app.goo.gl');
+                const isPendingSetup = item.destination.includes('setup=true') || item.destination.includes('google.com') && !item.destination.includes('maps.app.goo.gl');
                 
                 return `
                     <div class="card-item">
                         <div class="card-header-row">
                             <span style="font-weight:700;">Kartu ID: ${cardId}</span>
-                            <span class="card-badge ${isDefault ? 'badge-empty' : 'badge-active'}">
-                                ${isDefault ? 'BELUM AKTIF' : 'AKTIF'}
+                            <span class="card-badge ${isPendingSetup ? 'badge-empty' : 'badge-active'}">
+                                ${isPendingSetup ? 'BELUM DIISI KLIEN' : 'AKTIF (TERISI)'}
                             </span>
                         </div>
                         <div class="card-url"><strong>Tujuan:</strong> ${item.destination}</div>
@@ -238,17 +236,22 @@
 
     function selectCardToEdit(id, url) {
         document.getElementById('targetCardId').value = id;
-        document.getElementById('targetUrl').value = url.includes('google.com') && !url.includes('maps.app.goo.gl') ? '' : url;
+        document.getElementById('targetUrl').value = url.includes('setup=true') ? '' : url;
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    async function handleSaveCard(e) {
+    async function handleCreateSlot(e) {
         e.preventDefault();
         const token = localStorage.getItem("rzl_gh_token");
         const cardId = document.getElementById('targetCardId').value.trim();
-        const targetUrl = document.getElementById('targetUrl').value.trim();
-        const btn = document.getElementById('saveBtn');
+        let targetUrl = document.getElementById('targetUrl').value.trim();
+        
+        // Jika admin tidak memasukkan URL, set mengarah ke halaman pengisian setup user
+        if (!targetUrl) {
+            targetUrl = `https://rzlhmdproject.vercel.app/setup.html?id=${cardId}`;
+        }
 
+        const btn = document.getElementById('saveBtn');
         btn.disabled = true;
         btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
 
@@ -275,7 +278,7 @@
                 method: 'PUT',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: `Update /card/${cardId} via Rzlhmdproject Admin`,
+                    message: `Create slot /card/${cardId} via Rzlhmdproject Admin`,
                     content: btoa(JSON.stringify(jsonContent, null, 2)),
                     sha: fileData.sha
                 })
@@ -283,7 +286,7 @@
 
             if (!putRes.ok) throw new Error('Gagal menyimpan ke GitHub.');
 
-            showToast(`Kartu ID ${cardId} berhasil diaktifkan/diperbarui!`);
+            showToast(`Slot Kartu ID ${cardId} berhasil dibuat & diaktifkan!`);
             document.getElementById('targetCardId').value = '';
             document.getElementById('targetUrl').value = '';
             loadDashboardData();
@@ -291,7 +294,7 @@
             showToast(err.message, 'error');
         } finally {
             btn.disabled = false;
-            btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan & Aktifkan`;
+            btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan & Aktifkan Slot Kartu`;
         }
     }
 
@@ -300,11 +303,11 @@
         const cardId = document.getElementById('targetCardId').value.trim();
         
         if (!cardId) {
-            showToast('Masukkan atau pilih Nomor Kartu (ID) yang ingin dihapus link-nya!', 'error');
+            showToast('Masukkan ID Kartu yang ingin dihapus!', 'error');
             return;
         }
 
-        if (!confirm(`Apakah Anda yakin ingin menghapus/mereset link untuk Kartu ID ${cardId}?`)) return;
+        if (!confirm(`Hapus Slot Kartu ID ${cardId}?`)) return;
 
         try {
             const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
@@ -312,23 +315,21 @@
             const fileData = await res.json();
             let jsonContent = JSON.parse(atob(fileData.content));
 
-            const sourcePath = `/card/${cardId}`;
-            // Ubah destination menjadi default/kosong atau hapus dari list
-            jsonContent.redirects = jsonContent.redirects.filter(item => item.source !== sourcePath);
+            jsonContent.redirects = jsonContent.redirects.filter(item => item.source !== `/card/${cardId}`);
 
             const putRes = await fetch(apiUrl, {
                 method: 'PUT',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: `Reset /card/${cardId} via Rzlhmdproject Admin`,
+                    message: `Delete /card/${cardId}`,
                     content: btoa(JSON.stringify(jsonContent, null, 2)),
                     sha: fileData.sha
                 })
             });
 
-            if (!putRes.ok) throw new Error('Gagal menghapus link dari GitHub.');
+            if (!putRes.ok) throw new Error('Gagal menghapus.');
 
-            showToast(`Link untuk Kartu ID ${cardId} berhasil dihapus/direset!`);
+            showToast(`Slot Kartu ID ${cardId} berhasil dihapus!`);
             document.getElementById('targetCardId').value = '';
             document.getElementById('targetUrl').value = '';
             loadDashboardData();
