@@ -1,26 +1,254 @@
-<form id="setupForm" onsubmit="handleUserSubmit(event)">
-    <div class="form-group">
-        <label for="userStoreName">Nama Usaha / Toko</label>
-        <div class="input-wrapper">
-            <i class="fa-solid fa-store"></i>
-            <input type="text" id="userStoreName" placeholder="Contoh: Kopi Kenangan" onkeyup="updatePreview(this.value)" required>
-        </div>
-    </div>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aktivasi Kartu Digital — Rzlhmdproject</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-main: #121316;
+            --panel-bg: #181A1E;
+            --panel-card: #21242B;
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0A5B1;
+            --text-muted: #5A606E;
+            --primary-orange: #FF6B00;
+            --primary-orange-hover: #F25400;
+            --accent-mint: #00D68F;
+            --soft-yellow: #FFB800;
+        }
 
-    <div class="form-group">
-        <label for="userUrl">Link Langsung Google Review</label>
-        <div class="input-wrapper">
-            <i class="fa-solid fa-star"></i>
-            <input type="url" id="userUrl" placeholder="https://g.page/r/.../review" required>
-        </div>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-primary); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+
+        .container { width: 100%; max-width: 440px; }
+
+        .panel-card { 
+            background: var(--panel-card); 
+            border: 1px solid var(--panel-border); 
+            border-radius: 28px; 
+            padding: 32px 24px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5); 
+            text-align: center; 
+            position: relative;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        /* Top Brand Header */
+        .brand-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+        .brand-logo i { color: var(--primary-orange); }
+
+        .card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 107, 0, 0.12);
+            border: 1px solid rgba(255, 107, 0, 0.3);
+            color: var(--primary-orange);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* Hero Simulator Card */
+        .mini-simulator {
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.2) 0%, rgba(33, 36, 43, 0.9) 100%);
+            border: 1px solid var(--panel-border);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: left;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .sim-chip { width: 32px; height: 22px; background: linear-gradient(135deg, var(--soft-yellow), var(--primary-orange)); border-radius: 5px; margin-bottom: 12px; }
+        .sim-title { font-size: 15px; font-weight: 800; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sim-meta { font-size: 11px; color: var(--primary-orange); font-family: monospace; margin-top: 4px; letter-spacing: 0.5px; }
+
+        h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+        p.subtitle { font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px; }
+
+        /* Form Input Styles */
+        .form-group { text-align: left; margin-bottom: 18px; }
+        label { display: block; font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         
-        <!-- Panduan Cara Ambil Link Review Direct -->
-        <div class="helper-box">
-            💡 <span>Cara Ambil Link Direct Review:</span> Cari toko Anda di Google ➔ Klik menu <b>"Minta Ulasan" (Ask for Reviews)</b> ➔ Salin Tautan Tulis Ulasan.
+        .input-wrapper { position: relative; display: flex; align-items: center; }
+        .input-wrapper i { position: absolute; left: 16px; color: var(--text-muted); font-size: 14px; }
+        
+        input { 
+            width: 100%; 
+            padding: 13px 16px 13px 44px; 
+            border: 1px solid var(--panel-border); 
+            border-radius: 14px; 
+            background: rgba(0, 0, 0, 0.3); 
+            color: var(--text-primary); 
+            font-size: 14px; 
+            outline: none; 
+            transition: border 0.2s; 
+        }
+        input:focus { border-color: var(--primary-orange); }
+
+        /* Helper Box Panduan Link */
+        .helper-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--panel-border);
+            border-radius: 12px;
+            padding: 10px 12px;
+            margin-top: 8px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            text-align: left;
+        }
+        .helper-box span { color: var(--soft-yellow); font-weight: 700; }
+
+        .btn-primary { 
+            width: 100%; 
+            background: var(--primary-orange); 
+            color: #fff; 
+            border: none; 
+            padding: 14px; 
+            border-radius: 14px; 
+            font-weight: 700; 
+            font-size: 14px; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 8px; 
+            margin-top: 14px; 
+            transition: background 0.2s; 
+            box-shadow: 0 8px 20px rgba(255, 107, 0, 0.25);
+        }
+        .btn-primary:hover { background: var(--primary-orange-hover); }
+
+        /* Footer Info */
+        .support-box { 
+            margin-top: 28px; 
+            padding-top: 18px; 
+            border-top: 1px solid var(--panel-border); 
+            font-size: 12px; 
+            color: var(--text-secondary); 
+        }
+        .support-link { 
+            color: var(--accent-mint); 
+            text-decoration: none; 
+            font-weight: 700; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px; 
+            margin-top: 6px; 
+        }
+        .support-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="panel-card">
+        <!-- Top Brand Header -->
+        <div class="brand-header">
+            <div class="brand-logo">
+                <i class="fa-solid fa-cube"></i> Rzlhmdproject
+            </div>
+            <div class="card-badge" id="cardTagDisplay">
+                <i class="fa-solid fa-id-card"></i> SLOT #001
+            </div>
+        </div>
+
+        <!-- Interactive Card Simulator Preview -->
+        <div class="mini-simulator">
+            <div class="sim-chip"></div>
+            <div class="sim-title" id="simStoreName">Nama Usaha Anda</div>
+            <div class="sim-meta" id="simCardId">SMART CARD REVIEW #001</div>
+        </div>
+
+        <h2>Aktivasi Kartu Digital Anda</h2>
+        <p class="subtitle">Hubungkan kartu fisik Anda dengan lokasi bisnis di Google Maps hanya dalam hitungan detik.</p>
+
+        <!-- Form Setup -->
+        <form id="setupForm" onsubmit="handleUserSubmit(event)">
+            <div class="form-group">
+                <label for="userStoreName">Nama Usaha / Toko</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-store"></i>
+                    <input type="text" id="userStoreName" placeholder="Contoh: Kopi Kenangan" onkeyup="updatePreview(this.value)" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="userUrl">Link Google Maps / Google Review</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <input type="url" id="userUrl" placeholder="https://maps.app.goo.gl/..." required>
+                </div>
+                
+                <!-- Panduan Cara Ambil Link -->
+                <div class="helper-box">
+                    💡 <span>Cara Salin Link:</span> Buka aplikasi Google Maps ➔ Cari nama toko Anda ➔ Klik <b>Bagikan</b> ➔ Salin Tautan (Copy Link).
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">
+                <i class="fa-brands fa-whatsapp"></i> Aktifkan Kartu via WhatsApp
+            </button>
+        </form>
+
+        <!-- Support Info -->
+        <div class="support-box">
+            Layanan Resmi Rzlhmdproject — Membantu Bisnis Anda Mendapatkan Ulasan Bintang 5 Lebih Cepat.
+            <br>
+            <a href="https://wa.me/6288971717983?text=Halo%20Admin%20Rzlhmdproject,%20saya%20butuh%20bantuan%20aktivasi%20kartu" target="_blank" class="support-link">
+                <i class="fa-brands fa-whatsapp"></i> Butuh bantuan saat aktivasi?
+            </a>
         </div>
     </div>
+</div>
 
-    <button type="submit" class="btn-primary">
-        <i class="fa-brands fa-whatsapp"></i> Kirim & Aktifkan Link Review
-    </button>
-</form>
+<script>
+    // Membaca Parameter ID dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const cardId = urlParams.get('id') || '001';
+
+    // Update ID Kartu di Tampilan
+    document.getElementById('cardTagDisplay').innerHTML = `<i class="fa-solid fa-id-card"></i> SLOT #${cardId}`;
+    document.getElementById('simCardId').innerText = `SMART CARD REVIEW #${cardId}`;
+
+    // Live Simulator Update
+    function updatePreview(val) {
+        document.getElementById('simStoreName').innerText = val.trim() || "Nama Usaha Anda";
+    }
+
+    // Handover Kirim Ke WhatsApp Admin
+    function handleUserSubmit(e) {
+        e.preventDefault();
+        const storeName = document.getElementById('userStoreName').value.trim();
+        const targetUrl = document.getElementById('userUrl').value.trim();
+        const adminWA = "6288971717983"; 
+
+        const message = `Halo Admin Rzlhmdproject! 👋%0A%0ASaya ingin mengaktifkan *Kartu Review ID %23${cardId}*%0A%0A🏪 *Nama Toko:* ${encodeURIComponent(storeName)}%0A📍 *Link Google Maps:* ${encodeURIComponent(targetUrl)}%0A%0AMohon bantuannya untuk diaktifkan di dashboard. Terima kasih!`;
+
+        window.location.href = `https://wa.me/${adminWA}?text=${message}`;
+    }
+</script>
+
+</body>
+</html>
