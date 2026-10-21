@@ -1,3 +1,9 @@
 {
-  "redirects": []
+  "redirects": [
+    {
+      "source": "/card/001",
+      "destination": "https://rzlhmdproject.vercel.app/setup.html?id=001",
+      "permanent": false
+    }
+  ]
 }
