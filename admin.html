@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rzlhmdproject — Admin Management</title>
+    <title>Rzlhmdproject — Smart Review Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- QR Code Generator Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
         :root {
@@ -18,16 +20,23 @@
             --border: #e2e8f0;
             --success: #10b981;
             --danger: #ef4444;
+            --warning: #f59e0b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 25px 15px; }
-        .container { width: 100%; max-width: 620px; }
+        .container { width: 100%; max-width: 650px; }
 
         .header { text-align: center; margin-bottom: 20px; }
         .brand-badge { display: inline-flex; align-items: center; gap: 8px; background: #eff6ff; color: var(--primary); padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 10px; border: 1px solid #dbeafe; }
         .header h1 { font-size: 22px; font-weight: 700; color: var(--text-main); }
         .header p { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+
+        /* KPI Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+        .stat-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px; text-align: center; }
+        .stat-val { font-size: 20px; font-weight: 700; color: var(--text-main); }
+        .stat-lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 
         .card { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.03); padding: 22px; margin-bottom: 18px; }
         .card-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: var(--text-main); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
@@ -55,16 +64,23 @@
         .badge-empty { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
 
         .card-url { color: var(--text-muted); font-size: 12px; word-break: break-all; margin-bottom: 8px; }
-        .card-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border); padding-top: 8px; font-size: 12px; gap: 6px; }
+        .card-actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border); padding-top: 8px; font-size: 12px; gap: 6px; }
 
         .action-btn { width: auto; padding: 5px 10px; font-size: 11px; box-shadow: none; border-radius: 6px; }
         .btn-copy { background: #eff6ff; color: var(--primary); border: 1px solid #dbeafe; }
         .btn-copy:hover { background: #dbeafe; }
+        .btn-qr { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+        .btn-qr:hover { background: #dcfce7; }
         .btn-edit { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border); }
 
         .toast { padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 500; display: none; align-items: center; gap: 8px; margin-bottom: 16px; }
         .toast-success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
         .toast-error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+        /* Modal Preview QR Code */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 999; padding: 20px; }
+        .modal-content { background: #fff; padding: 24px; border-radius: 16px; text-align: center; max-width: 340px; width: 100%; }
+        #qrcode { display: flex; justify-content: center; margin: 16px 0; }
 
         .hidden { display: none !important; }
         .logout-btn { background: transparent; color: var(--danger); border: 1px solid #fecaca; padding: 6px 12px; font-size: 12px; width: auto; box-shadow: none; }
@@ -75,9 +91,9 @@
 
 <div class="container">
     <div class="header">
-        <div class="brand-badge"><i class="fa-solid fa-shield-halved"></i> Admin Panel</div>
+        <div class="brand-badge"><i class="fa-solid fa-bolt"></i> Rzlhmdproject Admin</div>
         <h1>Smart Review Dashboard</h1>
-        <p>Sistem Pengelolaan Kartu NFC & QR Code Rzlhmdproject</p>
+        <p>Manajemen & Monitoring Kartu NFC & QR Code</p>
     </div>
 
     <div id="toast" class="toast"></div>
@@ -101,15 +117,31 @@
     <div id="dashboardSection" class="hidden">
         <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 18px;">
             <div>
-                <span style="font-size: 11px; color: var(--text-muted); display: block;">Status Akses:</span>
+                <span style="font-size: 11px; color: var(--text-muted); display: block;">Status Admin:</span>
                 <span style="font-size: 12px; font-weight: 600; color: var(--success);"><i class="fa-solid fa-circle" style="font-size: 7px;"></i> Terverifikasi</span>
             </div>
             <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-power-off"></i> Keluar</button>
         </div>
 
+        <!-- KPI Ringkasan Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-val" id="statTotal">0</div>
+                <div class="stat-lbl">Total Kartu</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" style="color: var(--success);" id="statActive">0</div>
+                <div class="stat-lbl">Kartu Aktif</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" style="color: var(--warning);" id="statEmpty">0</div>
+                <div class="stat-lbl">Kartu Belum Aktif</div>
+            </div>
+        </div>
+
         <!-- Form Input Card -->
         <div class="card">
-            <div class="card-title"><i class="fa-solid fa-pen-to-square"></i> Input / Perbarui Kartu Klien</div>
+            <div class="card-title"><i class="fa-solid fa-pen-to-square"></i> Kelola / Tambah Slot Kartu</div>
             <form onsubmit="handleSaveCard(event)">
                 <div class="form-group">
                     <label>Nomor Kartu (ID)</label>
@@ -122,7 +154,7 @@
                     <label>Link Google Maps / Review Klien</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-location-dot"></i>
-                        <input type="url" id="targetUrl" placeholder="Kosongkan jika ingin diisi oleh klien via setup.html">
+                        <input type="url" id="targetUrl" placeholder="Kosongkan jika ingin diisi via setup.html">
                     </div>
                 </div>
                 <div class="btn-group">
@@ -135,7 +167,7 @@
         <!-- Card List -->
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <div class="card-title" style="border:none; margin:0; padding:0;"><i class="fa-solid fa-list-check"></i> Daftar Kartu</div>
+                <div class="card-title" style="border:none; margin:0; padding:0;"><i class="fa-solid fa-list-check"></i> Daftar Slot Kartu</div>
                 <button onclick="loadDashboardData()" style="width: auto; padding: 5px 10px; font-size: 11px; background: #f1f5f9; color: var(--text-main); box-shadow:none;"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
             </div>
             
@@ -153,11 +185,22 @@
     </div>
 </div>
 
+<!-- Modal Pop-up Preview QR Code -->
+<div id="qrModal" class="modal">
+    <div class="modal-content">
+        <h3 id="qrModalTitle" style="font-size: 16px; margin-bottom: 4px;">QR Code Kartu</h3>
+        <p style="font-size: 12px; color: var(--text-muted);" id="qrModalSubtitle"></p>
+        <div id="qrcode"></div>
+        <button onclick="closeQrModal()" style="background: #f1f5f9; color: var(--text-main); box-shadow: none;">Tutup</button>
+    </div>
+</div>
+
 <script>
     const OWNER = 'rzlhmdproject';
     const REPO = 'rzlhmdproject';
     const PATH = 'vercel.json';
     let globalCardsData = [];
+    let qrcodeObj = null;
 
     document.addEventListener("DOMContentLoaded", () => {
         const savedToken = localStorage.getItem("rzl_gh_token");
@@ -217,10 +260,21 @@
             const jsonContent = JSON.parse(atob(fileData.content));
             
             globalCardsData = jsonContent.redirects.filter(r => r.source && r.source.startsWith('/card/'));
+            updateKPIs(globalCardsData);
             renderCards(globalCardsData);
         } catch (e) {
             container.innerHTML = `<p style="font-size: 12px; color: var(--danger); text-align: center;">Gagal memuat daftar kartu.</p>`;
         }
+    }
+
+    function updateKPIs(cards) {
+        const total = cards.length;
+        const active = cards.filter(c => !c.destination.includes('setup.html')).length;
+        const empty = total - active;
+
+        document.getElementById('statTotal').innerText = total;
+        document.getElementById('statActive').innerText = active;
+        document.getElementById('statEmpty').innerText = empty;
     }
 
     function renderCards(cards) {
@@ -245,7 +299,8 @@
                     </div>
                     <div class="card-url"><strong>Tujuan:</strong> ${item.destination}</div>
                     <div class="card-actions">
-                        <button onclick="copyNfcLink('${fullAccessUrl}')" class="action-btn btn-copy"><i class="fa-solid fa-copy"></i> Copy Link NFC</button>
+                        <button onclick="copyNfcLink('${fullAccessUrl}')" class="action-btn btn-copy"><i class="fa-solid fa-copy"></i> Copy NFC</button>
+                        <button onclick="showQrModal('${cardId}', '${fullAccessUrl}')" class="action-btn btn-qr"><i class="fa-solid fa-qrcode"></i> Lihat QR</button>
                         <button onclick="selectCardToEdit('${cardId}', '${item.destination}')" class="action-btn btn-edit"><i class="fa-solid fa-pen"></i> Edit</button>
                     </div>
                 </div>
@@ -266,6 +321,25 @@
         navigator.clipboard.writeText(url).then(() => {
             showToast('Link NFC berhasil disalin!');
         });
+    }
+
+    function showQrModal(id, url) {
+        document.getElementById('qrModalTitle').innerText = `QR Code Kartu #${id}`;
+        document.getElementById('qrModalSubtitle').innerText = url;
+        const qrContainer = document.getElementById('qrcode');
+        qrContainer.innerHTML = '';
+        
+        qrcodeObj = new QRCode(qrContainer, {
+            text: url,
+            width: 160,
+            height: 160
+        });
+
+        document.getElementById('qrModal').style.display = 'flex';
+    }
+
+    function closeQrModal() {
+        document.getElementById('qrModal').style.display = 'none';
     }
 
     function selectCardToEdit(id, url) {
@@ -297,7 +371,6 @@
             const sourcePath = `/card/${cardId}`;
             let found = false;
 
-            // Bersihkan properti non-standar Vercel
             jsonContent.redirects = jsonContent.redirects.map(item => ({
                 source: item.source,
                 destination: item.destination,
