@@ -9,6 +9,11 @@
       "source": "/card/002",
       "destination": "https://maps.app.goo.gl/pbjoShMBEYoXPR2a6?g_st=ic",
       "permanent": false
+    },
+    {
+      "source": "/card/003",
+      "destination": "https://rzlhmdproject.vercel.app/setup.html?id=003",
+      "permanent": false
     }
   ]
 }
