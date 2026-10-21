@@ -14,6 +14,36 @@
       "source": "/card/003",
       "destination": "https://rzlhmdproject.vercel.app/setup.html?id=003",
       "permanent": false
+    },
+    {
+      "source": "/card/005",
+      "destination": "https://rzlhmdproject.vercel.app/setup.html?id=005",
+      "permanent": false
+    },
+    {
+      "source": "/card/006",
+      "destination": "https://rzlhmdproject.vercel.app/setup.html?id=006",
+      "permanent": false
+    },
+    {
+      "source": "/card/007",
+      "destination": "https://rzlhmdproject.vercel.app/setup.html?id=007",
+      "permanent": false
+    },
+    {
+      "source": "/card/008",
+      "destination": "https://rzlhmdproject.vercel.app/setup.html?id=008",
+      "permanent": false
+    },
+    {
+      "source": "/card/009",
+      "destination": "https://rzlhmdproject.vercel.app/setup.html?id=009",
+      "permanent": false
+    },
+    {
+      "source": "/card/010",
+      "destination": "https://rzlhmdproject.vercel.app/setup.html?id=010",
+      "permanent": false
     }
   ]
 }
