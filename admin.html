@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rzlhmdproject — Smart Review Dashboard</title>
-    <!-- Google Fonts & FontAwesome Icons -->
+    <title>Rzlhmdproject — Dashboard & Management</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -21,308 +20,110 @@
             --danger: #ef4444;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 30px 15px; }
+        .container { width: 100%; max-width: 550px; }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 40px 20px;
-        }
+        .header { text-align: center; margin-bottom: 24px; }
+        .brand-badge { display: inline-flex; align-items: center; gap: 8px; background: #eff6ff; color: var(--primary); padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 10px; border: 1px solid #dbeafe; }
+        .header h1 { font-size: 24px; font-weight: 700; color: var(--text-main); }
+        .header p { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
 
-        .container {
-            width: 100%;
-            max-width: 600px;
-        }
+        .card { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.03); padding: 24px; margin-bottom: 20px; }
+        .card-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: var(--text-main); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .card-title i { color: var(--primary); }
 
-        /* Header Brand */
-        .header {
-            text-align: center;
-            margin-bottom: 28px;
-        }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 12px; font-weight: 600; color: var(--text-main); margin-bottom: 6px; }
+        .input-wrapper { position: relative; display: flex; align-items: center; }
+        .input-wrapper i { position: absolute; left: 14px; color: var(--text-muted); font-size: 14px; }
+        input, select { width: 100%; padding: 11px 12px 11px 38px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text-main); background: #fff; transition: all 0.2s; }
+        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
-        .brand-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #eff6ff;
-            color: var(--primary);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            border: 1px solid #dbeafe;
-        }
+        button { width: 100%; background: var(--primary); color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s; }
+        button:hover { background: var(--primary-hover); }
+        button:disabled { background: #94a3b8; cursor: not-allowed; }
 
-        .header h1 {
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--text-main);
-            letter-spacing: -0.5px;
-        }
+        .card-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; background: #fafafa; font-size: 13px; }
+        .card-badge { background: var(--primary); color: #fff; font-weight: 700; font-size: 11px; padding: 3px 8px; border-radius: 4px; }
+        .card-url { color: var(--text-muted); text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 250px; }
 
-        .header p {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin-top: 6px;
-        }
+        .toast { padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 500; display: none; align-items: center; gap: 8px; margin-bottom: 16px; }
+        .toast-success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+        .toast-error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 
-        /* Card Container */
-        .card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-            padding: 28px;
-            margin-bottom: 24px;
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--text-main);
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 12px;
-        }
-
-        .card-title i {
-            color: var(--primary);
-        }
-
-        /* Form Inputs */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 8px;
-        }
-
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-wrapper i {
-            position: absolute;
-            left: 14px;
-            color: var(--text-muted);
-            font-size: 15px;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 14px 12px 42px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 14px;
-            color: var(--text-main);
-            background: #fff;
-            transition: all 0.2s ease;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-        }
-
-        .helper-text {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 6px;
-        }
-
-        /* Submit Button & Animations */
-        button {
-            width: 100%;
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        }
-
-        button:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-        }
-
-        button:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Live Redirect List Table */
-        .list-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .card-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 14px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            background: #fafafa;
-        }
-
-        .card-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            overflow: hidden;
-        }
-
-        .card-badge {
-            background: var(--primary);
-            color: #fff;
-            font-weight: 700;
-            font-size: 12px;
-            padding: 4px 10px;
-            border-radius: 6px;
-            white-space: nowrap;
-        }
-
-        .card-url {
-            font-size: 12px;
-            color: var(--text-muted);
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-            max-width: 320px;
-        }
-
-        /* Toast Message Notification */
-        .toast {
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            display: none;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .toast-success {
-            background: #ecfdf5;
-            color: #065f46;
-            border: 1px solid #a7f3d0;
-        }
-
-        .toast-error {
-            background: #fef2f2;
-            color: #991b1b;
-            border: 1px solid #fecaca;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .hidden { display: none !important; }
+        .logout-btn { background: transparent; color: var(--danger); border: 1px solid #fecaca; padding: 6px 12px; font-size: 12px; width: auto; box-shadow: none; }
+        .logout-btn:hover { background: #fef2f2; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- Header -->
     <div class="header">
-        <div class="brand-badge">
-            <i class="fa-solid fa-bolt"></i> Rzlhmdproject System
-        </div>
+        <div class="brand-badge"><i class="fa-solid fa-bolt"></i> Rzlhmdproject System</div>
         <h1>Smart Review Dashboard</h1>
-        <p>Kelola link Google Review kartu NFC & QR Code secara instan</p>
+        <p>Sistem Manajemen Kartu NFC & QR Code</p>
     </div>
 
-    <!-- Notification Toast -->
     <div id="toast" class="toast"></div>
 
-    <!-- Form Section -->
-    <div class="card">
-        <div class="card-title">
-            <i class="fa-solid fa-pen-to-square"></i> Input / Perbarui Target Kartu
-        </div>
-
-        <form id="redirectForm" onsubmit="handleFormSubmit(event)">
+    <!-- TAMPILAN 1: MENU LOGIN TOKEN -->
+    <div id="loginSection" class="card">
+        <div class="card-title"><i class="fa-solid fa-lock"></i> Login Akses Admin</div>
+        <form onsubmit="handleLogin(event)">
             <div class="form-group">
-                <label for="ghToken">GitHub Personal Access Token</label>
+                <label>GitHub Personal Access Token (GHP)</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-key"></i>
-                    <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" required>
-                </div>
-                <div class="helper-text">*Token disimpan otomatis di browser HP/Laptop Anda.</div>
-            </div>
-
-            <div class="form-group">
-                <label for="cardId">Nomor Kartu (ID)</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-id-card"></i>
-                    <input type="text" id="cardId" placeholder="Contoh: 001" required>
+                    <input type="password" id="loginToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" required>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label for="targetUrl">Link Google Review / Maps Klien</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <input type="url" id="targetUrl" placeholder="https://maps.app.goo.gl/..." required>
-                </div>
-            </div>
-
-            <button type="submit" id="submitBtn">
-                <i class="fa-solid fa-floppy-disk"></i> Simpan & Update Link
-            </button>
+            <button type="submit"><i class="fa-solid fa-right-to-bracket"></i> Masuk Dashboard</button>
         </form>
     </div>
 
-    <!-- Live Active Cards List -->
-    <div class="card">
-        <div class="list-header">
-            <div class="card-title" style="border-bottom: none; padding-bottom: 0; margin-bottom: 0;">
-                <i class="fa-solid fa-list-check"></i> Daftar Kartu Terdaftar
+    <!-- TAMPILAN 2: DASHBOARD UTAMA (TERSEMBUNYI SEBELUM LOGIN) -->
+    <div id="dashboardSection" class="hidden">
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
+            <div>
+                <span style="font-size: 12px; color: var(--text-muted);">Status:</span>
+                <span style="font-size: 13px; font-weight: 600; color: var(--success);"><i class="fa-solid fa-circle" style="font-size: 8px;"></i> Terhubung ke GitHub</span>
             </div>
-            <button onclick="loadCurrentRedirects()" style="width: auto; padding: 6px 12px; font-size: 12px; background: #f1f5f9; color: var(--text-main); box-shadow: none;">
-                <i class="fa-solid fa-rotate-right"></i> Refresh Data
-            </button>
+            <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-power-off"></i> Keluar</button>
         </div>
-        <div id="cardsContainer" style="margin-top: 16px;">
-            <p style="font-size: 13px; color: var(--text-muted); text-align: center;">Masukkan Token di atas & klik Refresh Data untuk melihat daftar kartu.</p>
+
+        <!-- Form Aktivasi Kartu -->
+        <div class="card">
+            <div class="card-title"><i class="fa-solid fa-plus-circle"></i> Aktivasi / Update Nomor Kartu</div>
+            <form onsubmit="handleUpdateCard(event)">
+                <div class="form-group">
+                    <label>Pilih / Ketik Nomor Kartu (ID)</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-id-card"></i>
+                        <input type="text" id="targetCardId" placeholder="Contoh: 003 (atau nomor baru)" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Link Google Maps / Review Klien</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="url" id="targetUrl" placeholder="https://maps.app.goo.gl/..." required>
+                    </div>
+                </div>
+                <button type="submit" id="saveBtn"><i class="fa-solid fa-floppy-disk"></i> Simpan & Aktifkan Kartu</button>
+            </form>
+        </div>
+
+        <!-- Daftar Kartu Aktif & Status -->
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <div class="card-title" style="border:none; margin:0; padding:0;"><i class="fa-solid fa-list-check"></i> Daftar Kartu Terdaftar</div>
+                <button onclick="loadDashboardData()" style="width: auto; padding: 6px 10px; font-size: 11px; background: #f1f5f9; color: var(--text-main); box-shadow:none;"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+            </div>
+            <div id="cardsListContainer">
+                <p style="font-size: 12px; color: var(--text-muted); text-align: center;">Memuat data kartu...</p>
+            </div>
         </div>
     </div>
 </div>
@@ -332,138 +133,133 @@
     const REPO = 'rzlhmdproject';
     const PATH = 'vercel.json';
 
-    // Otomatis muat Token yang tersimpan di LocalStorage saat halaman dibuka
     document.addEventListener("DOMContentLoaded", () => {
         const savedToken = localStorage.getItem("rzl_gh_token");
         if (savedToken) {
-            document.getElementById("ghToken").value = savedToken;
-            loadCurrentRedirects();
+            document.getElementById("loginToken").value = savedToken;
+            verifyAndOpenDashboard(savedToken);
         }
     });
 
-    function showToast(message, type = 'success') {
-        const toast = document.getElementById('toast');
-        toast.className = `toast toast-${type}`;
-        toast.innerHTML = type === 'success' 
-            ? `<i class="fa-solid fa-circle-check"></i> ${message}` 
-            : `<i class="fa-solid fa-circle-xmark"></i> ${message}`;
-        toast.style.display = 'flex';
-        setTimeout(() => { toast.style.display = 'none'; }, 5000);
+    function showToast(msg, type = 'success') {
+        const t = document.getElementById('toast');
+        t.className = `toast toast-${type}`;
+        t.innerHTML = `<i class="fa-solid fa-${type === 'success' ? 'circle-check' : 'circle-xmark'}"></i> ${msg}`;
+        t.style.display = 'flex';
+        setTimeout(() => t.style.display = 'none', 4000);
     }
 
-    async function handleFormSubmit(e) {
+    async function handleLogin(e) {
         e.preventDefault();
-        
-        const token = document.getElementById('ghToken').value.trim();
-        const cardIdInput = document.getElementById('cardId').value.trim();
-        const cardId = cardIdInput ? cardIdInput : '001';
-        const targetUrl = document.getElementById('targetUrl').value.trim();
-        const submitBtn = document.getElementById('submitBtn');
+        const token = document.getElementById('loginToken').value.trim();
+        await verifyAndOpenDashboard(token, true);
+    }
 
-        // Simpan token ke browser
-        localStorage.setItem("rzl_gh_token", token);
-
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Memproses ke GitHub...`;
-
+    async function verifyAndOpenDashboard(token, notify = false) {
         try {
-            const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
-            
-            // 1. Ambil data vercel.json saat ini
-            const getRes = await fetch(apiUrl, { headers: { 'Authorization': `token ${token}` } });
-            if (!getRes.ok) throw new Error('Token salah atau gagal terhubung ke GitHub.');
-            
-            const fileData = await getRes.json();
-            let jsonContent = JSON.parse(atob(fileData.content));
-            
-            const sourcePath = `/card/${cardId}`;
-            let updated = false;
-
-            // 2. Cek & update jika kartu sudah ada
-            jsonContent.redirects.forEach(item => {
-                if (item.source === sourcePath) {
-                    item.destination = targetUrl;
-                    updated = true;
-                }
+            const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, {
+                headers: { 'Authorization': `token ${token}` }
             });
+            if (!res.ok) throw new Error('Token salah atau kadaluwarsa.');
 
-            // 3. Tambahkan jika kartu baru
-            if (!updated) {
-                jsonContent.redirects.push({
-                    source: sourcePath,
-                    destination: targetUrl,
-                    permanent: false
-                });
+            localStorage.setItem("rzl_gh_token", token);
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            if (notify) showToast('Login berhasil!');
+            loadDashboardData();
+        } catch (err) {
+            localStorage.removeItem("rzl_gh_token");
+            if (notify) showToast(err.message, 'error');
+        }
+    }
+
+    function handleLogout() {
+        localStorage.removeItem("rzl_gh_token");
+        document.getElementById('dashboardSection').classList.add('hidden');
+        document.getElementById('loginSection').classList.remove('hidden');
+        showToast('Berhasil keluar sistem.');
+    }
+
+    async function loadDashboardData() {
+        const token = localStorage.getItem("rzl_gh_token");
+        const container = document.getElementById('cardsListContainer');
+        try {
+            const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, {
+                headers: { 'Authorization': `token ${token}` }
+            });
+            const fileData = await res.json();
+            const jsonContent = JSON.parse(atob(fileData.content));
+            const cards = jsonContent.redirects.filter(r => r.source.startsWith('/card/'));
+
+            if (cards.length === 0) {
+                container.innerHTML = `<p style="font-size: 12px; color: var(--text-muted); text-align: center;">Belum ada kartu diaktifkan.</p>`;
+                return;
             }
 
-            // 4. Push balik ke GitHub
-            const updatedContent = btoa(JSON.stringify(jsonContent, null, 2));
-            const putRes = await fetch(apiUrl, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: `Update card /card/${cardId} via Rzlhmdproject Dashboard`,
-                    content: updatedContent,
-                    sha: fileData.sha
-                })
-            });
-
-            if (!putRes.ok) throw new Error('Gagal menyimpan perubahan ke GitHub.');
-
-            showToast(`Kartu ID ${cardId} berhasil dihubungkan ke link baru!`);
-            document.getElementById('cardId').value = '';
-            document.getElementById('targetUrl').value = '';
-            
-            // Re-load list
-            setTimeout(loadCurrentRedirects, 1000);
-
-        } catch (error) {
-            showToast(error.message, 'error');
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan & Update Link`;
+            container.innerHTML = cards.map(item => `
+                <div class="card-item">
+                    <div style="display: flex; align-items: center; gap: 10px; overflow:hidden;">
+                        <span class="card-badge">${item.source.replace('/card/', 'ID ')}</span>
+                        <span class="card-url" title="${item.destination}">${item.destination}</span>
+                    </div>
+                    <a href="${item.destination}" target="_blank" style="color: var(--primary); font-size: 12px;"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                </div>
+            `).join('');
+        } catch (e) {
+            container.innerHTML = `<p style="font-size: 12px; color: var(--danger); text-align: center;">Gagal memuat daftar.</p>`;
         }
     }
 
-    async function loadCurrentRedirects() {
-        const token = document.getElementById('ghToken').value.trim();
-        const container = document.getElementById('cardsContainer');
+    async function handleUpdateCard(e) {
+        e.preventDefault();
+        const token = localStorage.getItem("rzl_gh_token");
+        const cardId = document.getElementById('targetCardId').value.trim();
+        const targetUrl = document.getElementById('targetUrl').value.trim();
+        const btn = document.getElementById('saveBtn');
 
-        if (!token) {
-            container.innerHTML = `<p style="font-size: 13px; color: var(--text-muted); text-align: center;">Isi Token untuk melihat data.</p>`;
-            return;
-        }
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan ke GitHub...`;
 
         try {
             const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
             const res = await fetch(apiUrl, { headers: { 'Authorization': `token ${token}` } });
-            if (!res.ok) return;
-
             const fileData = await res.json();
-            const jsonContent = JSON.parse(atob(fileData.content));
+            let jsonContent = JSON.parse(atob(fileData.content));
 
-            const cardRedirects = jsonContent.redirects.filter(r => r.source.startsWith('/card/'));
+            const sourcePath = `/card/${cardId}`;
+            let found = false;
+            jsonContent.redirects.forEach(item => {
+                if (item.source === sourcePath) {
+                    item.destination = targetUrl;
+                    found = true;
+                }
+            });
 
-            if (cardRedirects.length === 0) {
-                container.innerHTML = `<p style="font-size: 13px; color: var(--text-muted); text-align: center;">Belum ada kartu terdaftar.</p>`;
-                return;
+            if (!found) {
+                jsonContent.redirects.push({ source: sourcePath, destination: targetUrl, permanent: false });
             }
 
-            container.innerHTML = cardRedirects.map(item => `
-                <div class="card-item">
-                    <div class="card-info">
-                        <span class="card-badge">${item.source.replace('/card/', 'ID ')}</span>
-                        <span class="card-url" title="${item.destination}">${item.destination}</span>
-                    </div>
-                    <a href="${item.destination}" target="_blank" style="color: var(--primary); font-size: 13px;"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                </div>
-            `).join('');
+            const putRes = await fetch(apiUrl, {
+                method: 'PUT',
+                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: `Aktivasi kartu /card/${cardId} via Rzlhmdproject Admin`,
+                    content: btoa(JSON.stringify(jsonContent, null, 2)),
+                    sha: fileData.sha
+                })
+            });
 
+            if (!putRes.ok) throw new Error('Gagal memperbarui file di GitHub.');
+
+            showToast(`Kartu ID ${cardId} berhasil diaktifkan!`);
+            document.getElementById('targetCardId').value = '';
+            document.getElementById('targetUrl').value = '';
+            loadDashboardData();
         } catch (err) {
-            container.innerHTML = `<p style="font-size: 13px; color: var(--danger); text-align: center;">Gagal memuat daftar kartu.</p>`;
+            showToast(err.message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan & Aktifkan Kartu`;
         }
     }
 </script>
