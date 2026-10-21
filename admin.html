@@ -149,6 +149,7 @@
             <button class="nav-icon active" id="btnNavDash" onclick="switchTab('dash')" title="Ringkasan Sistem"><i class="fa-solid fa-chart-pie"></i></button>
             <button class="nav-icon" id="btnNavCards" onclick="switchTab('cards')" title="Inventaris Kartu"><i class="fa-solid fa-credit-card"></i></button>
             <button class="nav-icon" id="btnNavBatch" onclick="switchTab('batch')" title="Batch Generator"><i class="fa-solid fa-layer-group"></i></button>
+            <button class="nav-icon" id="btnNavAcrylic" onclick="switchTab('acrylic')" title="Generator Akrilik & QR"><i class="fa-solid fa-object-ungroup"></i></button>
             <button class="nav-icon" id="btnNavSettings" onclick="switchTab('settings')" title="Pengaturan Sistem"><i class="fa-solid fa-gear"></i></button>
         </div>
         <button class="nav-icon" onclick="handleLogout()" title="Keluar"><i class="fa-solid fa-power-off" style="color:var(--danger)"></i></button>
@@ -286,7 +287,50 @@
             </div>
         </div>
 
-        <!-- TAB 4: SETTINGS -->
+        <!-- TAB 4: PRATINJAU & GENERATOR AKRILIK -->
+        <div id="tabAcrylic" class="hidden">
+            <div class="panel-card">
+                <div class="panel-header"><i class="fa-solid fa-object-ungroup"></i> Pratinjau & Generator Desain Akrilik</div>
+                <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px;">
+                    Sistem secara otomatis menanamkan QR Code dinamis ke dalam template desain fisik akrilik siap cetak.
+                </p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center;">
+                    <!-- Area Pratinjau Desain Akrilik -->
+                    <div style="background: #121316; border: 2px dashed var(--panel-border); border-radius: 20px; padding: 24px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 280px;">
+                        <div id="acrylicCanvasContainer" style="position: relative; background: #181A1E; padding: 20px; border-radius: 16px; border: 1px solid var(--panel-border); box-shadow: 0 15px 35px rgba(0,0,0,0.6); display: inline-block;">
+                            <div style="font-size: 11px; font-weight: 700; color: var(--primary-orange); letter-spacing: 1px; margin-bottom: 10px;" id="acrylicBrandHeader">RZLHMDPROJECT</div>
+                            <!-- Tempat QR Code dirender otomatis -->
+                            <div id="acrylicQrTarget" style="background: #ffffff; padding: 10px; border-radius: 12px; display: inline-block;"></div>
+                            <div style="font-size: 10px; color: var(--text-secondary); margin-top: 10px; font-family: monospace;" id="acrylicCardLabel">SLOT #001</div>
+                        </div>
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 14px;"><i class="fa-solid fa-eye"></i> Pratinjau Mockup Akrilik Kustom</div>
+                    </div>
+
+                    <!-- Panel Kontrol & Download -->
+                    <div>
+                        <div class="form-group">
+                            <label>Pilih Slot Kartu</label>
+                            <select id="acrylicSlotSelect" onchange="generateAcrylicMockup()">
+                                <option value="">-- Muat Inventaris Slot --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Template Desain Akrilik</label>
+                            <select id="acrylicTemplate" onchange="updateTemplateTheme()">
+                                <option value="dark">Dark Minimalist Edition</option>
+                                <option value="gold">Luxury Gold Edition</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn-primary" onclick="downloadAcrylicDesign()" style="margin-top: 10px;">
+                            <i class="fa-solid fa-download"></i> Download Desain Siap Cetak (PNG)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: SETTINGS -->
         <div id="tabSettings" class="hidden">
             <div class="panel-card">
                 <div class="panel-header"><i class="fa-solid fa-sliders"></i> Pengaturan Sistem & Akses API</div>
@@ -333,11 +377,13 @@
         document.getElementById('tabDash').classList.add('hidden');
         document.getElementById('tabCards').classList.add('hidden');
         document.getElementById('tabBatch').classList.add('hidden');
+        document.getElementById('tabAcrylic').classList.add('hidden');
         document.getElementById('tabSettings').classList.add('hidden');
 
         document.getElementById('btnNavDash').classList.remove('active');
         document.getElementById('btnNavCards').classList.remove('active');
         document.getElementById('btnNavBatch').classList.remove('active');
+        document.getElementById('btnNavAcrylic').classList.remove('active');
         document.getElementById('btnNavSettings').classList.remove('active');
 
         if(tab === 'dash') {
@@ -352,6 +398,11 @@
             document.getElementById('tabBatch').classList.remove('hidden');
             document.getElementById('btnNavBatch').classList.add('active');
             document.getElementById('pageTitle').innerText = "Batch Generator";
+        } else if(tab === 'acrylic') {
+            document.getElementById('tabAcrylic').classList.remove('hidden');
+            document.getElementById('btnNavAcrylic').classList.add('active');
+            document.getElementById('pageTitle').innerText = "Generator Akrilik & QR";
+            populateAcrylicSlots();
         } else if(tab === 'settings') {
             document.getElementById('tabSettings').classList.remove('hidden');
             document.getElementById('btnNavSettings').classList.add('active');
@@ -672,6 +723,114 @@
             document.getElementById('cardUrl').value = '';
             loadData();
         } catch(e) { notify(e.message, true); }
+    }
+
+    // --- FITUR PRATINJAU & GENERATOR AKRILIK ---
+    function populateAcrylicSlots() {
+        const select = document.getElementById('acrylicSlotSelect');
+        if(rawData.length === 0) {
+            select.innerHTML = '<option value="001">Slot #001 (Default)</option>';
+        } else {
+            select.innerHTML = rawData.map(item => {
+                const id = item.source.replace('/card/', '');
+                return `<option value="${id}">Slot #${id}</option>`;
+            }).join('');
+        }
+        generateAcrylicMockup();
+    }
+
+    function updateTemplateTheme() {
+        const theme = document.getElementById('acrylicTemplate').value;
+        const box = document.getElementById('acrylicCanvasContainer');
+        const header = document.getElementById('acrylicBrandHeader');
+
+        if(theme === 'gold') {
+            box.style.background = 'linear-gradient(135deg, #2d2312 0%, #12100a 100%)';
+            box.style.borderColor = '#FFB800';
+            header.style.color = '#FFB800';
+        } else {
+            box.style.background = '#181A1E';
+            box.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+            header.style.color = '#FF6B00';
+        }
+        generateAcrylicMockup();
+    }
+
+    function generateAcrylicMockup() {
+        const slotId = document.getElementById('acrylicSlotSelect').value || '001';
+        const targetUrl = `https://rzlhmdproject.vercel.app/card/${slotId}`;
+        
+        document.getElementById('acrylicCardLabel').innerText = `SMART REVIEW CARD #${slotId}`;
+        
+        const qrTarget = document.getElementById('acrylicQrTarget');
+        qrTarget.innerHTML = '';
+        
+        new QRCode(qrTarget, {
+            text: targetUrl,
+            width: 130,
+            height: 130,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    }
+
+    function downloadAcrylicDesign() {
+        const container = document.getElementById('acrylicCanvasContainer');
+        const slotId = document.getElementById('acrylicSlotSelect').value || '001';
+        
+        // Menggunakan library canvas sederhana untuk menangkap gambar mockup
+        const qrImg = container.querySelector('img');
+        if(!qrImg) return notify("QR Code belum siap", true);
+
+        // Buat canvas sementara untuk merender file siap cetak high-res
+        const canvas = document.createElement('canvas');
+        canvas.width = 600;
+        canvas.height = 800;
+        const ctx = canvas.getContext('2d');
+
+        // Background template
+        const theme = document.getElementById('acrylicTemplate').value;
+        ctx.fillStyle = theme === 'gold' ? '#1a160d' : '#181A1E';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Border
+        ctx.strokeStyle = theme === 'gold' ? '#FFB800' : '#333842';
+        ctx.lineWidth = 8;
+        ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+
+        // Header Brand Text
+        ctx.fillStyle = theme === 'gold' ? '#FFB800' : '#FF6B00';
+        ctx.font = 'bold 28px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('RZLHMDPROJECT', canvas.width / 2, 120);
+
+        ctx.fillStyle = '#A0A5B1';
+        ctx.font = '16px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText('Scan untuk Memberikan Ulasan', canvas.width / 2, 160);
+
+        // Draw QR Image ke canvas
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = function() {
+            // Kotak putih QR
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect((canvas.width - 320) / 2, 220, 320, 320);
+            ctx.drawImage(img, (canvas.width - 280) / 2, 240, 280, 280);
+
+            // Footer Slot ID
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 22px monospace';
+            ctx.fillText(`SMART CARD REVIEW #${slotId}`, canvas.width / 2, 630);
+
+            // Trigger Download
+            const a = document.createElement('a');
+            a.href = canvas.toDataURL("image/png");
+            a.download = `Desain_Akrilik_Slot_${slotId}.png`;
+            a.click();
+            notify(`Desain Akrilik #${slotId} siap cetak berhasil diunduh!`);
+        };
+        img.src = qrImg.src;
     }
 </script>
 </body>
