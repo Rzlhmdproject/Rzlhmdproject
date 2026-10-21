@@ -1,11 +1,6 @@
 {
   "redirects": [
     {
-      "source": "/card/001",
-      "destination": "https://maps.app.goo.gl/xi1vm7amPKFpyEQN7",
-      "permanent": false
-    },
-    {
       "source": "/card/002",
       "destination": "https://maps.app.goo.gl/QaH6r5Y5YThR3MTo9",
       "permanent": false
