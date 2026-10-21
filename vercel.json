@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    {
+      "source": "/card/001",
+      "destination": "https://maps.google.com",
+      "permanent": false
+    },
+    {
+      "source": "/card/002",
+      "destination": "https://maps.google.com",
+      "permanent": false
+    }
+  ]
+}
