@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rzlhmdproject — Smart Review Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Rzlhmdproject — Enterprise Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- QR Code Generator Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #eeef2;
+            --accent: #3b82f6;
+            --bg: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.95);
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
@@ -24,101 +25,192 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 25px 15px; }
-        .container { width: 100%; max-width: 650px; }
+        
+        body { 
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            color: var(--text-main); 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            padding: 30px 15px; 
+        }
 
-        .header { text-align: center; margin-bottom: 20px; }
-        .brand-badge { display: inline-flex; align-items: center; gap: 8px; background: #eff6ff; color: var(--primary); padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 10px; border: 1px solid #dbeafe; }
-        .header h1 { font-size: 22px; font-weight: 700; color: var(--text-main); }
-        .header p { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+        .container { width: 100%; max-width: 680px; }
+
+        /* Header Style */
+        .header { text-align: center; margin-bottom: 24px; }
+        .brand-badge { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            background: rgba(99, 102, 241, 0.15); 
+            color: #818cf8; 
+            padding: 8px 18px; 
+            border-radius: 30px; 
+            font-size: 13px; 
+            font-weight: 700; 
+            margin-bottom: 12px; 
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .header h1 { font-size: 28px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
+        .header p { color: #94a3b8; font-size: 14px; margin-top: 6px; }
 
         /* KPI Stats Grid */
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
-        .stat-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px; text-align: center; }
-        .stat-val { font-size: 20px; font-weight: 700; color: var(--text-main); }
-        .stat-lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        .stat-card { 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 16px; 
+            padding: 16px; 
+            text-align: center; 
+            backdrop-filter: blur(10px);
+            transition: transform 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-2px); }
+        .stat-val { font-size: 24px; font-weight: 800; color: #fff; }
+        .stat-lbl { font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; margin-top: 4px; letter-spacing: 0.5px; }
 
-        .card { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.03); padding: 22px; margin-bottom: 18px; }
-        .card-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: var(--text-main); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .card-title i { color: var(--primary); }
+        /* Glassmorphism Cards */
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 20px; 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); 
+            padding: 26px; 
+            margin-bottom: 22px; 
+            backdrop-filter: blur(20px);
+        }
+        .card-title { 
+            font-size: 16px; 
+            font-weight: 700; 
+            margin-bottom: 18px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            color: var(--text-main); 
+            border-bottom: 1px solid var(--border); 
+            padding-bottom: 12px; 
+        }
+        .card-title i { color: var(--primary); font-size: 18px; }
 
-        .form-group { margin-bottom: 14px; }
-        label { display: block; font-size: 12px; font-weight: 600; color: var(--text-main); margin-bottom: 6px; }
+        /* Form Control */
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         .input-wrapper { position: relative; display: flex; align-items: center; }
-        .input-wrapper i { position: absolute; left: 14px; color: var(--text-muted); font-size: 14px; }
-        input { width: 100%; padding: 11px 12px 11px 38px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text-main); background: #fff; transition: all 0.2s; }
-        input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        .input-wrapper i { position: absolute; left: 14px; color: var(--text-muted); font-size: 15px; }
+        input { 
+            width: 100%; 
+            padding: 12px 14px 12px 42px; 
+            border: 1.5px solid var(--border); 
+            border-radius: 12px; 
+            font-size: 14px; 
+            color: var(--text-main); 
+            background: #f8fafc; 
+            transition: all 0.2s ease; 
+        }
+        input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); }
 
-        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
-        button { width: 100%; background: var(--primary); color: #fff; border: none; padding: 11px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s; }
-        button:hover { background: var(--primary-hover); }
-        button:disabled { background: #94a3b8; cursor: not-allowed; }
+        .btn-group { display: flex; gap: 10px; margin-top: 18px; }
+        button { 
+            width: 100%; 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); 
+            color: #fff; 
+            border: none; 
+            padding: 13px; 
+            border-radius: 12px; 
+            font-size: 14px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            transition: all 0.2s ease; 
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+        button:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4); }
+        button:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
         
-        .btn-danger { background: var(--danger); }
-        .btn-danger:hover { background: #dc2626; }
+        .btn-danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); }
+        .btn-danger:hover { box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4); }
 
-        .card-item { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px; background: #fafafa; font-size: 13px; }
+        /* Card List Styling */
+        .card-item { 
+            padding: 14px 16px; 
+            border: 1px solid var(--border); 
+            border-radius: 14px; 
+            margin-bottom: 12px; 
+            background: #fff; 
+            font-size: 13px; 
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .card-item:hover { border-color: var(--primary); transform: translateX(2px); }
         .card-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .card-badge { font-weight: 700; font-size: 11px; padding: 3px 8px; border-radius: 4px; }
-        .badge-active { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
-        .badge-empty { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+        .card-badge { font-weight: 800; font-size: 10px; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-active { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+        .badge-empty { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
 
-        .card-url { color: var(--text-muted); font-size: 12px; word-break: break-all; margin-bottom: 8px; }
-        .card-actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border); padding-top: 8px; font-size: 12px; gap: 6px; }
+        .card-url { color: var(--text-muted); font-size: 12px; word-break: break-all; margin-bottom: 10px; }
+        .card-actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border); padding-top: 10px; gap: 6px; }
 
-        .action-btn { width: auto; padding: 5px 10px; font-size: 11px; box-shadow: none; border-radius: 6px; }
+        .action-btn { width: auto; padding: 6px 12px; font-size: 12px; box-shadow: none; border-radius: 8px; font-weight: 600; }
         .btn-copy { background: #eff6ff; color: var(--primary); border: 1px solid #dbeafe; }
         .btn-copy:hover { background: #dbeafe; }
         .btn-qr { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
         .btn-qr:hover { background: #dcfce7; }
-        .btn-edit { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border); }
+        .btn-edit { background: #f8fafc; color: var(--text-main); border: 1px solid var(--border); }
 
-        .toast { padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 500; display: none; align-items: center; gap: 8px; margin-bottom: 16px; }
-        .toast-success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
-        .toast-error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        .toast { padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; display: none; align-items: center; gap: 10px; margin-bottom: 18px; animation: fadeIn 0.3s ease; }
+        .toast-success { background: #dcfce7; color: #14532d; border: 1px solid #bbf7d0; }
+        .toast-error { background: #fef2f2; color: #7f1d1d; border: 1px solid #fecaca; }
 
         /* Modal Preview QR Code */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 999; padding: 20px; }
-        .modal-content { background: #fff; padding: 24px; border-radius: 16px; text-align: center; max-width: 340px; width: 100%; }
-        #qrcode { display: flex; justify-content: center; margin: 16px 0; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 999; padding: 20px; }
+        .modal-content { background: #fff; padding: 28px; border-radius: 24px; text-align: center; max-width: 360px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        #qrcode { display: flex; justify-content: center; margin: 20px 0; padding: 12px; background: #fff; border-radius: 16px; border: 1px solid var(--border); }
 
         .hidden { display: none !important; }
-        .logout-btn { background: transparent; color: var(--danger); border: 1px solid #fecaca; padding: 6px 12px; font-size: 12px; width: auto; box-shadow: none; }
-        .logout-btn:hover { background: #fef2f2; }
+        .logout-btn { background: transparent; color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); padding: 6px 14px; font-size: 12px; width: auto; box-shadow: none; border-radius: 20px; }
+        .logout-btn:hover { background: rgba(239, 68, 68, 0.1); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <div class="brand-badge"><i class="fa-solid fa-bolt"></i> Rzlhmdproject Admin</div>
-        <h1>Smart Review Dashboard</h1>
-        <p>Manajemen & Monitoring Kartu NFC & QR Code</p>
+        <div class="brand-badge"><i class="fa-solid fa-crown"></i> Rzlhmdproject Enterprise</div>
+        <h1>Smart Review Control Center</h1>
+        <p>Manajemen Terpusat Kartu NFC & QR Code Review Google Maps</p>
     </div>
 
     <div id="toast" class="toast"></div>
 
     <!-- LOGIN SECTION -->
     <div id="loginSection" class="card">
-        <div class="card-title"><i class="fa-solid fa-lock"></i> Autentikasi Admin</div>
+        <div class="card-title"><i class="fa-solid fa-shield-halved"></i> Autentikasi Super Admin</div>
         <form onsubmit="handleLogin(event)">
             <div class="form-group">
-                <label>GitHub Personal Access Token</label>
+                <label>GitHub Personal Access Token (GHP)</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-key"></i>
                     <input type="password" id="loginToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" required>
                 </div>
             </div>
-            <button type="submit"><i class="fa-solid fa-right-to-bracket"></i> Masuk Dashboard</button>
+            <button type="submit"><i class="fa-solid fa-right-to-bracket"></i> Masuk Ke Control Center</button>
         </form>
     </div>
 
     <!-- MAIN DASHBOARD -->
     <div id="dashboardSection" class="hidden">
-        <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 18px;">
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);">
             <div>
-                <span style="font-size: 11px; color: var(--text-muted); display: block;">Status Admin:</span>
-                <span style="font-size: 12px; font-weight: 600; color: var(--success);"><i class="fa-solid fa-circle" style="font-size: 7px;"></i> Terverifikasi</span>
+                <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 600;">STATUS KONEKSI</span>
+                <span style="font-size: 13px; font-weight: 700; color: #34d399;"><i class="fa-solid fa-circle" style="font-size: 8px;"></i> Terhubung ke GitHub API</span>
             </div>
             <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-power-off"></i> Keluar</button>
         </div>
@@ -130,18 +222,18 @@
                 <div class="stat-lbl">Total Kartu</div>
             </div>
             <div class="stat-card">
-                <div class="stat-val" style="color: var(--success);" id="statActive">0</div>
+                <div class="stat-val" style="color: #34d399;" id="statActive">0</div>
                 <div class="stat-lbl">Kartu Aktif</div>
             </div>
             <div class="stat-card">
-                <div class="stat-val" style="color: var(--warning);" id="statEmpty">0</div>
-                <div class="stat-lbl">Kartu Belum Aktif</div>
+                <div class="stat-val" style="color: #fbbf24;" id="statEmpty">0</div>
+                <div class="stat-lbl">Belum Aktif</div>
             </div>
         </div>
 
         <!-- Form Input Card -->
         <div class="card">
-            <div class="card-title"><i class="fa-solid fa-pen-to-square"></i> Kelola / Tambah Slot Kartu</div>
+            <div class="card-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Kelola / Aktifkan Slot Kartu</div>
             <form onsubmit="handleSaveCard(event)">
                 <div class="form-group">
                     <label>Nomor Kartu (ID)</label>
@@ -151,35 +243,35 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Link Google Maps / Review Klien</label>
+                    <label>Link Google Maps / Google Review Klien</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-location-dot"></i>
                         <input type="url" id="targetUrl" placeholder="Kosongkan jika ingin diisi via setup.html">
                     </div>
                 </div>
                 <div class="btn-group">
-                    <button type="submit" id="saveBtn"><i class="fa-solid fa-floppy-disk"></i> Simpan Kartu</button>
-                    <button type="button" class="btn-danger" onclick="handleDeleteCard()"><i class="fa-solid fa-trash-can"></i> Hapus / Reset</button>
+                    <button type="submit" id="saveBtn"><i class="fa-solid fa-floppy-disk"></i> Simpan & Aktifkan Slot</button>
+                    <button type="button" class="btn-danger" onclick="handleDeleteCard()"><i class="fa-solid fa-trash-can"></i> Reset Slot</button>
                 </div>
             </form>
         </div>
 
         <!-- Card List -->
         <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <div class="card-title" style="border:none; margin:0; padding:0;"><i class="fa-solid fa-list-check"></i> Daftar Slot Kartu</div>
-                <button onclick="loadDashboardData()" style="width: auto; padding: 5px 10px; font-size: 11px; background: #f1f5f9; color: var(--text-main); box-shadow:none;"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div class="card-title" style="border:none; margin:0; padding:0;"><i class="fa-solid fa-layer-group"></i> Daftar Slot Kartu System</div>
+                <button onclick="loadDashboardData()" style="width: auto; padding: 6px 12px; font-size: 11px; background: #f1f5f9; color: var(--text-main); box-shadow:none;"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
             </div>
             
-            <div class="form-group" style="margin-bottom: 14px;">
+            <div class="form-group" style="margin-bottom: 16px;">
                 <div class="input-wrapper">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="Cari ID Kartu...">
+                    <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="Cari berdasarkan ID Kartu...">
                 </div>
             </div>
 
             <div id="cardsListContainer">
-                <p style="font-size: 12px; color: var(--text-muted); text-align: center;">Memuat data kartu...</p>
+                <p style="font-size: 13px; color: var(--text-muted); text-align: center; padding: 20px;">Memuat data kartu dari server...</p>
             </div>
         </div>
     </div>
@@ -188,10 +280,10 @@
 <!-- Modal Pop-up Preview QR Code -->
 <div id="qrModal" class="modal">
     <div class="modal-content">
-        <h3 id="qrModalTitle" style="font-size: 16px; margin-bottom: 4px;">QR Code Kartu</h3>
-        <p style="font-size: 12px; color: var(--text-muted);" id="qrModalSubtitle"></p>
+        <h3 id="qrModalTitle" style="font-size: 18px; font-weight: 800; color: var(--text-main);">QR Code Kartu</h3>
+        <p style="font-size: 12px; color: var(--text-muted); word-break: break-all; margin-top: 4px;" id="qrModalSubtitle"></p>
         <div id="qrcode"></div>
-        <button onclick="closeQrModal()" style="background: #f1f5f9; color: var(--text-main); box-shadow: none;">Tutup</button>
+        <button onclick="closeQrModal()" style="background: #f1f5f9; color: var(--text-main); box-shadow: none;">Tutup Preview</button>
     </div>
 </div>
 
@@ -200,7 +292,6 @@
     const REPO = 'rzlhmdproject';
     const PATH = 'vercel.json';
     let globalCardsData = [];
-    let qrcodeObj = null;
 
     document.addEventListener("DOMContentLoaded", () => {
         const savedToken = localStorage.getItem("rzl_gh_token");
@@ -234,7 +325,7 @@
             localStorage.setItem("rzl_gh_token", token);
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.remove('hidden');
-            if (notify) showToast('Login berhasil!');
+            if (notify) showToast('Login berhasil! Selamat datang.');
             loadDashboardData();
         } catch (err) {
             localStorage.removeItem("rzl_gh_token");
@@ -263,7 +354,7 @@
             updateKPIs(globalCardsData);
             renderCards(globalCardsData);
         } catch (e) {
-            container.innerHTML = `<p style="font-size: 12px; color: var(--danger); text-align: center;">Gagal memuat daftar kartu.</p>`;
+            container.innerHTML = `<p style="font-size: 13px; color: var(--danger); text-align: center; padding: 20px;">Gagal memuat daftar kartu.</p>`;
         }
     }
 
@@ -280,7 +371,7 @@
     function renderCards(cards) {
         const container = document.getElementById('cardsListContainer');
         if (cards.length === 0) {
-            container.innerHTML = `<p style="font-size: 12px; color: var(--text-muted); text-align: center;">Tidak ada kartu ditemukan.</p>`;
+            container.innerHTML = `<p style="font-size: 13px; color: var(--text-muted); text-align: center; padding: 20px;">Tidak ada kartu ditemukan.</p>`;
             return;
         }
 
@@ -292,12 +383,12 @@
             return `
                 <div class="card-item">
                     <div class="card-header-row">
-                        <span style="font-weight:700;">ID Kartu: #${cardId}</span>
+                        <span style="font-weight:800; color: var(--primary);">ID Kartu: #${cardId}</span>
                         <span class="card-badge ${isSetup ? 'badge-empty' : 'badge-active'}">
                             ${isSetup ? 'BELUM AKTIF' : 'AKTIF'}
                         </span>
                     </div>
-                    <div class="card-url"><strong>Tujuan:</strong> ${item.destination}</div>
+                    <div class="card-url"><strong>Link Tujuan:</strong> ${item.destination}</div>
                     <div class="card-actions">
                         <button onclick="copyNfcLink('${fullAccessUrl}')" class="action-btn btn-copy"><i class="fa-solid fa-copy"></i> Copy NFC</button>
                         <button onclick="showQrModal('${cardId}', '${fullAccessUrl}')" class="action-btn btn-qr"><i class="fa-solid fa-qrcode"></i> Lihat QR</button>
@@ -319,7 +410,7 @@
 
     function copyNfcLink(url) {
         navigator.clipboard.writeText(url).then(() => {
-            showToast('Link NFC berhasil disalin!');
+            showToast('Link NFC berhasil disalin ke clipboard!');
         });
     }
 
@@ -329,10 +420,10 @@
         const qrContainer = document.getElementById('qrcode');
         qrContainer.innerHTML = '';
         
-        qrcodeObj = new QRCode(qrContainer, {
+        new QRCode(qrContainer, {
             text: url,
-            width: 160,
-            height: 160
+            width: 180,
+            height: 180
         });
 
         document.getElementById('qrModal').style.display = 'flex';
@@ -360,7 +451,7 @@
 
         const btn = document.getElementById('saveBtn');
         btn.disabled = true;
-        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan Perubahan...`;
 
         try {
             const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
@@ -402,9 +493,9 @@
                 })
             });
 
-            if (!putRes.ok) throw new Error('Gagal menyimpan ke GitHub.');
+            if (!putRes.ok) throw new Error('Gagal menyimpan ke server GitHub.');
 
-            showToast(`Kartu ID #${cardId} berhasil disimpan!`);
+            showToast(`Kartu ID #${cardId} berhasil diperbarui!`);
             document.getElementById('targetCardId').value = '';
             document.getElementById('targetUrl').value = '';
             loadDashboardData();
@@ -412,7 +503,7 @@
             showToast(err.message, 'error');
         } finally {
             btn.disabled = false;
-            btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan Kartu`;
+            btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan & Aktifkan Slot`;
         }
     }
 
@@ -421,7 +512,7 @@
         const cardId = document.getElementById('targetCardId').value.trim();
         
         if (!cardId) {
-            showToast('Masukkan ID Kartu yang ingin dihapus!', 'error');
+            showToast('Masukkan ID Kartu yang ingin direset!', 'error');
             return;
         }
 
@@ -451,7 +542,7 @@
 
             if (!putRes.ok) throw new Error('Gagal menghapus.');
 
-            showToast(`Kartu ID #${cardId} berhasil dihapus!`);
+            showToast(`Kartu ID #${cardId} berhasil direset!`);
             document.getElementById('targetCardId').value = '';
             document.getElementById('targetUrl').value = '';
             loadDashboardData();
