@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aktivasi Kartu Review — Rzlhmdproject</title>
+    <title>Aktivasi Kartu Digital — Rzlhmdproject</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -20,7 +20,6 @@
             --primary-orange-hover: #F25400;
             --accent-mint: #00D68F;
             --soft-yellow: #FFB800;
-            --danger: #FF4D4D;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -40,7 +39,7 @@
             -webkit-backdrop-filter: blur(16px);
         }
 
-        /* Top Brand & Badge */
+        /* Top Brand Header */
         .brand-header {
             display: flex;
             justify-content: space-between;
@@ -107,6 +106,20 @@
         }
         input:focus { border-color: var(--primary-orange); }
 
+        /* Helper Box Panduan Link */
+        .helper-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--panel-border);
+            border-radius: 12px;
+            padding: 10px 12px;
+            margin-top: 8px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            text-align: left;
+        }
+        .helper-box span { color: var(--soft-yellow); font-weight: 700; }
+
         .btn-primary { 
             width: 100%; 
             background: var(--primary-orange); 
@@ -121,13 +134,13 @@
             justify-content: center; 
             align-items: center; 
             gap: 8px; 
-            margin-top: 10px; 
+            margin-top: 14px; 
             transition: background 0.2s; 
             box-shadow: 0 8px 20px rgba(255, 107, 0, 0.25);
         }
         .btn-primary:hover { background: var(--primary-orange-hover); }
 
-        /* Footer & Customer Support */
+        /* Footer Info */
         .support-box { 
             margin-top: 28px; 
             padding-top: 18px; 
@@ -165,16 +178,16 @@
         <div class="mini-simulator">
             <div class="sim-chip"></div>
             <div class="sim-title" id="simStoreName">Nama Usaha Anda</div>
-            <div class="sim-meta" id="simCardId">NFC CARD REVIEW #001</div>
+            <div class="sim-meta" id="simCardId">SMART CARD REVIEW #001</div>
         </div>
 
-        <h2>Aktivasi Kartu Review</h2>
-        <p class="subtitle">Isi data usaha Anda di bawah ini untuk menghubungkan kartu NFC / QR Code secara langsung.</p>
+        <h2>Aktivasi Kartu Digital Anda</h2>
+        <p class="subtitle">Hubungkan kartu fisik Anda dengan lokasi bisnis di Google Maps hanya dalam hitungan detik.</p>
 
         <!-- Form Setup -->
         <form id="setupForm" onsubmit="handleUserSubmit(event)">
             <div class="form-group">
-                <label for="userStoreName">Nama Usaha / Toko Anda</label>
+                <label for="userStoreName">Nama Usaha / Toko</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-store"></i>
                     <input type="text" id="userStoreName" placeholder="Contoh: Kopi Kenangan" onkeyup="updatePreview(this.value)" required>
@@ -182,24 +195,29 @@
             </div>
 
             <div class="form-group">
-                <label for="userUrl">Link Google Maps / Review Toko</label>
+                <label for="userUrl">Link Google Maps / Google Review</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-location-dot"></i>
                     <input type="url" id="userUrl" placeholder="https://maps.app.goo.gl/..." required>
                 </div>
+                
+                <!-- Panduan Cara Ambil Link -->
+                <div class="helper-box">
+                    💡 <span>Cara Salin Link:</span> Buka aplikasi Google Maps ➔ Cari nama toko Anda ➔ Klik <b>Bagikan</b> ➔ Salin Tautan (Copy Link).
+                </div>
             </div>
 
             <button type="submit" class="btn-primary">
-                <i class="fa-brands fa-whatsapp"></i> Kirim & Aktifkan Kartu
+                <i class="fa-brands fa-whatsapp"></i> Aktifkan Kartu via WhatsApp
             </button>
         </form>
 
         <!-- Support Info -->
         <div class="support-box">
-            Mengalami kendala saat pendaftaran?
+            Layanan Resmi Rzlhmdproject — Membantu Bisnis Anda Mendapatkan Ulasan Bintang 5 Lebih Cepat.
             <br>
             <a href="https://wa.me/6288971717983?text=Halo%20Admin%20Rzlhmdproject,%20saya%20butuh%20bantuan%20aktivasi%20kartu" target="_blank" class="support-link">
-                <i class="fa-brands fa-whatsapp"></i> Hubungi Customer Service
+                <i class="fa-brands fa-whatsapp"></i> Butuh bantuan saat aktivasi?
             </a>
         </div>
     </div>
@@ -212,7 +230,7 @@
 
     // Update ID Kartu di Tampilan
     document.getElementById('cardTagDisplay').innerHTML = `<i class="fa-solid fa-id-card"></i> SLOT #${cardId}`;
-    document.getElementById('simCardId').innerText = `NFC CARD REVIEW #${cardId}`;
+    document.getElementById('simCardId').innerText = `SMART CARD REVIEW #${cardId}`;
 
     // Live Simulator Update
     function updatePreview(val) {
