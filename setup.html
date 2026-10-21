@@ -3,117 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aktivasi Kartu Rzlhmdproject</title>
+    <title>Aktivasi Kartu — Rzlhmdproject</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background: #f8fafc; color: #0f172a; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 28px; width: 100%; max-width: 450px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
-        .icon-badge { width: 60px; height: 60px; background: #eff6ff; color: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 16px; }
-        h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-        p { font-size: 13px; color: #64748b; margin-bottom: 24px; line-height: 1.5; }
-        .form-group { text-align: left; margin-bottom: 20px; }
+        .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 26px; width: 100%; max-width: 460px; box-shadow: 0 10px 25px rgba(0,0,0,0.04); }
+        .header-box { text-align: center; margin-bottom: 20px; }
+        .icon-badge { width: 56px; height: 56px; background: #eff6ff; color: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 12px; }
+        h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+        p { font-size: 13px; color: #64748b; line-height: 1.5; }
+        
+        .guide-box { background: #f1f5f9; border-radius: 10px; padding: 12px 14px; margin-bottom: 20px; font-size: 12px; color: #334155; }
+        .guide-box ol { margin-left: 18px; margin-top: 6px; }
+        .guide-box li { margin-bottom: 4px; }
+
+        .form-group { margin-bottom: 16px; text-align: left; }
         label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; }
-        input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; }
+        input { width: 100%; padding: 11px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; }
         input:focus { outline: none; border-color: #2563eb; }
-        button { width: 100%; background: #2563eb; color: #fff; border: none; padding: 13px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
+
+        button { width: 100%; background: #2563eb; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: background 0.2s; }
         button:hover { background: #1d4ed8; }
-        button:disabled { background: #94a3b8; cursor: not-allowed; }
-        #status { margin-top: 15px; font-size: 13px; font-weight: 500; }
-        .success { color: #10b981; }
-        .error { color: #ef4444; }
+
+        .support-box { margin-top: 20px; padding-top: 16px; border-top: 1px dashed #e2e8f0; text-align: center; font-size: 12px; color: #64748b; }
+        .support-link { color: #10b981; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <div class="icon-badge"><i class="fa-solid fa-store"></i></div>
-    <h2 id="titleText">Aktivasi Kartu Review</h2>
-    <p id="descText">Kartu ini belum terhubung. Masukkan link Google Maps / Review bisnis Anda di bawah ini untuk mengaktifkannya.</p>
+    <div class="header-box">
+        <div class="icon-badge"><i class="fa-solid fa-store"></i></div>
+        <h2 id="titleText">Aktivasi Kartu Review</h2>
+        <p id="descText">Kartu ini belum terhubung. Daftarkan usaha Anda di bawah ini untuk mengaktifkannya.</p>
+    </div>
+
+    <!-- Panduan Ambil Link -->
+    <div class="guide-box">
+        <strong><i class="fa-solid fa-circle-info"></i> Cara Mengambil Link Google Maps Usaha Anda:</strong>
+        <ol>
+            <li>Buka aplikasi <strong>Google Maps</strong> di HP Anda.</li>
+            <li>Cari nama toko/lokasi bisnis Anda.</li>
+            <li>Klik tombol <strong>Bagikan (Share)</strong> lalu pilih <strong>Salin Link</strong>.</li>
+        </ol>
+    </div>
 
     <form id="setupForm" onsubmit="handleUserSubmit(event)">
         <div class="form-group">
-            <label>Link Google Maps / Google Review Bisnis Anda</label>
+            <label>Nama Bisnis / Toko Anda</label>
+            <input type="text" id="userStoreName" placeholder="Contoh: Ayam Geprek Mentari" required>
+        </div>
+        <div class="form-group">
+            <label>Link Google Maps / Google Review Toko</label>
             <input type="url" id="userUrl" placeholder="https://maps.app.goo.gl/..." required>
         </div>
-        <button type="submit" id="submitBtn"><i class="fa-solid fa-paper-plane"></i> Daftarkan Bisnis Saya</button>
+        <button type="submit"><i class="fa-brands fa-whatsapp"></i> Kirim & Aktifkan Kartu</button>
     </form>
-    <div id="status"></div>
+
+    <div class="support-box">
+        Membutuhkan bantuan teknis?
+        <br>
+        <!-- Ganti nomor HP WhatsApp Admin Anda di bawah ini -->
+        <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Rzlhmdproject,%20saya%20butuh%20bantuan%20aktivasi%20kartu" target="_blank" class="support-link">
+            <i class="fa-brands fa-whatsapp"></i> Hubungi Customer Service
+        </a>
+    </div>
 </div>
 
 <script>
-    const OWNER = 'rzlhmdproject';
-    const REPO = 'rzlhmdproject';
-    const PATH = 'vercel.json';
-
     const urlParams = new URLSearchParams(window.location.search);
-    const cardId = urlParams.get('id');
+    const cardId = urlParams.get('id') || '001';
 
-    if (!cardId) {
-        document.getElementById('titleText').innerText = "ID Kartu Tidak Valid";
-        document.getElementById('descText').innerText = "Silakan scan ulang dari QR Code / Kartu NFC yang resmi.";
-        document.getElementById('setupForm').style.display = 'none';
-    } else {
-        document.getElementById('titleText').innerText = `Aktivasi Kartu ID #${cardId}`;
-    }
+    document.getElementById('titleText').innerText = `Aktivasi Kartu ID #${cardId}`;
 
-    async function handleUserSubmit(e) {
+    function handleUserSubmit(e) {
         e.preventDefault();
+        const storeName = document.getElementById('userStoreName').value.trim();
         const targetUrl = document.getElementById('userUrl').value.trim();
-        const btn = document.getElementById('submitBtn');
-        const statusDiv = document.getElementById('status');
 
-        // Ambil token tersimpan jika ada, atau gunakan token sesi
-        const token = localStorage.getItem("rzl_gh_token");
+        // Ganti nomor WhatsApp Admin Anda di bawah ini (Gunakan kode negara 62)
+        const adminWA = "6288971717983"; 
 
-        if (!token) {
-            statusDiv.className = 'error';
-            statusDiv.innerHTML = `Gagal memperbarui secara otomatis.<br>Silakan kirimkan link ini ke Admin untuk diaktifkan!`;
-            return;
-        }
+        const message = `Halo Admin Rzlhmdproject! 👋%0A%0ASaya ingin mengaktifkan *Kartu Review ID %23${cardId}*%0A%0A🏪 *Nama Toko:* ${encodeURIComponent(storeName)}%0A📍 *Link Google Maps:* ${encodeURIComponent(targetUrl)}%0A%0AMohon bantuannya untuk diaktifkan di dashboard. Terima kasih!`;
 
-        btn.disabled = true;
-        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Mendaftarkan Bisnis...`;
-
-        try {
-            const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
-            const res = await fetch(apiUrl, { headers: { 'Authorization': `token ${token}` } });
-            const fileData = await res.json();
-            let jsonContent = JSON.parse(atob(fileData.content));
-
-            const sourcePath = `/card/${cardId}`;
-            jsonContent.redirects.forEach(item => {
-                if (item.source === sourcePath) {
-                    item.destination = targetUrl;
-                }
-            });
-
-            const putRes = await fetch(apiUrl, {
-                method: 'PUT',
-                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: `User setup for /card/${cardId}`,
-                    content: btoa(JSON.stringify(jsonContent, null, 2)),
-                    sha: fileData.sha
-                })
-            });
-
-            if (!putRes.ok) throw new Error('Gagal memperbarui ke sistem.');
-
-            statusDiv.className = 'success';
-            statusDiv.innerHTML = `🎉 Bisnis Berhasil Terdaftar!<br>Mengalihkan ke Google Maps...`;
-
-            setTimeout(() => {
-                window.location.href = targetUrl;
-            }, 1500);
-
-        } catch (err) {
-            statusDiv.className = 'error';
-            statusDiv.innerText = err.message;
-            btn.disabled = false;
-            btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Daftarkan Bisnis Saya`;
-        }
+        // Alihkan user ke WhatsApp Admin
+        window.location.href = `https://wa.me/${adminWA}?text=${message}`;
     }
 </script>
 
