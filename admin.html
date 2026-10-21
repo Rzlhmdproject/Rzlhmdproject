@@ -3,287 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rzlhmdproject — Enterprise Admin Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Rzlhmdproject — Google Workspace Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --primary-light: #eeef2;
-            --accent: #3b82f6;
-            --bg: #0f172a;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
+            /* Google Light Theme */
+            --bg: #f8f9fa;
+            --surface: #ffffff;
+            --surface-variant: #f1f3f4;
+            --border: #e0e0e0;
+            --text-main: #202124;
+            --text-sub: #5f6368;
+            --g-blue: #1a73e8;
+            --g-blue-hover: #1557b0;
+            --g-red: #ea4335;
+            --g-green: #34a853;
+            --g-yellow: #fbbc04;
+            --card-shadow: 0 1px 3px rgba(60,64,67,0.12), 0 1px 2px rgba(60,64,67,0.24);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        
-        body { 
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-            color: var(--text-main); 
-            min-height: 100vh; 
-            display: flex; 
-            justify-content: center; 
-            align-items: flex-start; 
-            padding: 30px 15px; 
+        [data-theme="dark"] {
+            /* Google Dark Theme (Material Dark) */
+            --bg: #171717;
+            --surface: #242424;
+            --surface-variant: #2d2d2d;
+            --border: #3c4043;
+            --text-main: #e8eaed;
+            --text-sub: #9aa0a6;
+            --g-blue: #8ab4f8;
+            --g-blue-hover: #aecbfa;
+            --g-red: #f28b82;
+            --g-green: #81c995;
+            --g-yellow: #fdd663;
+            --card-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
-        .container { width: 100%; max-width: 680px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, Roboto, sans-serif; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
+        body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; padding: 30px 15px; }
+        .container { width: 100%; max-width: 650px; }
 
-        /* Header Style */
-        .header { text-align: center; margin-bottom: 24px; }
-        .brand-badge { 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 8px; 
-            background: rgba(99, 102, 241, 0.15); 
-            color: #818cf8; 
-            padding: 8px 18px; 
-            border-radius: 30px; 
-            font-size: 13px; 
-            font-weight: 700; 
-            margin-bottom: 12px; 
-            border: 1px solid rgba(129, 140, 248, 0.3);
-            backdrop-filter: blur(10px);
-        }
-        .header h1 { font-size: 28px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
-        .header p { color: #94a3b8; font-size: 14px; margin-top: 6px; }
+        /* Top Bar & Theme Toggle */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .brand-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; letter-spacing: -0.3px; }
+        .brand-logo .g-dots { display: flex; gap: 4px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
 
-        /* KPI Stats Grid */
+        .theme-toggle { background: var(--surface-variant); border: 1px solid var(--border); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+        /* Material Cards */
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 24px; margin-bottom: 20px; box-shadow: var(--card-shadow); }
+        .card-title { font-size: 16px; font-weight: 600; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; color: var(--text-main); }
+        .card-title i { color: var(--g-blue); }
+
+        /* KPI Grid */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
-        .stat-card { 
-            background: rgba(255, 255, 255, 0.05); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            border-radius: 16px; 
-            padding: 16px; 
-            text-align: center; 
-            backdrop-filter: blur(10px);
-            transition: transform 0.2s;
-        }
-        .stat-card:hover { transform: translateY(-2px); }
-        .stat-val { font-size: 24px; font-weight: 800; color: #fff; }
-        .stat-lbl { font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; margin-top: 4px; letter-spacing: 0.5px; }
+        .stat-card { background: var(--surface-variant); border-radius: 16px; padding: 14px; text-align: center; }
+        .stat-val { font-size: 22px; font-weight: 700; }
+        .stat-lbl { font-size: 11px; color: var(--text-sub); font-weight: 600; margin-top: 2px; }
 
-        /* Glassmorphism Cards */
-        .card { 
-            background: var(--card-bg); 
-            border-radius: 20px; 
-            border: 1px solid rgba(255, 255, 255, 0.2); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3); 
-            padding: 26px; 
-            margin-bottom: 22px; 
-            backdrop-filter: blur(20px);
-        }
-        .card-title { 
-            font-size: 16px; 
-            font-weight: 700; 
-            margin-bottom: 18px; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            color: var(--text-main); 
-            border-bottom: 1px solid var(--border); 
-            padding-bottom: 12px; 
-        }
-        .card-title i { color: var(--primary); font-size: 18px; }
-
-        /* Form Control */
+        /* Google Form Style Inputs */
         .form-group { margin-bottom: 16px; }
-        label { display: block; font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        label { display: block; font-size: 12px; font-weight: 600; color: var(--text-sub); margin-bottom: 6px; }
         .input-wrapper { position: relative; display: flex; align-items: center; }
-        .input-wrapper i { position: absolute; left: 14px; color: var(--text-muted); font-size: 15px; }
-        input { 
-            width: 100%; 
-            padding: 12px 14px 12px 42px; 
-            border: 1.5px solid var(--border); 
-            border-radius: 12px; 
-            font-size: 14px; 
-            color: var(--text-main); 
-            background: #f8fafc; 
-            transition: all 0.2s ease; 
-        }
-        input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); }
+        .input-wrapper i { position: absolute; left: 16px; color: var(--text-sub); font-size: 14px; }
+        input { width: 100%; padding: 12px 16px 12px 44px; border: 1px solid var(--border); border-radius: 12px; font-size: 14px; color: var(--text-main); background: var(--surface); outline: none; }
+        input:focus { border-color: var(--g-blue); box-shadow: 0 0 0 2px rgba(26,115,232,0.2); }
 
+        /* Material Buttons */
         .btn-group { display: flex; gap: 10px; margin-top: 18px; }
-        button { 
-            width: 100%; 
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); 
-            color: #fff; 
-            border: none; 
-            padding: 13px; 
-            border-radius: 12px; 
-            font-size: 14px; 
-            font-weight: 700; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px; 
-            transition: all 0.2s ease; 
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-        }
-        button:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4); }
-        button:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
-        
-        .btn-danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); }
-        .btn-danger:hover { box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4); }
+        button { width: 100%; background: var(--g-blue); color: #fff; border: none; padding: 12px 20px; border-radius: 24px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        button:hover { background: var(--g-blue-hover); }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-danger { background: transparent; color: var(--g-red); border: 1px solid var(--border); }
+        .btn-danger:hover { background: rgba(234,67,53,0.08); }
 
-        /* Card List Styling */
-        .card-item { 
-            padding: 14px 16px; 
-            border: 1px solid var(--border); 
-            border-radius: 14px; 
-            margin-bottom: 12px; 
-            background: #fff; 
-            font-size: 13px; 
-            transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-        }
-        .card-item:hover { border-color: var(--primary); transform: translateX(2px); }
+        /* Card List */
+        .card-item { padding: 14px 16px; border: 1px solid var(--border); border-radius: 16px; margin-bottom: 12px; background: var(--surface); }
         .card-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .card-badge { font-weight: 800; font-size: 10px; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .badge-active { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-        .badge-empty { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .card-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px; }
+        .badge-active { background: rgba(52,168,83,0.15); color: var(--g-green); }
+        .badge-empty { background: rgba(251,188,4,0.15); color: var(--g-yellow); }
 
-        .card-url { color: var(--text-muted); font-size: 12px; word-break: break-all; margin-bottom: 10px; }
-        .card-actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border); padding-top: 10px; gap: 6px; }
+        .card-url { color: var(--text-sub); font-size: 12px; word-break: break-all; margin-bottom: 10px; }
+        .card-actions { display: flex; gap: 8px; border-top: 1px solid var(--border); padding-top: 10px; }
+        .action-btn { width: auto; padding: 6px 14px; font-size: 12px; border-radius: 16px; background: var(--surface-variant); color: var(--text-main); border: none; }
+        .action-btn:hover { background: var(--border); }
 
-        .action-btn { width: auto; padding: 6px 12px; font-size: 12px; box-shadow: none; border-radius: 8px; font-weight: 600; }
-        .btn-copy { background: #eff6ff; color: var(--primary); border: 1px solid #dbeafe; }
-        .btn-copy:hover { background: #dbeafe; }
-        .btn-qr { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
-        .btn-qr:hover { background: #dcfce7; }
-        .btn-edit { background: #f8fafc; color: var(--text-main); border: 1px solid var(--border); }
+        .toast { padding: 12px 16px; border-radius: 12px; font-size: 13px; display: none; align-items: center; gap: 10px; margin-bottom: 18px; }
+        .toast-success { background: rgba(52,168,83,0.15); color: var(--g-green); border: 1px solid var(--g-green); }
+        .toast-error { background: rgba(234,67,53,0.15); color: var(--g-red); border: 1px solid var(--g-red); }
 
-        .toast { padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; display: none; align-items: center; gap: 10px; margin-bottom: 18px; animation: fadeIn 0.3s ease; }
-        .toast-success { background: #dcfce7; color: #14532d; border: 1px solid #bbf7d0; }
-        .toast-error { background: #fef2f2; color: #7f1d1d; border: 1px solid #fecaca; }
-
-        /* Modal Preview QR Code */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 999; padding: 20px; }
-        .modal-content { background: #fff; padding: 28px; border-radius: 24px; text-align: center; max-width: 360px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
-        #qrcode { display: flex; justify-content: center; margin: 20px 0; padding: 12px; background: #fff; border-radius: 16px; border: 1px solid var(--border); }
+        /* Modal QR */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 999; }
+        .modal-content { background: var(--surface); padding: 24px; border-radius: 24px; text-align: center; max-width: 320px; width: 100%; }
+        #qrcode { display: flex; justify-content: center; margin: 16px 0; background: #fff; padding: 12px; border-radius: 12px; }
 
         .hidden { display: none !important; }
-        .logout-btn { background: transparent; color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); padding: 6px 14px; font-size: 12px; width: auto; box-shadow: none; border-radius: 20px; }
-        .logout-btn:hover { background: rgba(239, 68, 68, 0.1); }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <div class="brand-badge"><i class="fa-solid fa-crown"></i> Rzlhmdproject Enterprise</div>
-        <h1>Smart Review Control Center</h1>
-        <p>Manajemen Terpusat Kartu NFC & QR Code Review Google Maps</p>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="brand-logo">
+            <div class="g-dots">
+                <div class="dot" style="background:#4285F4"></div>
+                <div class="dot" style="background:#EA4335"></div>
+                <div class="dot" style="background:#FBBC05"></div>
+                <div class="dot" style="background:#34A853"></div>
+            </div>
+            Rzlhmdproject Admin
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Ganti Tema Light/Dark">
+            <i class="fa-solid fa-moon" id="themeIcon"></i>
+        </button>
     </div>
 
     <div id="toast" class="toast"></div>
 
     <!-- LOGIN SECTION -->
     <div id="loginSection" class="card">
-        <div class="card-title"><i class="fa-solid fa-shield-halved"></i> Autentikasi Super Admin</div>
+        <div class="card-title"><i class="fa-solid fa-shield"></i> Login Akses Admin</div>
         <form onsubmit="handleLogin(event)">
             <div class="form-group">
-                <label>GitHub Personal Access Token (GHP)</label>
+                <label>GitHub Access Token</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-key"></i>
                     <input type="password" id="loginToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" required>
                 </div>
             </div>
-            <button type="submit"><i class="fa-solid fa-right-to-bracket"></i> Masuk Ke Control Center</button>
+            <button type="submit"><i class="fa-solid fa-right-to-bracket"></i> Masuk Dashboard</button>
         </form>
     </div>
 
     <!-- MAIN DASHBOARD -->
     <div id="dashboardSection" class="hidden">
-        <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);">
-            <div>
-                <span style="font-size: 11px; color: #94a3b8; display: block; font-weight: 600;">STATUS KONEKSI</span>
-                <span style="font-size: 13px; font-weight: 700; color: #34d399;"><i class="fa-solid fa-circle" style="font-size: 8px;"></i> Terhubung ke GitHub API</span>
-            </div>
-            <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-power-off"></i> Keluar</button>
-        </div>
-
-        <!-- KPI Ringkasan Stats -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-val" id="statTotal">0</div>
                 <div class="stat-lbl">Total Kartu</div>
             </div>
             <div class="stat-card">
-                <div class="stat-val" style="color: #34d399;" id="statActive">0</div>
-                <div class="stat-lbl">Kartu Aktif</div>
+                <div class="stat-val" style="color:var(--g-green)" id="statActive">0</div>
+                <div class="stat-lbl">Aktif</div>
             </div>
             <div class="stat-card">
-                <div class="stat-val" style="color: #fbbf24;" id="statEmpty">0</div>
-                <div class="stat-lbl">Belum Aktif</div>
+                <div class="stat-val" style="color:var(--g-yellow)" id="statEmpty">0</div>
+                <div class="stat-lbl">Kosong</div>
             </div>
         </div>
 
-        <!-- Form Input Card -->
         <div class="card">
-            <div class="card-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Kelola / Aktifkan Slot Kartu</div>
+            <div class="card-title"><i class="fa-solid fa-plus-circle"></i> Kelola Slot Kartu</div>
             <form onsubmit="handleSaveCard(event)">
                 <div class="form-group">
-                    <label>Nomor Kartu (ID)</label>
+                    <label>ID Kartu</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-id-card"></i>
-                        <input type="text" id="targetCardId" placeholder="Contoh: 001, 002, 003..." required>
+                        <input type="text" id="targetCardId" placeholder="Contoh: 001" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Link Google Maps / Google Review Klien</label>
+                    <label>Link Google Maps Bisnis</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-location-dot"></i>
-                        <input type="url" id="targetUrl" placeholder="Kosongkan jika ingin diisi via setup.html">
+                        <input type="url" id="targetUrl" placeholder="Kosongkan jika mau diisi user via setup.html">
                     </div>
                 </div>
                 <div class="btn-group">
-                    <button type="submit" id="saveBtn"><i class="fa-solid fa-floppy-disk"></i> Simpan & Aktifkan Slot</button>
-                    <button type="button" class="btn-danger" onclick="handleDeleteCard()"><i class="fa-solid fa-trash-can"></i> Reset Slot</button>
+                    <button type="submit" id="saveBtn"><i class="fa-solid fa-check"></i> Simpan Kartu</button>
+                    <button type="button" class="btn-danger" onclick="handleDeleteCard()"><i class="fa-solid fa-trash"></i> Reset</button>
                 </div>
             </form>
         </div>
 
-        <!-- Card List -->
         <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <div class="card-title" style="border:none; margin:0; padding:0;"><i class="fa-solid fa-layer-group"></i> Daftar Slot Kartu System</div>
-                <button onclick="loadDashboardData()" style="width: auto; padding: 6px 12px; font-size: 11px; background: #f1f5f9; color: var(--text-main); box-shadow:none;"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+            <div class="card-title" style="justify-content:space-between">
+                <span><i class="fa-solid fa-list"></i> Daftar Kartu</span>
+                <button onclick="loadDashboardData()" style="width:auto; padding:6px 14px; font-size:12px; background:var(--surface-variant); color:var(--text-main);"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
             </div>
-            
-            <div class="form-group" style="margin-bottom: 16px;">
+            <div class="form-group">
                 <div class="input-wrapper">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="Cari berdasarkan ID Kartu...">
+                    <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="Cari ID Kartu...">
                 </div>
             </div>
-
-            <div id="cardsListContainer">
-                <p style="font-size: 13px; color: var(--text-muted); text-align: center; padding: 20px;">Memuat data kartu dari server...</p>
-            </div>
+            <div id="cardsListContainer"></div>
         </div>
     </div>
 </div>
 
-<!-- Modal Pop-up Preview QR Code -->
 <div id="qrModal" class="modal">
     <div class="modal-content">
-        <h3 id="qrModalTitle" style="font-size: 18px; font-weight: 800; color: var(--text-main);">QR Code Kartu</h3>
-        <p style="font-size: 12px; color: var(--text-muted); word-break: break-all; margin-top: 4px;" id="qrModalSubtitle"></p>
+        <h3 id="qrModalTitle" style="font-size:16px; margin-bottom:4px;">QR Code</h3>
+        <p style="font-size:12px; color:var(--text-sub); word-break:break-all;" id="qrModalSubtitle"></p>
         <div id="qrcode"></div>
-        <button onclick="closeQrModal()" style="background: #f1f5f9; color: var(--text-main); box-shadow: none;">Tutup Preview</button>
+        <button onclick="closeQrModal()" style="background:var(--surface-variant); color:var(--text-main); margin-top:10px;">Tutup</button>
     </div>
 </div>
 
@@ -293,7 +212,30 @@
     const PATH = 'vercel.json';
     let globalCardsData = [];
 
+    // Theme Switcher Logic
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeIcon(newTheme);
+    }
+
+    function updateThemeIcon(theme) {
+        const icon = document.getElementById('themeIcon');
+        if(theme === 'dark') {
+            icon.className = 'fa-solid fa-sun';
+        } else {
+            icon.className = 'fa-solid fa-moon';
+        }
+    }
+
+    // Init Theme
+    const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
     document.addEventListener("DOMContentLoaded", () => {
+        updateThemeIcon(savedTheme);
         const savedToken = localStorage.getItem("rzl_gh_token");
         if (savedToken) {
             document.getElementById("loginToken").value = savedToken;
@@ -320,24 +262,16 @@
             const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, {
                 headers: { 'Authorization': `token ${token}` }
             });
-            if (!res.ok) throw new Error('Token salah atau kadaluwarsa.');
-
+            if (!res.ok) throw new Error('Token salah.');
             localStorage.setItem("rzl_gh_token", token);
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.remove('hidden');
-            if (notify) showToast('Login berhasil! Selamat datang.');
+            if (notify) showToast('Login Berhasil');
             loadDashboardData();
         } catch (err) {
             localStorage.removeItem("rzl_gh_token");
             if (notify) showToast(err.message, 'error');
         }
-    }
-
-    function handleLogout() {
-        localStorage.removeItem("rzl_gh_token");
-        document.getElementById('dashboardSection').classList.add('hidden');
-        document.getElementById('loginSection').classList.remove('hidden');
-        showToast('Berhasil keluar sistem.');
     }
 
     async function loadDashboardData() {
@@ -349,29 +283,26 @@
             });
             const fileData = await res.json();
             const jsonContent = JSON.parse(atob(fileData.content));
-            
             globalCardsData = jsonContent.redirects.filter(r => r.source && r.source.startsWith('/card/'));
             updateKPIs(globalCardsData);
             renderCards(globalCardsData);
         } catch (e) {
-            container.innerHTML = `<p style="font-size: 13px; color: var(--danger); text-align: center; padding: 20px;">Gagal memuat daftar kartu.</p>`;
+            container.innerHTML = `<p style="font-size: 13px; color: var(--g-red); text-align: center;">Gagal memuat data.</p>`;
         }
     }
 
     function updateKPIs(cards) {
         const total = cards.length;
         const active = cards.filter(c => !c.destination.includes('setup.html')).length;
-        const empty = total - active;
-
         document.getElementById('statTotal').innerText = total;
         document.getElementById('statActive').innerText = active;
-        document.getElementById('statEmpty').innerText = empty;
+        document.getElementById('statEmpty').innerText = total - active;
     }
 
     function renderCards(cards) {
         const container = document.getElementById('cardsListContainer');
         if (cards.length === 0) {
-            container.innerHTML = `<p style="font-size: 13px; color: var(--text-muted); text-align: center; padding: 20px;">Tidak ada kartu ditemukan.</p>`;
+            container.innerHTML = `<p style="font-size: 13px; color: var(--text-sub); text-align: center;">Belum ada kartu.</p>`;
             return;
         }
 
@@ -383,16 +314,16 @@
             return `
                 <div class="card-item">
                     <div class="card-header-row">
-                        <span style="font-weight:800; color: var(--primary);">ID Kartu: #${cardId}</span>
+                        <span style="font-weight:700;">ID Kartu #${cardId}</span>
                         <span class="card-badge ${isSetup ? 'badge-empty' : 'badge-active'}">
-                            ${isSetup ? 'BELUM AKTIF' : 'AKTIF'}
+                            ${isSetup ? 'KOSONG' : 'AKTIF'}
                         </span>
                     </div>
-                    <div class="card-url"><strong>Link Tujuan:</strong> ${item.destination}</div>
+                    <div class="card-url">${item.destination}</div>
                     <div class="card-actions">
-                        <button onclick="copyNfcLink('${fullAccessUrl}')" class="action-btn btn-copy"><i class="fa-solid fa-copy"></i> Copy NFC</button>
-                        <button onclick="showQrModal('${cardId}', '${fullAccessUrl}')" class="action-btn btn-qr"><i class="fa-solid fa-qrcode"></i> Lihat QR</button>
-                        <button onclick="selectCardToEdit('${cardId}', '${item.destination}')" class="action-btn btn-edit"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button onclick="copyNfcLink('${fullAccessUrl}')" class="action-btn"><i class="fa-solid fa-copy"></i> Copy Link</button>
+                        <button onclick="showQrModal('${cardId}', '${fullAccessUrl}')" class="action-btn"><i class="fa-solid fa-qrcode"></i> QR</button>
+                        <button onclick="selectCardToEdit('${cardId}', '${item.destination}')" class="action-btn"><i class="fa-solid fa-pen"></i> Edit</button>
                     </div>
                 </div>
             `;
@@ -401,37 +332,23 @@
 
     function filterCards() {
         const query = document.getElementById('searchInput').value.toLowerCase().trim();
-        const filtered = globalCardsData.filter(item => {
-            const cardId = item.source.replace('/card/', '').toLowerCase();
-            return cardId.includes(query);
-        });
-        renderCards(filtered);
+        renderCards(globalCardsData.filter(item => item.source.replace('/card/', '').toLowerCase().includes(query)));
     }
 
     function copyNfcLink(url) {
-        navigator.clipboard.writeText(url).then(() => {
-            showToast('Link NFC berhasil disalin ke clipboard!');
-        });
+        navigator.clipboard.writeText(url).then(() => showToast('Link NFC Tersalin!'));
     }
 
     function showQrModal(id, url) {
-        document.getElementById('qrModalTitle').innerText = `QR Code Kartu #${id}`;
+        document.getElementById('qrModalTitle').innerText = `QR Code #${id}`;
         document.getElementById('qrModalSubtitle').innerText = url;
-        const qrContainer = document.getElementById('qrcode');
-        qrContainer.innerHTML = '';
-        
-        new QRCode(qrContainer, {
-            text: url,
-            width: 180,
-            height: 180
-        });
-
+        const qr = document.getElementById('qrcode');
+        qr.innerHTML = '';
+        new QRCode(qr, { text: url, width: 160, height: 160 });
         document.getElementById('qrModal').style.display = 'flex';
     }
 
-    function closeQrModal() {
-        document.getElementById('qrModal').style.display = 'none';
-    }
+    function closeQrModal() { document.getElementById('qrModal').style.display = 'none'; }
 
     function selectCardToEdit(id, url) {
         document.getElementById('targetCardId').value = id;
@@ -443,15 +360,11 @@
         e.preventDefault();
         const token = localStorage.getItem("rzl_gh_token");
         const cardId = document.getElementById('targetCardId').value.trim();
-        let targetUrl = document.getElementById('targetUrl').value.trim();
-
-        if (!targetUrl) {
-            targetUrl = `https://rzlhmdproject.vercel.app/setup.html?id=${cardId}`;
-        }
-
+        let targetUrl = document.getElementById('targetUrl').value.trim() || `https://rzlhmdproject.vercel.app/setup.html?id=${cardId}`;
         const btn = document.getElementById('saveBtn');
+
         btn.disabled = true;
-        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan Perubahan...`;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
 
         try {
             const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
@@ -462,40 +375,19 @@
             const sourcePath = `/card/${cardId}`;
             let found = false;
 
-            jsonContent.redirects = jsonContent.redirects.map(item => ({
-                source: item.source,
-                destination: item.destination,
-                permanent: false
-            }));
-
-            jsonContent.redirects.forEach(item => {
-                if (item.source === sourcePath) {
-                    item.destination = targetUrl;
-                    found = true;
-                }
-            });
-
-            if (!found) {
-                jsonContent.redirects.push({
-                    source: sourcePath,
-                    destination: targetUrl,
-                    permanent: false
-                });
-            }
+            jsonContent.redirects = jsonContent.redirects.map(i => ({ source: i.source, destination: i.destination, permanent: false }));
+            jsonContent.redirects.forEach(i => { if (i.source === sourcePath) { i.destination = targetUrl; found = true; } });
+            if (!found) jsonContent.redirects.push({ source: sourcePath, destination: targetUrl, permanent: false });
 
             const putRes = await fetch(apiUrl, {
                 method: 'PUT',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: `Update /card/${cardId} via Rzlhmdproject Admin`,
-                    content: btoa(JSON.stringify(jsonContent, null, 2)),
-                    sha: fileData.sha
-                })
+                body: JSON.stringify({ message: `Update /card/${cardId}`, content: btoa(JSON.stringify(jsonContent, null, 2)), sha: fileData.sha })
             });
 
-            if (!putRes.ok) throw new Error('Gagal menyimpan ke server GitHub.');
+            if (!putRes.ok) throw new Error('Gagal menyimpan.');
 
-            showToast(`Kartu ID #${cardId} berhasil diperbarui!`);
+            showToast(`Kartu #${cardId} Berhasil Disimpan!`);
             document.getElementById('targetCardId').value = '';
             document.getElementById('targetUrl').value = '';
             loadDashboardData();
@@ -503,20 +395,14 @@
             showToast(err.message, 'error');
         } finally {
             btn.disabled = false;
-            btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan & Aktifkan Slot`;
+            btn.innerHTML = `<i class="fa-solid fa-check"></i> Simpan Kartu`;
         }
     }
 
     async function handleDeleteCard() {
         const token = localStorage.getItem("rzl_gh_token");
         const cardId = document.getElementById('targetCardId').value.trim();
-        
-        if (!cardId) {
-            showToast('Masukkan ID Kartu yang ingin direset!', 'error');
-            return;
-        }
-
-        if (!confirm(`Hapus/Reset Kartu ID #${cardId}?`)) return;
+        if (!cardId || !confirm(`Reset Kartu #${cardId}?`)) return;
 
         try {
             const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
@@ -524,25 +410,15 @@
             const fileData = await res.json();
             let jsonContent = JSON.parse(atob(fileData.content));
 
-            jsonContent.redirects = jsonContent.redirects.filter(item => item.source !== `/card/${cardId}`).map(item => ({
-                source: item.source,
-                destination: item.destination,
-                permanent: false
-            }));
+            jsonContent.redirects = jsonContent.redirects.filter(i => i.source !== `/card/${cardId}`).map(i => ({ source: i.source, destination: i.destination, permanent: false }));
 
-            const putRes = await fetch(apiUrl, {
+            await fetch(apiUrl, {
                 method: 'PUT',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: `Delete /card/${cardId}`,
-                    content: btoa(JSON.stringify(jsonContent, null, 2)),
-                    sha: fileData.sha
-                })
+                body: JSON.stringify({ message: `Delete /card/${cardId}`, content: btoa(JSON.stringify(jsonContent, null, 2)), sha: fileData.sha })
             });
 
-            if (!putRes.ok) throw new Error('Gagal menghapus.');
-
-            showToast(`Kartu ID #${cardId} berhasil direset!`);
+            showToast(`Kartu #${cardId} Direset`);
             document.getElementById('targetCardId').value = '';
             document.getElementById('targetUrl').value = '';
             loadDashboardData();
@@ -551,6 +427,5 @@
         }
     }
 </script>
-
 </body>
 </html>
