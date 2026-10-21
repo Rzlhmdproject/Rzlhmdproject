@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    {
+      "source": "/card/001",
+      "destination": "https://maps.app.goo.gl/link-google-review-klien-pertama",
+      "permanent": false
+    },
+    {
+      "source": "/card/002",
+      "destination": "https://maps.app.goo.gl/link-google-review-klien-kedua",
+      "permanent": false
+    }
+  ]
+}
