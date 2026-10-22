@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rzlhmdproject — Smart Card Portal</title>
+    <title>Rzlhmdproject — Smart Review Card Portal</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -11,10 +11,10 @@
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex items-center justify-center p-4">
 
-    <!-- CONTAINER UTAMA (CARD) -->
+    <!-- CONTAINER UTAMA -->
     <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-lg p-6 sm:p-8 shadow-2xl relative overflow-hidden">
         
-        <!-- Background Gradient Glow Effect -->
+        <!-- Background Glow -->
         <div class="absolute -top-24 -left-24 w-48 h-48 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -23,74 +23,72 @@
             <div class="inline-flex p-3.5 rounded-2xl bg-indigo-500/10 text-indigo-400 mb-3 border border-indigo-500/20 shadow-inner">
                 <i class="fa-solid fa-qrcode text-3xl"></i>
             </div>
-            <h1 class="text-xl font-bold tracking-tight text-white">Smart Card Portal</h1>
+            <h1 class="text-xl font-bold tracking-tight text-white">Smart Review Card</h1>
             <p id="slot-badge" class="inline-block mt-2 px-3 py-1 bg-slate-800 border border-slate-700 text-indigo-400 text-xs font-mono rounded-full">
-                Mendeteksi Kartu...
+                Memuat Slot...
             </p>
         </div>
 
-        <!-- SECTION 1: REDIRECTING SPINNER (Jika Kartu Sudah Aktif) -->
+        <!-- STATE 1: REDIRECTING (Jika Slot Sudah Terisi Link Bisnis) -->
         <div id="section-redirecting" class="text-center py-8 space-y-4 hidden relative z-10">
             <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-indigo-500 border-t-transparent"></div>
             <div>
-                <h3 class="text-base font-semibold text-white">Mengalihkan ke Halaman Tujuan...</h3>
+                <h3 class="text-base font-semibold text-white">Mengarahkan ke Halaman Ulasan...</h3>
                 <p id="redirect-target-text" class="text-xs text-slate-400 mt-1 truncate max-w-xs mx-auto">Mohon tunggu sebentar...</p>
             </div>
             <button id="manual-redirect-btn" class="text-xs text-indigo-400 underline hover:text-indigo-300 transition-colors hidden">
-                Klik di sini jika tidak dialihkan otomatis
+                Klik di sini jika tidak otomatis dialihkan
             </button>
         </div>
 
-        <!-- SECTION 2: SETUP FORM (Jika Slot Belum Didaftarkan) -->
+        <!-- STATE 2: FORM AKTIVASI KOSONG (Jika Slot Masih Kosong / Belum Diisi) -->
         <div id="section-setup" class="space-y-5 hidden relative z-10">
             <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-4 text-xs text-slate-300 leading-relaxed">
                 <i class="fa-solid fa-circle-info text-amber-400 mr-1.5"></i>
-                <span class="font-semibold text-white">Aktivasi Kartu Baru:</span> Kartu ini belum ditautkan ke link mana pun. Silakan masukkan URL tujuan ulasan Google, WhatsApp, atau sosial media Anda.
+                <span class="font-semibold text-white">Kartu Siap Digunakan:</span> Kartu ini belum ditautkan ke bisnis apa pun. Masukkan nama usaha dan link Google Review/WhatsApp Anda di bawah ini untuk mengaktifkannya secara instan!
             </div>
 
             <form id="setup-form" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Nama Pemilik / Usaha</label>
-                    <input type="text" id="owner-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600" placeholder="Contoh: Kopi Kenangan Cirebon">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Nama Bisnis / Usaha</label>
+                    <input type="text" id="owner-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600" placeholder="Contoh: Kedai Kopi Bahagia">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">URL Tujuan Redirection</label>
-                    <input type="url" id="target-url" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600" placeholder="https://maps.google.com/...">
-                    <p class="text-[11px] text-slate-500 mt-1.5">*Pastikan diawali dengan https:// atau http://</p>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Link Ulasan Google / Target URL</label>
+                    <input type="url" id="target-url" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600" placeholder="https://g.page/r/... atau https://wa.me/...">
+                    <p class="text-[11px] text-slate-500 mt-1.5">*Link otomatis aktif setelah disimpan.</p>
                 </div>
 
                 <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 text-sm">
-                    <i class="fa-solid fa-bolt"></i> Aktifkan Smart Card
+                    <i class="fa-solid fa-rocket"></i> Simpan & Aktifkan Kartu
                 </button>
             </form>
         </div>
 
-        <!-- SECTION 3: ERROR / NOT FOUND -->
+        <!-- STATE 3: ERROR / SLOT TIDAK DITEMUKAN -->
         <div id="section-error" class="text-center py-6 space-y-3 hidden relative z-10">
             <div class="inline-flex p-3 rounded-full bg-rose-500/10 text-rose-400 text-xl">
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
-            <h3 class="text-base font-bold text-white">Slot Kartu Tidak Valid</h3>
-            <p class="text-xs text-slate-400 max-w-xs mx-auto">Nomor slot tidak ditemukan atau kode QR yang Anda pindai tidak terdaftar di sistem.</p>
+            <h3 class="text-base font-bold text-white">Slot Kartu Tidak Ditemukan</h3>
+            <p class="text-xs text-slate-400 max-w-xs mx-auto">Nomor slot pada QR Code tidak terdaftar di sistem basis data.</p>
         </div>
 
-        <!-- FOOTER BRANDING -->
+        <!-- FOOTER -->
         <div class="mt-8 pt-4 border-t border-slate-800/80 text-center text-[11px] text-slate-500 relative z-10">
             Powered by <span class="font-bold text-slate-400">Rzlhmdproject Redirection Engine</span>
         </div>
     </div>
 
-    <!-- SCRIPT LOGIC PERBAIKAN -->
+    <!-- SCRIPT LOGIC -->
     <script>
-        // Helper: Sanitasi Input Mencegah XSS
         function sanitizeInput(str) {
             return String(str).replace(/[&<>"']/g, function(m) {
                 return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
             });
         }
 
-        // Helper: Validasi & Format URL Aman
         function cleanAndValidateUrl(url) {
             let clean = url.trim();
             if (!clean) return null;
@@ -106,11 +104,10 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Read 'slot' parameter from URL (e.g. ?slot=SLOT-001)
             const urlParams = new URLSearchParams(window.location.search);
             let slotId = urlParams.get('slot');
 
-            // Default Fallback jika tidak ada query param
+            // Default fallback jika dibuka tanpa parameter slot
             if (!slotId) {
                 slotId = "SLOT-001";
             } else {
@@ -119,11 +116,11 @@
 
             document.getElementById('slot-badge').innerText = slotId;
 
-            // Load Inventory dari Storage (atau terhubung ke Backend API)
+            // Ambil data inventaris dari LocalStorage (atau ganti dengan fetch API database jika sudah pakai backend)
             let inventory = JSON.parse(localStorage.getItem('rz_inventory')) || [];
             let currentSlot = inventory.find(i => i.id === slotId);
 
-            // Skenario A: Slot ditemukan & sudah Aktif -> Lakukan Redirection
+            // SKENARIO 1: Slot sudah ada dan URL-nya sudah terisi -> Otomatis Redirect
             if (currentSlot && currentSlot.url && currentSlot.status === 'Aktif') {
                 const validUrl = cleanAndValidateUrl(currentSlot.url);
                 if (validUrl) {
@@ -134,55 +131,47 @@
                     manualBtn.classList.remove('hidden');
                     manualBtn.onclick = () => { window.location.href = validUrl; };
 
-                    // Redirect Otomatis setelah 1 detik
                     setTimeout(() => {
                         window.location.href = validUrl;
-                    }, 1000);
+                    }, 800);
                     return;
                 }
             }
 
-            // Skenario B: Slot ditemukan tapi Belum Didaftarkan / URL Kosong -> Tampilkan Form Setup
-            if (!currentSlot || !currentSlot.url || currentSlot.status !== 'Aktif') {
-                showSection('section-setup');
+            // SKENARIO 2: Slot masih kosong / belum diatur -> Tampilkan Form Setup Kosong
+            // Jika slot belum terdaftar di inventaris, kita buatkan objek sementara agar bisa diisi
+            showSection('section-setup');
 
-                // Handle Form Setup Aktivasi
-                document.getElementById('setup-form').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const owner = document.getElementById('owner-name').value;
-                    const rawUrl = document.getElementById('target-url').value;
-                    const validatedUrl = cleanAndValidateUrl(rawUrl);
+            document.getElementById('setup-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const owner = document.getElementById('owner-name').value;
+                const rawUrl = document.getElementById('target-url').value;
+                const validatedUrl = cleanAndValidateUrl(rawUrl);
 
-                    if (!validatedUrl) {
-                        alert('URL yang Anda masukkan tidak valid. Harap periksa kembali!');
-                        return;
-                    }
+                if (!validatedUrl) {
+                    alert('Format URL tujuan tidak valid! Pastikan menyertakan https://');
+                    return;
+                }
 
-                    // Update atau Tambah Data Slot ke Storage
-                    if (currentSlot) {
-                        currentSlot.url = validatedUrl;
-                        currentSlot.owner = sanitizeInput(owner);
-                        currentSlot.status = 'Aktif';
-                    } else {
-                        inventory.push({
-                            id: slotId,
-                            owner: sanitizeInput(owner),
-                            url: validatedUrl,
-                            status: 'Aktif'
-                        });
-                    }
+                if (currentSlot) {
+                    currentSlot.url = validatedUrl;
+                    currentSlot.owner = sanitizeInput(owner);
+                    currentSlot.status = 'Aktif';
+                } else {
+                    inventory.push({
+                        id: slotId,
+                        owner: sanitizeInput(owner),
+                        url: validatedUrl,
+                        status: 'Aktif'
+                    });
+                }
 
-                    // Simpan Perubahan
-                    localStorage.setItem('rz_inventory', JSON.stringify(inventory));
+                // Simpan perubahan ke storage browser (atau sinkronisasi ke server)
+                localStorage.setItem('rz_inventory', JSON.stringify(inventory));
 
-                    alert('Kartu Berhasil Diaktifkan! Anda akan segera dialihkan.');
-                    window.location.href = validatedUrl;
-                });
-                return;
-            }
-
-            // Skenario C: Slot Invalid / Error
-            showSection('section-error');
+                alert('Berhasil! Kartu Anda sekarang sudah aktif dan terhubung ke link bisnis.');
+                window.location.href = validatedUrl;
+            });
         });
 
         function showSection(sectionId) {
