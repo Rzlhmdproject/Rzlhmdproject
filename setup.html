@@ -3,252 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aktivasi Kartu Digital — Rzlhmdproject</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Rzlhmdproject — Smart Card Portal</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        :root {
-            --bg-main: #121316;
-            --panel-bg: #181A1E;
-            --panel-card: #21242B;
-            --panel-border: rgba(255, 255, 255, 0.08);
-            --text-primary: #FFFFFF;
-            --text-secondary: #A0A5B1;
-            --text-muted: #5A606E;
-            --primary-orange: #FF6B00;
-            --primary-orange-hover: #F25400;
-            --accent-mint: #00D68F;
-            --soft-yellow: #FFB800;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-primary); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-
-        .container { width: 100%; max-width: 440px; }
-
-        .panel-card { 
-            background: var(--panel-card); 
-            border: 1px solid var(--panel-border); 
-            border-radius: 28px; 
-            padding: 32px 24px; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5); 
-            text-align: center; 
-            position: relative;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-        }
-
-        /* Top Brand Header */
-        .brand-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-        .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 800;
-            color: var(--text-primary);
-        }
-        .brand-logo i { color: var(--primary-orange); }
-
-        .card-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255, 107, 0, 0.12);
-            border: 1px solid rgba(255, 107, 0, 0.3);
-            color: var(--primary-orange);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        /* Hero Simulator Card */
-        .mini-simulator {
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.2) 0%, rgba(33, 36, 43, 0.9) 100%);
-            border: 1px solid var(--panel-border);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: left;
-            margin-bottom: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-        .sim-chip { width: 32px; height: 22px; background: linear-gradient(135deg, var(--soft-yellow), var(--primary-orange)); border-radius: 5px; margin-bottom: 12px; }
-        .sim-title { font-size: 15px; font-weight: 800; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .sim-meta { font-size: 11px; color: var(--primary-orange); font-family: monospace; margin-top: 4px; letter-spacing: 0.5px; }
-
-        h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
-        p.subtitle { font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px; }
-
-        /* Form Input Styles */
-        .form-group { text-align: left; margin-bottom: 18px; }
-        label { display: block; font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-        
-        .input-wrapper { position: relative; display: flex; align-items: center; }
-        .input-wrapper i { position: absolute; left: 16px; color: var(--text-muted); font-size: 14px; }
-        
-        input { 
-            width: 100%; 
-            padding: 13px 16px 13px 44px; 
-            border: 1px solid var(--panel-border); 
-            border-radius: 14px; 
-            background: rgba(0, 0, 0, 0.3); 
-            color: var(--text-primary); 
-            font-size: 14px; 
-            outline: none; 
-            transition: border 0.2s; 
-        }
-        input:focus { border-color: var(--primary-orange); }
-
-        /* Helper Box Panduan Link */
-        .helper-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px dashed var(--panel-border);
-            border-radius: 12px;
-            padding: 10px 12px;
-            margin-top: 8px;
-            font-size: 11px;
-            color: var(--text-secondary);
-            line-height: 1.4;
-            text-align: left;
-        }
-        .helper-box span { color: var(--soft-yellow); font-weight: 700; }
-
-        .btn-primary { 
-            width: 100%; 
-            background: var(--primary-orange); 
-            color: #fff; 
-            border: none; 
-            padding: 14px; 
-            border-radius: 14px; 
-            font-weight: 700; 
-            font-size: 14px; 
-            cursor: pointer; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 8px; 
-            margin-top: 14px; 
-            transition: background 0.2s; 
-            box-shadow: 0 8px 20px rgba(255, 107, 0, 0.25);
-        }
-        .btn-primary:hover { background: var(--primary-orange-hover); }
-
-        /* Footer Info */
-        .support-box { 
-            margin-top: 28px; 
-            padding-top: 18px; 
-            border-top: 1px solid var(--panel-border); 
-            font-size: 12px; 
-            color: var(--text-secondary); 
-        }
-        .support-link { 
-            color: var(--accent-mint); 
-            text-decoration: none; 
-            font-weight: 700; 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 6px; 
-            margin-top: 6px; 
-        }
-        .support-link:hover { text-decoration: underline; }
-    </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex items-center justify-center p-4">
 
-<div class="container">
-    <div class="panel-card">
-        <!-- Top Brand Header -->
-        <div class="brand-header">
-            <div class="brand-logo">
-                <i class="fa-solid fa-cube"></i> Rzlhmdproject
+    <!-- CONTAINER UTAMA (CARD) -->
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-lg p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        
+        <!-- Background Gradient Glow Effect -->
+        <div class="absolute -top-24 -left-24 w-48 h-48 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- HEADER BRAND -->
+        <div class="text-center mb-6 relative z-10">
+            <div class="inline-flex p-3.5 rounded-2xl bg-indigo-500/10 text-indigo-400 mb-3 border border-indigo-500/20 shadow-inner">
+                <i class="fa-solid fa-qrcode text-3xl"></i>
             </div>
-            <div class="card-badge" id="cardTagDisplay">
-                <i class="fa-solid fa-id-card"></i> SLOT #001
-            </div>
+            <h1 class="text-xl font-bold tracking-tight text-white">Smart Card Portal</h1>
+            <p id="slot-badge" class="inline-block mt-2 px-3 py-1 bg-slate-800 border border-slate-700 text-indigo-400 text-xs font-mono rounded-full">
+                Mendeteksi Kartu...
+            </p>
         </div>
 
-        <!-- Interactive Card Simulator Preview -->
-        <div class="mini-simulator">
-            <div class="sim-chip"></div>
-            <div class="sim-title" id="simStoreName">Nama Usaha Anda</div>
-            <div class="sim-meta" id="simCardId">SMART CARD REVIEW #001</div>
-        </div>
-
-        <h2>Aktivasi Kartu Digital Anda</h2>
-        <p class="subtitle">Hubungkan kartu fisik Anda dengan lokasi bisnis di Google Maps hanya dalam hitungan detik.</p>
-
-        <!-- Form Setup -->
-        <form id="setupForm" onsubmit="handleUserSubmit(event)">
-            <div class="form-group">
-                <label for="userStoreName">Nama Usaha / Toko</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-store"></i>
-                    <input type="text" id="userStoreName" placeholder="Contoh: Kopi Kenangan" onkeyup="updatePreview(this.value)" required>
-                </div>
+        <!-- SECTION 1: REDIRECTING SPINNER (Jika Kartu Sudah Aktif) -->
+        <div id="section-redirecting" class="text-center py-8 space-y-4 hidden relative z-10">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-indigo-500 border-t-transparent"></div>
+            <div>
+                <h3 class="text-base font-semibold text-white">Mengalihkan ke Halaman Tujuan...</h3>
+                <p id="redirect-target-text" class="text-xs text-slate-400 mt-1 truncate max-w-xs mx-auto">Mohon tunggu sebentar...</p>
             </div>
-
-            <div class="form-group">
-                <label for="userUrl">Link Google Maps / Google Review</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <input type="url" id="userUrl" placeholder="https://maps.app.goo.gl/..." required>
-                </div>
-                
-                <!-- Panduan Cara Ambil Link -->
-                <div class="helper-box">
-                    💡 <span>Cara Salin Link:</span> Buka aplikasi Google Maps ➔ Cari nama toko Anda ➔ Klik <b>Bagikan</b> ➔ Salin Tautan (Copy Link).
-                </div>
-            </div>
-
-            <button type="submit" class="btn-primary">
-                <i class="fa-brands fa-whatsapp"></i> Aktifkan Kartu via WhatsApp
+            <button id="manual-redirect-btn" class="text-xs text-indigo-400 underline hover:text-indigo-300 transition-colors hidden">
+                Klik di sini jika tidak dialihkan otomatis
             </button>
-        </form>
+        </div>
 
-        <!-- Support Info -->
-        <div class="support-box">
-            Layanan Resmi Rzlhmdproject — Membantu Bisnis Anda Mendapatkan Ulasan Bintang 5 Lebih Cepat.
-            <br>
-            <a href="https://wa.me/6288971717983?text=Halo%20Admin%20Rzlhmdproject,%20saya%20butuh%20bantuan%20aktivasi%20kartu" target="_blank" class="support-link">
-                <i class="fa-brands fa-whatsapp"></i> Butuh bantuan saat aktivasi?
-            </a>
+        <!-- SECTION 2: SETUP FORM (Jika Slot Belum Didaftarkan) -->
+        <div id="section-setup" class="space-y-5 hidden relative z-10">
+            <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-4 text-xs text-slate-300 leading-relaxed">
+                <i class="fa-solid fa-circle-info text-amber-400 mr-1.5"></i>
+                <span class="font-semibold text-white">Aktivasi Kartu Baru:</span> Kartu ini belum ditautkan ke link mana pun. Silakan masukkan URL tujuan ulasan Google, WhatsApp, atau sosial media Anda.
+            </div>
+
+            <form id="setup-form" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Nama Pemilik / Usaha</label>
+                    <input type="text" id="owner-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600" placeholder="Contoh: Kopi Kenangan Cirebon">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">URL Tujuan Redirection</label>
+                    <input type="url" id="target-url" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600" placeholder="https://maps.google.com/...">
+                    <p class="text-[11px] text-slate-500 mt-1.5">*Pastikan diawali dengan https:// atau http://</p>
+                </div>
+
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 text-sm">
+                    <i class="fa-solid fa-bolt"></i> Aktifkan Smart Card
+                </button>
+            </form>
+        </div>
+
+        <!-- SECTION 3: ERROR / NOT FOUND -->
+        <div id="section-error" class="text-center py-6 space-y-3 hidden relative z-10">
+            <div class="inline-flex p-3 rounded-full bg-rose-500/10 text-rose-400 text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-base font-bold text-white">Slot Kartu Tidak Valid</h3>
+            <p class="text-xs text-slate-400 max-w-xs mx-auto">Nomor slot tidak ditemukan atau kode QR yang Anda pindai tidak terdaftar di sistem.</p>
+        </div>
+
+        <!-- FOOTER BRANDING -->
+        <div class="mt-8 pt-4 border-t border-slate-800/80 text-center text-[11px] text-slate-500 relative z-10">
+            Powered by <span class="font-bold text-slate-400">Rzlhmdproject Redirection Engine</span>
         </div>
     </div>
-</div>
 
-<script>
-    // Membaca Parameter ID dari URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const cardId = urlParams.get('id') || '001';
+    <!-- SCRIPT LOGIC PERBAIKAN -->
+    <script>
+        // Helper: Sanitasi Input Mencegah XSS
+        function sanitizeInput(str) {
+            return String(str).replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+            });
+        }
 
-    // Update ID Kartu di Tampilan
-    document.getElementById('cardTagDisplay').innerHTML = `<i class="fa-solid fa-id-card"></i> SLOT #${cardId}`;
-    document.getElementById('simCardId').innerText = `SMART CARD REVIEW #${cardId}`;
+        // Helper: Validasi & Format URL Aman
+        function cleanAndValidateUrl(url) {
+            let clean = url.trim();
+            if (!clean) return null;
+            if (!/^https?:\/\//i.test(clean)) {
+                clean = 'https://' + clean;
+            }
+            try {
+                const parsed = new URL(clean);
+                return parsed.href;
+            } catch (e) {
+                return null;
+            }
+        }
 
-    // Live Simulator Update
-    function updatePreview(val) {
-        document.getElementById('simStoreName').innerText = val.trim() || "Nama Usaha Anda";
-    }
+        document.addEventListener('DOMContentLoaded', () => {
+            // Read 'slot' parameter from URL (e.g. ?slot=SLOT-001)
+            const urlParams = new URLSearchParams(window.location.search);
+            let slotId = urlParams.get('slot');
 
-    // Handover Kirim Ke WhatsApp Admin
-    function handleUserSubmit(e) {
-        e.preventDefault();
-        const storeName = document.getElementById('userStoreName').value.trim();
-        const targetUrl = document.getElementById('userUrl').value.trim();
-        const adminWA = "6288971717983"; 
+            // Default Fallback jika tidak ada query param
+            if (!slotId) {
+                slotId = "SLOT-001";
+            } else {
+                slotId = sanitizeInput(slotId.toUpperCase());
+            }
 
-        const message = `Halo Admin Rzlhmdproject! 👋%0A%0ASaya ingin mengaktifkan *Kartu Review ID %23${cardId}*%0A%0A🏪 *Nama Toko:* ${encodeURIComponent(storeName)}%0A📍 *Link Google Maps:* ${encodeURIComponent(targetUrl)}%0A%0AMohon bantuannya untuk diaktifkan di dashboard. Terima kasih!`;
+            document.getElementById('slot-badge').innerText = slotId;
 
-        window.location.href = `https://wa.me/${adminWA}?text=${message}`;
-    }
-</script>
+            // Load Inventory dari Storage (atau terhubung ke Backend API)
+            let inventory = JSON.parse(localStorage.getItem('rz_inventory')) || [];
+            let currentSlot = inventory.find(i => i.id === slotId);
 
+            // Skenario A: Slot ditemukan & sudah Aktif -> Lakukan Redirection
+            if (currentSlot && currentSlot.url && currentSlot.status === 'Aktif') {
+                const validUrl = cleanAndValidateUrl(currentSlot.url);
+                if (validUrl) {
+                    showSection('section-redirecting');
+                    document.getElementById('redirect-target-text').innerText = validUrl;
+
+                    const manualBtn = document.getElementById('manual-redirect-btn');
+                    manualBtn.classList.remove('hidden');
+                    manualBtn.onclick = () => { window.location.href = validUrl; };
+
+                    // Redirect Otomatis setelah 1 detik
+                    setTimeout(() => {
+                        window.location.href = validUrl;
+                    }, 1000);
+                    return;
+                }
+            }
+
+            // Skenario B: Slot ditemukan tapi Belum Didaftarkan / URL Kosong -> Tampilkan Form Setup
+            if (!currentSlot || !currentSlot.url || currentSlot.status !== 'Aktif') {
+                showSection('section-setup');
+
+                // Handle Form Setup Aktivasi
+                document.getElementById('setup-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const owner = document.getElementById('owner-name').value;
+                    const rawUrl = document.getElementById('target-url').value;
+                    const validatedUrl = cleanAndValidateUrl(rawUrl);
+
+                    if (!validatedUrl) {
+                        alert('URL yang Anda masukkan tidak valid. Harap periksa kembali!');
+                        return;
+                    }
+
+                    // Update atau Tambah Data Slot ke Storage
+                    if (currentSlot) {
+                        currentSlot.url = validatedUrl;
+                        currentSlot.owner = sanitizeInput(owner);
+                        currentSlot.status = 'Aktif';
+                    } else {
+                        inventory.push({
+                            id: slotId,
+                            owner: sanitizeInput(owner),
+                            url: validatedUrl,
+                            status: 'Aktif'
+                        });
+                    }
+
+                    // Simpan Perubahan
+                    localStorage.setItem('rz_inventory', JSON.stringify(inventory));
+
+                    alert('Kartu Berhasil Diaktifkan! Anda akan segera dialihkan.');
+                    window.location.href = validatedUrl;
+                });
+                return;
+            }
+
+            // Skenario C: Slot Invalid / Error
+            showSection('section-error');
+        });
+
+        function showSection(sectionId) {
+            document.getElementById('section-redirecting').classList.add('hidden');
+            document.getElementById('section-setup').classList.add('hidden');
+            document.getElementById('section-error').classList.add('hidden');
+
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+    </script>
 </body>
 </html>
