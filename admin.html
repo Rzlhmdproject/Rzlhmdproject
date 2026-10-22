@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- QR Code Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <!-- FontAwesomeIcons -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col">
@@ -21,7 +21,7 @@
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <h2 class="text-2xl font-bold tracking-tight">Super Admin Access</h2>
-                <p class="text-sm text-slate-400 mt-1">Masukkan kredensial aman untuk membuka konsol</p>
+                <p class="text-sm text-slate-400 mt-1">Masukkan password untuk membuka konsol</p>
             </div>
             <form id="login-form" class="space-y-4">
                 <div>
@@ -143,21 +143,16 @@
 
     <!-- Application Script -->
     <script>
-        // Konfigurasi Keamanan Hash Password Sederhana (Contoh: "rzlhmd2026")
-        // Untuk produksi tingkat lanjut, gunakan backend hashing (bcrypt).
-        const ADMIN_PASS_HASH = "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"; // SHA-256 untuk "password" (ganti sesuai kebutuhan)
-
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
+        // ==========================================
+        // KONFIGURASI PASSWORD ADMIN
+        // ==========================================
+        // Anda dapat mengubah password di bawah ini sesuai keinginan:
+        const ADMIN_PASSWORD = "rzlhmd2026"; 
 
         // State Manajemen Lokal
         let inventory = JSON.parse(localStorage.getItem('rz_inventory')) || [];
 
-        // Inisialisasi Auth Check
+        // Inisialisasi Auth Check saat halaman dimuat
         document.addEventListener('DOMContentLoaded', () => {
             const isAuth = sessionStorage.getItem('rz_auth');
             if (isAuth === 'true') {
@@ -168,23 +163,23 @@
         });
 
         // Form Login Handler
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
+        document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const passInput = document.getElementById('admin-pass').value;
-            const inputHash = await sha256(passInput);
             
-            // Default verifikasi fleksibel (bisa disesuaikan dengan sandi pilihan Anda, misal 'rzadmin123')
-            // Di sini kita izinkan password 'rzadmin123' (hash diuji secara dinamis atau hardcoded)
-            if (passInput === 'rzadmin123' || inputHash === ADMIN_PASS_HASH) {
+            if (passInput === ADMIN_PASSWORD) {
                 sessionStorage.setItem('rz_auth', 'true');
                 document.getElementById('auth-modal').classList.add('hidden');
                 document.getElementById('main-dashboard').classList.remove('hidden');
                 renderDashboard();
             } else {
                 document.getElementById('login-error').classList.remove('hidden');
+                document.getElementById('admin-pass').value = '';
+                document.getElementById('admin-pass').focus();
             }
         });
 
+        // Logout Handler
         document.getElementById('logout-btn').addEventListener('click', () => {
             sessionStorage.removeItem('rz_auth');
             location.reload();
@@ -215,16 +210,16 @@
         }
 
         function renderDashboard() {
-            // Update Stats
             const total = inventory.length;
             const active = inventory.filter(i => i.status === 'Aktif').length;
             const pending = total - active;
 
+            // Update Statistik Dashboard
             document.getElementById('stat-total').innerText = total;
             document.getElementById('stat-active').innerText = active;
             document.getElementById('stat-pending').innerText = pending;
 
-            // Render Table
+            // Render Tabel Inventaris
             const tbody = document.getElementById('inventory-table-body');
             const select = document.getElementById('preview-slot-select');
             
@@ -237,7 +232,6 @@
             }
 
             inventory.forEach((item, index) => {
-                // Populate Table
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td class="py-3 px-4 font-mono font-bold text-indigo-400">${item.id}</td>
@@ -254,7 +248,6 @@
                 `;
                 tbody.appendChild(tr);
 
-                // Populate Dropdown Preview
                 const opt = document.createElement('option');
                 opt.value = index;
                 opt.textContent = `${item.id} (${item.status})`;
@@ -267,13 +260,13 @@
             const item = inventory[index];
             const newUrl = prompt(`Masukkan URL tujuan redirection untuk ${item.id}:`, item.url);
             if (newUrl !== null) {
-                // Validasi URL Sederhana untuk mencegah Open Redirection
                 item.url = newUrl.trim();
                 item.status = item.url ? 'Aktif' : 'Belum Didaftar';
                 saveAndRender();
             }
         };
 
+        // Hapus Slot
         window.deleteSlot = function(index) {
             if (confirm(`Hapus slot ${inventory[index].id}?`)) {
                 inventory.splice(index, 1);
@@ -296,7 +289,6 @@
             const item = inventory[idx];
             label.innerText = `${item.id}`;
 
-            // Generate QR Code dinamis menunjuk ke URL target atau fallback
             const targetRedirectUrl = item.url || `https://rzlhmdproject.vercel.app/redirect.html?slot=${item.id}`;
             
             new QRCode(container, {
