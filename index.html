@@ -8,6 +8,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK (Version 9 Compatibility Mode) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex items-center justify-center p-4">
 
@@ -25,11 +28,11 @@
             </div>
             <h1 class="text-xl font-bold tracking-tight text-white">Smart Review Card</h1>
             <p id="slot-badge" class="inline-block mt-2 px-3 py-1 bg-slate-800 border border-slate-700 text-indigo-400 text-xs font-mono rounded-full">
-                Memuat Slot...
+                Memeriksa Server Cloud...
             </p>
         </div>
 
-        <!-- STATE 1: REDIRECTING (Jika Slot Sudah Terisi Link Bisnis) -->
+        <!-- STATE 1: REDIRECTING -->
         <div id="section-redirecting" class="text-center py-8 space-y-4 hidden relative z-10">
             <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-indigo-500 border-t-transparent"></div>
             <div>
@@ -41,38 +44,28 @@
             </button>
         </div>
 
-        <!-- STATE 2: FORM AKTIVASI KOSONG (Jika Slot Masih Kosong / Belum Diisi) -->
+        <!-- STATE 2: FORM AKTIVASI KOSONG -->
         <div id="section-setup" class="space-y-5 hidden relative z-10">
             <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-4 text-xs text-slate-300 leading-relaxed">
                 <i class="fa-solid fa-circle-info text-amber-400 mr-1.5"></i>
-                <span class="font-semibold text-white">Kartu Siap Digunakan:</span> Kartu ini belum ditautkan ke bisnis apa pun. Masukkan nama usaha dan link Google Review/WhatsApp Anda di bawah ini untuk mengaktifkannya secara instan!
+                <span class="font-semibold text-white">Kartu Belum Didaftarkan:</span> Masukkan nama usaha dan link Google Review Anda di bawah ini untuk mengaktifkan kartu ini secara publik.
             </div>
 
             <form id="setup-form" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Nama Bisnis / Usaha</label>
-                    <input type="text" id="owner-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600" placeholder="Contoh: Kedai Kopi Bahagia">
+                    <input type="text" id="owner-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600" placeholder="Contoh: Kedai Kopi Cirebon">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Link Ulasan Google / Target URL</label>
-                    <input type="url" id="target-url" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600" placeholder="https://g.page/r/... atau https://wa.me/...">
-                    <p class="text-[11px] text-slate-500 mt-1.5">*Link otomatis aktif setelah disimpan.</p>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Link Ulasan Google Maps / WhatsApp</label>
+                    <input type="url" id="target-url" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600" placeholder="https://maps.app.goo.gl/...">
                 </div>
 
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 text-sm">
-                    <i class="fa-solid fa-rocket"></i> Simpan & Aktifkan Kartu
+                <button type="submit" id="submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 text-sm">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Simpan ke Server Cloud
                 </button>
             </form>
-        </div>
-
-        <!-- STATE 3: ERROR / SLOT TIDAK DITEMUKAN -->
-        <div id="section-error" class="text-center py-6 space-y-3 hidden relative z-10">
-            <div class="inline-flex p-3 rounded-full bg-rose-500/10 text-rose-400 text-xl">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-            </div>
-            <h3 class="text-base font-bold text-white">Slot Kartu Tidak Ditemukan</h3>
-            <p class="text-xs text-slate-400 max-w-xs mx-auto">Nomor slot pada QR Code tidak terdaftar di sistem basis data.</p>
         </div>
 
         <!-- FOOTER -->
@@ -81,13 +74,18 @@
         </div>
     </div>
 
-    <!-- SCRIPT LOGIC -->
     <script>
-        function sanitizeInput(str) {
-            return String(str).replace(/[&<>"']/g, function(m) {
-                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
-            });
+        // 1. KONFIGURASI FIREBASE CLOUD DATABASE (GRATIS)
+        // Ganti kredensial di bawah dari konsol Firebase Anda jika ada
+        const firebaseConfig = {
+            databaseURL: "https://rzlhmdproject-default-rtdb.asia-southeast1.firebasedatabase.app"
+        };
+        
+        // Inisialisasi Firebase (jika memakai DB publik terbuka)
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
         }
+        const database = firebase.database();
 
         function cleanAndValidateUrl(url) {
             let clean = url.trim();
@@ -96,8 +94,7 @@
                 clean = 'https://' + clean;
             }
             try {
-                const parsed = new URL(clean);
-                return parsed.href;
+                return new URL(clean).href;
             } catch (e) {
                 return null;
             }
@@ -105,80 +102,64 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            let slotId = urlParams.get('slot');
-
-            // Default fallback jika dibuka tanpa parameter slot
-            if (!slotId) {
-                slotId = "SLOT-001";
-            } else {
-                slotId = sanitizeInput(slotId.toUpperCase());
-            }
+            let slotId = urlParams.get('slot') || "SLOT-001";
+            slotId = slotId.toUpperCase().replace(/[^A-Z0-9-]/g, '');
 
             document.getElementById('slot-badge').innerText = slotId;
 
-            // Ambil data inventaris dari LocalStorage (atau ganti dengan fetch API database jika sudah pakai backend)
-            let inventory = JSON.parse(localStorage.getItem('rz_inventory')) || [];
-            let currentSlot = inventory.find(i => i.id === slotId);
+            // 2. CEK DATA LANGSUNG DARI FIREBASE CLOUD DATABASE
+            const slotRef = database.ref('slots/' + slotId);
+            
+            slotRef.once('value', (snapshot) => {
+                const data = snapshot.val();
 
-            // SKENARIO 1: Slot sudah ada dan URL-nya sudah terisi -> Otomatis Redirect
-            if (currentSlot && currentSlot.url && currentSlot.status === 'Aktif') {
-                const validUrl = cleanAndValidateUrl(currentSlot.url);
-                if (validUrl) {
-                    showSection('section-redirecting');
-                    document.getElementById('redirect-target-text').innerText = validUrl;
-
-                    const manualBtn = document.getElementById('manual-redirect-btn');
-                    manualBtn.classList.remove('hidden');
-                    manualBtn.onclick = () => { window.location.href = validUrl; };
-
-                    setTimeout(() => {
-                        window.location.href = validUrl;
-                    }, 800);
-                    return;
-                }
-            }
-
-            // SKENARIO 2: Slot masih kosong / belum diatur -> Tampilkan Form Setup Kosong
-            // Jika slot belum terdaftar di inventaris, kita buatkan objek sementara agar bisa diisi
-            showSection('section-setup');
-
-            document.getElementById('setup-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const owner = document.getElementById('owner-name').value;
-                const rawUrl = document.getElementById('target-url').value;
-                const validatedUrl = cleanAndValidateUrl(rawUrl);
-
-                if (!validatedUrl) {
-                    alert('Format URL tujuan tidak valid! Pastikan menyertakan https://');
-                    return;
+                // Jika data sudah ada di cloud & aktif -> Redirect
+                if (data && data.url && data.status === 'Aktif') {
+                    const validUrl = cleanAndValidateUrl(data.url);
+                    if (validUrl) {
+                        showSection('section-redirecting');
+                        document.getElementById('redirect-target-text').innerText = validUrl;
+                        
+                        setTimeout(() => {
+                            window.location.href = validUrl;
+                        }, 600);
+                        return;
+                    }
                 }
 
-                if (currentSlot) {
-                    currentSlot.url = validatedUrl;
-                    currentSlot.owner = sanitizeInput(owner);
-                    currentSlot.status = 'Aktif';
-                } else {
-                    inventory.push({
-                        id: slotId,
-                        owner: sanitizeInput(owner),
+                // Jika belum diisi di Cloud -> Tampilkan Form Setup
+                showSection('section-setup');
+
+                document.getElementById('setup-form').onsubmit = (e) => {
+                    e.preventDefault();
+                    const owner = document.getElementById('owner-name').value;
+                    const rawUrl = document.getElementById('target-url').value;
+                    const validatedUrl = cleanAndValidateUrl(rawUrl);
+
+                    if (!validatedUrl) {
+                        alert('URL tidak valid!');
+                        return;
+                    }
+
+                    // SIMPAN DATA KARTU LANGSUNG KE FIREBASE CLOUD (Dapat diakses seluruh dunia)
+                    slotRef.set({
+                        owner: owner,
                         url: validatedUrl,
-                        status: 'Aktif'
+                        status: 'Aktif',
+                        updatedAt: new Date().toISOString()
+                    }).then(() => {
+                        alert('Kartu Berhasil Diaktifkan di Cloud!');
+                        window.location.href = validatedUrl;
+                    }).catch((err) => {
+                        alert('Gagal menyimpan ke server: ' + err.message);
                     });
-                }
-
-                // Simpan perubahan ke storage browser (atau sinkronisasi ke server)
-                localStorage.setItem('rz_inventory', JSON.stringify(inventory));
-
-                alert('Berhasil! Kartu Anda sekarang sudah aktif dan terhubung ke link bisnis.');
-                window.location.href = validatedUrl;
+                };
             });
         });
 
         function showSection(sectionId) {
             document.getElementById('section-redirecting').classList.add('hidden');
             document.getElementById('section-setup').classList.add('hidden');
-            document.getElementById('section-error').classList.add('hidden');
-
             document.getElementById(sectionId).classList.remove('hidden');
         }
     </script>
